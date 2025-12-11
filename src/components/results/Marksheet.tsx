@@ -38,12 +38,10 @@ export default function Marksheet({
         setCurrentDate(new Date().toLocaleDateString());
     }, []);
 
-    // Calculate percentage based on total marks if final, otherwise just MCQ
-    const percentage = isFinal 
-        ? (totalObtained / totalMax) * 100 
-        : (roboticsMarks / 80) * 100;
+    // Calculate percentage based on MCQ score out of 80.
+    const percentage = (roboticsMarks / 80) * 100;
     
-    const passStatus = percentage >= 40 ? "PASS" : "FAIL";
+    const passStatus = percentage >= 35 ? "PASS" : "FAIL";
 
     const getGrade = () => {
         if (percentage >= 90) return 'A1';
@@ -51,7 +49,7 @@ export default function Marksheet({
         if (percentage >= 70) return 'B1';
         if (percentage >= 60) return 'B2';
         if (percentage >= 50) return 'C1';
-        if (percentage >= 40) return 'C2';
+        if (percentage >= 35) return 'C2';
         return 'D';
     };
     
