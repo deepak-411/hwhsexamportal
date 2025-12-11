@@ -132,11 +132,6 @@ export default function Marksheet({
                  </div>
             </div>
 
-            <div className="mt-8">
-                <h3 className="font-bold">Teacher’s Remarks:</h3>
-                <p className="text-sm text-muted-foreground italic border-t pt-2 mt-2">{remarks}</p>
-            </div>
-
             <footer className="flex justify-between mt-24 pt-8 border-t">
                 <div className="text-center">
                     <div className="h-12"></div>
