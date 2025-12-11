@@ -59,7 +59,7 @@ export default function ResultPage() {
                         rollNumber: userForMarksheet.rollNumber,
                         class: userForMarksheet.class,
                         section: userForMarksheet.section,
-                        exam: `Robotics and AI Examination 2025 (Set ${firstExamId})`,
+                        exam: `Robotics and AI Examination 2025`,
                         marks: result,
                         totalMarks: {
                             robotics: 80,
