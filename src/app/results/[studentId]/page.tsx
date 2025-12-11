@@ -44,11 +44,9 @@ export default function ResultPage() {
         
         if (userForMarksheet) {
             const allResults = getStoredResults();
-            // Construct a unique key for students with duplicate roll numbers
             const uniqueStudentKeyForResults = `${userForMarksheet.rollNumber}-${userForMarksheet.class}-${userForMarksheet.section}`;
             
-            // Try finding result with unique key first, then fall back to just roll number
-            let studentResults = allResults[uniqueStudentKeyForResults];
+            const studentResults = allResults[uniqueStudentKeyForResults];
             
             if (studentResults) {
                 const availableExamIds = Object.keys(studentResults);
@@ -108,12 +106,11 @@ export default function ResultPage() {
     }
 
     if (!studentResult) {
-        // This case should ideally not be reached if the logic above is correct
         return <div className="flex h-screen items-center justify-center"><p>An unexpected error occurred while loading the marksheet.</p></div>
     }
 
-    const obtainedTotal = (studentResult.marks.robotics >= 0 ? studentResult.marks.robotics : 0) + (studentResult.marks.coding >= 0 ? studentResult.marks.coding : 0);
-    const maximumTotal = studentResult.totalMarks.robotics + studentResult.totalMarks.coding;
+    const obtainedTotal = studentResult.marks.robotics >= 0 ? studentResult.marks.robotics : 0;
+    const maximumTotal = studentResult.totalMarks.robotics;
     const isCodingEvaluated = studentResult.marks.coding >= 0;
 
     return (
@@ -141,7 +138,7 @@ export default function ResultPage() {
                         section={studentResult.section}
                         examTitle={studentResult.exam}
                         roboticsMarks={studentResult.marks.robotics}
-                        codingMarks={isCodingEvaluated ? studentResult.marks.coding : "Pending"}
+                        codingMarks={studentResult.marks.coding}
                         totalObtained={obtainedTotal}
                         totalMax={maximumTotal}
                         isFinal={isCodingEvaluated}
