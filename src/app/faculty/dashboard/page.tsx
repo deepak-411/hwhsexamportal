@@ -18,14 +18,12 @@ type GroupedStudents = {
 
 export default function FacultyDashboard() {
   const [totalStudents, setTotalStudents] = useState(0);
-  const [allUsers, setAllUsers] = useState<User[]>([]);
   const [allResults, setAllResults] = useState<{ [key: string]: any }>({});
   const [groupedStudents, setGroupedStudents] = useState<GroupedStudents>({});
 
   useEffect(() => {
     const users = getStoredUsers();
     const results = getStoredResults();
-    setAllUsers(users);
     setAllResults(results);
     setTotalStudents(users.length);
 

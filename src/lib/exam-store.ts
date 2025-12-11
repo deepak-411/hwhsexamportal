@@ -124,7 +124,7 @@ const DEFAULT_RESULTS: { [studentId: string]: { [examId: string]: ExamResult } }
     '06-8-Daisies': { '2': { robotics: 35, coding: 0 } }, // athang koli
     '7-8-Daisies': { '2': { robotics: 32, coding: 0 } }, // devansh koli
     '09-8-Daisies': { '2': { robotics: 35, coding: 0 } }, // gauri prajapati
-    '10-8-Daisies': { '2': { robotics: 3, coding: 0 } }, // harsh pravin bhoir
+    '10-8-Daisies': { '2': { robotics: 27, coding: 0 } }, // harsh pravin bhoir
     '12-8-Daisies': { '2': { robotics: 35, coding: 0 } }, // jjjeshon rex
     '13-8-Daisies': { '2': { robotics: 21, coding: 0 } }, // jalad tiwari
     '14-8-Daisies': { '2': { robotics: 35, coding: 0 } }, // JAY JADHAV
@@ -139,7 +139,7 @@ const DEFAULT_RESULTS: { [studentId: string]: { [examId: string]: ExamResult } }
     '25-8-Daisies': { '2': { robotics: 48, coding: 0 } }, // ParthVishalMane
     '26-8-Daisies': { '2': { robotics: 37, coding: 0 } }, // PIVALJANGID
     '27-8-Daisies': { '2': { robotics: 27, coding: 0 } }, // Pratik Prem Kumar
-    '28-8-Daisies': { '2': { robotics: 27, coding: 0 } }, // pratik jadhav
+    '28-8-Daisies': { '2': { robotics: 43, coding: 0 } }, // pratik jadhav
     '29-8-Daisies': { '2': { robotics: 24, coding: 0 } }, // rajpal yadav
     '30-8-Daisies': { '2': { robotics: 16, coding: 0 } }, // riya helode
     '31-8-Daisies': { '2': { robotics: 40, coding: 0 } }, // rudra tarmale
