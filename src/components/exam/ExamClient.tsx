@@ -20,7 +20,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import { Code, Send, Loader2, ShieldAlert, MonitorPlay, AlertTriangle } from "lucide-react";
-import { getCurrentUser } from "@/lib/user-store";
+import { getCurrentUser, type User } from "@/lib/user-store";
 import { sendSubmissionEmail } from "@/ai/flows/send-submission-email-flow";
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
 import { storeResult, hasAttemptedExam, markExamAsAttempted } from "@/lib/exam-store";
@@ -36,11 +36,19 @@ export default function ExamClient({ examId }: { examId: string }) {
   const [codingAnswer, setCodingAnswer] = useState("");
   const { toast } = useToast();
   const examSubmittedRef = useRef(false);
+  const [student, setStudent] = useState<User | null>(null);
 
   // Load exam questions and check for previous attempts
   useEffect(() => {
-    const student = getCurrentUser();
-    if (student && hasAttemptedExam(student.rollNumber, examId)) {
+    const studentUser = getCurrentUser();
+    if (!studentUser) {
+        setStatus("blocked");
+        toast({ title: "Error", description: "Could not find student details. Please log in again." });
+        return;
+    }
+    setStudent(studentUser);
+
+    if (hasAttemptedExam(`${studentUser.rollNumber}-${studentUser.class}-${studentUser.section}`, examId)) {
         setStatus("blocked");
         return;
     }
@@ -48,6 +56,7 @@ export default function ExamClient({ examId }: { examId: string }) {
     const questionSetIndex = parseInt(examId, 10) - 1;
     if (isNaN(questionSetIndex) || questionSetIndex < 0 || questionSetIndex >= 8) {
         setStatus("blocked");
+        toast({ title: "Invalid Exam", description: "This exam set is not available." });
         return;
     }
     
@@ -59,7 +68,7 @@ export default function ExamClient({ examId }: { examId: string }) {
     setMcqQuestions(examQuestions);
     
     setStatus("fullscreen_prompt");
-  }, [examId]);
+  }, [examId, toast]);
 
   // Proctoring: Tab switching and fullscreen exit detection
   useEffect(() => {
@@ -167,7 +176,7 @@ export default function ExamClient({ examId }: { examId: string }) {
     examSubmittedRef.current = true;
     
     setStatus("submitting");
-    const student = getCurrentUser();
+
     if (!student) {
         toast({
             variant: "destructive",
@@ -188,9 +197,11 @@ export default function ExamClient({ examId }: { examId: string }) {
 
     const totalMcq = mcqQuestions.length;
     const mcqScore = Math.round((mcqCorrect / totalMcq) * 80);
+    const studentId = `${student.rollNumber}-${student.class}-${student.section}`;
 
-    storeResult(student.rollNumber, examId, { robotics: mcqScore, coding: -1 });
-    markExamAsAttempted(student.rollNumber, examId);
+
+    storeResult(student.rollNumber, student.class, student.section, examId, { robotics: mcqScore, coding: -1 });
+    markExamAsAttempted(studentId, examId);
 
     const answeredQuestions = mcqQuestions.map(q => ({
         question: q.question,

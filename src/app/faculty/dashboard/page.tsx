@@ -47,7 +47,7 @@ export default function FacultyDashboard() {
 
   const getStudentResult = (student: User): ExamResult | null => {
     const uniqueStudentKey = `${student.rollNumber}-${student.class}-${student.section}`;
-    const studentResults = allResults[uniqueStudentKey] || allResults[student.rollNumber];
+    const studentResults = allResults[uniqueStudentKey];
     if (studentResults) {
       const examIds = Object.keys(studentResults);
       if (examIds.length > 0) {

@@ -48,7 +48,7 @@ export default function ResultPage() {
             const uniqueStudentKeyForResults = `${userForMarksheet.rollNumber}-${userForMarksheet.class}-${userForMarksheet.section}`;
             
             // Try finding result with unique key first, then fall back to just roll number
-            let studentResults = allResults[uniqueStudentKeyForResults] || allResults[userForMarksheet.rollNumber];
+            let studentResults = allResults[uniqueStudentKeyForResults];
             
             if (studentResults) {
                 const availableExamIds = Object.keys(studentResults);
@@ -151,5 +151,3 @@ export default function ResultPage() {
         </div>
     )
 }
-
-    

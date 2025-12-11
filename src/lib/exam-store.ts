@@ -79,76 +79,76 @@ const DEFAULT_RESULTS: { [studentId: string]: { [examId: string]: ExamResult } }
     '4-7-Daisies': { '1': { robotics: 16, coding: 0 } }, // Aryan Nigam
     '06-7-Daisies': { '1': { robotics: 35, coding: 0 } }, // Gauri Chavan
     '11-7-Daisies': { '1': { robotics: 32, coding: 0 } }, // mukta sagar tawale
-    '14-7-Daisies': { '1': { robotics: 35, coding: 0 } }, // PRAVEENSINGH RAO
-    '15-7-Daisies': { '1': { robotics: 16, coding: 0 } }, // pruthviraj Patil
-    '17-7-Daisies': { '1': { robotics: 35, coding: 0 } }, // Risheesh Kannoly
-    '20-7-Daisies': { '1': { robotics: 27, coding: 0 } }, // ROHITSETHIYA
-    '23-7-Daisies': { '1': { robotics: 27, coding: 0 } }, // Samyak Chaandrikapure
-    '25-7-Daisies': { '1': { robotics: 29, coding: 0 } }, // shaurya patil
-    '27-7-Daisies': { '1': { robotics: 40, coding: 0 } }, // shriyan.patel
-    '28-7-Daisies': { '1': { robotics: 43, coding: 0 } }, // sridharshan
-    '29-7-Daisies': { '1': { robotics: 19, coding: 0 } }, // tirth dhiwar
+    '14-7-Daisies': { '1': { robotics: 21, coding: 0 } }, // PRAVEENSINGH RAO
+    '15-7-Daisies': { '1': { robotics: 29, coding: 0 } }, // pruthviraj Patil
+    '17-7-Daisies': { '1': { robotics: 37, coding: 0 } }, // Risheesh Kannoly
+    '20-7-Daisies': { '1': { robotics: 19, coding: 0 } }, // ROHITSETHIYA
+    '23-7-Daisies': { '1': { robotics: 37, coding: 0 } }, // Samyak Chaandrikapure
+    '25-7-Daisies': { '1': { robotics: 27, coding: 0 } }, // shaurya patil
+    '27-7-Daisies': { '1': { robotics: 24, coding: 0 } }, // shriyan.patel
+    '28-7-Daisies': { '1': { robotics: 32, coding: 0 } }, // sridharshan
+    '29-7-Daisies': { '1': { robotics: 29, coding: 0 } }, // tirth dhiwar
 
     // Class 8 - Daffodils - Set 2
-    '01-8-Daffodils': { '2': { robotics: 40, coding: 0 } }, // ABHIUDAY SINGH
+    '01-8-Daffodils': { '2': { robotics: 45, coding: 0 } }, // ABHIUDAY SINGH
     '02-8-Daffodils': { '2': { robotics: 37, coding: 0 } }, // Adiraj Hole
-    '3-8-Daffodils': { '2': { robotics: 32, coding: 0 } }, // ADVAIT MULEY
+    '3-8-Daffodils': { '2': { robotics: 40, coding: 0 } }, // ADVAIT MULEY
     '5-8-Daffodils': { '2': { robotics: 24, coding: 0 } }, // ARNAV PANSARE
-    '06-8-Daffodils': { '2': { robotics: 35, coding: 0 } }, // Atharv Ray
-    '10-8-Daffodils': { '2': { robotics: 29, coding: 0 } }, // dimple.shekhawat
+    '06-8-Daffodils': { '2': { robotics: 43, coding: 0 } }, // Atharv Ray
+    '10-8-Daffodils': { '2': { robotics: 45, coding: 0 } }, // dimple.shekhawat
     '11-8-Daffodils': { '2': { robotics: 32, coding: 0 } }, // Harshada Tamhane
-    '12-8-Daffodils': { '2': { robotics: 8, coding: 0 } }, // HIND PATEL
-    '13-8-Daffodils': { '2': { robotics: 32, coding: 0 } }, // janvi Singh
-    '15-8-Daffodils': { '2': { robotics: 16, coding: 0 } }, // Keren Daniel
-    '16-8-Daffodils': { '2': { robotics: 37, coding: 0 } }, // KRISHAY SHIVLAL MAKANI
-    '17-8-Daffodils': { '2': { robotics: 35, coding: 0 } }, // MANNAT KOKATE
-    '19-8-Daffodils': { '2': { robotics: 40, coding: 0 } }, // MUJTABAKHAN
-    '20-8-Daffodils': { '2': { robotics: 27, coding: 0 } }, // Mishwa pokar
-    '22-8-Daffodils': { '2': { robotics: 29, coding: 0 } }, // MUKUND PATEL
+    '12-8-Daffodils': { '2': { robotics: 29, coding: 0 } }, // HIND PATEL
+    '13-8-Daffodils': { '2': { robotics: 27, coding: 0 } }, // janvi Singh
+    '15-8-Daffodils': { '2': { robotics: 48, coding: 0 } }, // Keren Daniel
+    '16-8-Daffodils': { '2': { robotics: 16, coding: 0 } }, // KRISHAY SHIVLAL MAKANI
+    '17-8-Daffodils': { '2': { robotics: 27, coding: 0 } }, // MANNAT KOKATE
+    '19-8-Daffodils': { '2': { robotics: 27, coding: 0 } }, // MUJTABAKHAN
+    '20-8-Daffodils': { '2': { robotics: 37, coding: 0 } }, // Mishwa pokar
+    '22-8-Daffodils': { '2': { robotics: 37, coding: 0 } }, // MUKUND PATEL
     '23-8-Daffodils': { '2': { robotics: 27, coding: 0 } }, // NIDHI SARMA
-    '24-8-Daffodils': { '2': { robotics: 32, coding: 0 } }, // piyu.sirohi
-    '27-8-Daffodils': { '2': { robotics: 40, coding: 0 } }, // Rohan Saha
+    '24-8-Daffodils': { '2': { robotics: 24, coding: 0 } }, // piyu.sirohi
+    '27-8-Daffodils': { '2': { robotics: 0, coding: 0 } }, // Rohan Saha
     '28-8-Daffodils': { '2': { robotics: 43, coding: 0 } }, // RUCHI RAMESH CHAUBEY
-    '29-8-Daffodils': { '2': { robotics: 19, coding: 0 } }, // sayali sharad gund
-    '30-8-Daffodils': { '2': { robotics: 37, coding: 0 } }, // shanttah dabhadkar
-    '31-8-Daffodils': { '2': { robotics: 48, coding: 0 } }, // subhransu sahoo
-    '33-8-Daffodils': { '2': { robotics: 32, coding: 0 } }, // sujal.pandit
+    '29-8-Daffodils': { '2': { robotics: 37, coding: 0 } }, // sayali sharad gund
+    '30-8-Daffodils': { '2': { robotics: 29, coding: 0 } }, // shanttah dabhadkar
+    '31-8-Daffodils': { '2': { robotics: 21, coding: 0 } }, // subhransu sahoo
+    '33-8-Daffodils': { '2': { robotics: 0, coding: 0 } }, // sujal.pandit
     '35-8-Daffodils': { '2': { robotics: 24, coding: 0 } }, // ved .mavani
-    '36-8-Daffodils': { '2': { robotics: 13, coding: 0 } }, // vidhyesh nikam
+    '36-8-Daffodils': { '2': { robotics: 19, coding: 0 } }, // vidhyesh nikam
     '37-8-Daffodils': { '2': { robotics: 19, coding: 0 } }, // vidhi dhonde
     '38-8-Daffodils': { '2': { robotics: 29, coding: 0 } }, // vijay gupta
 
     // Class 8 - Daisies - Set 2
-    '02-8-Daisies': { '2': { robotics: 37, coding: 0 } }, // Aditya Kumar raj
-    '5-8-Daisies': { '2': { robotics: 24, coding: 0 } }, // Arnav Ashok Godambe
+    '02-8-Daisies': { '2': { robotics: 43, coding: 0 } }, // Aditya Kumar raj
+    '5-8-Daisies': { '2': { robotics: 21, coding: 0 } }, // Arnav Ashok Godambe
     '06-8-Daisies': { '2': { robotics: 35, coding: 0 } }, // athang koli
-    '7-8-Daisies': { '2': { robotics: 27, coding: 0 } }, // devansh koli
+    '7-8-Daisies': { '2': { robotics: 32, coding: 0 } }, // devansh koli
     '09-8-Daisies': { '2': { robotics: 35, coding: 0 } }, // gauri prajapati
-    '10-8-Daisies': { '2': { robotics: 29, coding: 0 } }, // harsh pravin bhoir
-    '12-8-Daisies': { '2': { robotics: 8, coding: 0 } }, // jjjeshon rex
-    '13-8-Daisies': { '2': { robotics: 32, coding: 0 } }, // jalad tiwari
+    '10-8-Daisies': { '2': { robotics: 3, coding: 0 } }, // harsh pravin bhoir
+    '12-8-Daisies': { '2': { robotics: 35, coding: 0 } }, // jjjeshon rex
+    '13-8-Daisies': { '2': { robotics: 21, coding: 0 } }, // jalad tiwari
     '14-8-Daisies': { '2': { robotics: 35, coding: 0 } }, // JAY JADHAV
-    '15-8-Daisies': { '2': { robotics: 16, coding: 0 } }, // jignesh jitendra patil
-    '16-8-Daisies': { '2': { robotics: 37, coding: 0 } }, // kanak shah
-    '17-8-Daisies': { '2': { robotics: 35, coding: 0 } }, // Kashish sonawale
-    '19-8-Daisies': { '2': { robotics: 40, coding: 0 } }, // lucky tiwari
-    '20-8-Daisies': { '2': { robotics: 27, coding: 0 } }, // mher.pokar
-    '21-8-Daisies': { '2': { robotics: 32, coding: 0 } }, // moksh rakesh more
-    '22-8-Daisies': { '2': { robotics: 29, coding: 0 } }, // Naitik Jaiswal
-    '24-8-Daisies': { '2': { robotics: 32, coding: 0 } }, // pari baviskar
-    '25-8-Daisies': { '2': { robotics: 29, coding: 0 } }, // ParthVishalMane
-    '26-8-Daisies': { '2': { robotics: 35, coding: 0 } }, // PIVALJANGID
-    '27-8-Daisies': { '2': { robotics: 40, coding: 0 } }, // Pratik Prem Kumar
-    '28-8-Daisies': { '2': { robotics: 43, coding: 0 } }, // pratik jadhav
-    '29-8-Daisies': { '2': { robotics: 19, coding: 0 } }, // rajpal yadav
-    '30-8-Daisies': { '2': { robotics: 37, coding: 0 } }, // riya helode
-    '31-8-Daisies': { '2': { robotics: 48, coding: 0 } }, // rudra tarmale
+    '15-8-Daisies': { '2': { robotics: 0, coding: 0 } }, // jignesh jitendra patil
+    '16-8-Daisies': { '2': { robotics: 27, coding: 0 } }, // kanak shah
+    '17-8-Daisies': { '2': { robotics: 29, coding: 0 } }, // Kashish sonawale
+    '19-8-Daisies': { '2': { robotics: 37, coding: 0 } }, // lucky tiwari
+    '20-8-Daisies': { '2': { robotics: 29, coding: 0 } }, // mher.pokar
+    '21-8-Daisies': { '2': { robotics: 29, coding: 0 } }, // moksh rakesh more
+    '22-8-Daisies': { '2': { robotics: 48, coding: 0 } }, // Naitik Jaiswal
+    '24-8-Daisies': { '2': { robotics: 27, coding: 0 } }, // pari baviskar
+    '25-8-Daisies': { '2': { robotics: 48, coding: 0 } }, // ParthVishalMane
+    '26-8-Daisies': { '2': { robotics: 37, coding: 0 } }, // PIVALJANGID
+    '27-8-Daisies': { '2': { robotics: 27, coding: 0 } }, // Pratik Prem Kumar
+    '28-8-Daisies': { '2': { robotics: 27, coding: 0 } }, // pratik jadhav
+    '29-8-Daisies': { '2': { robotics: 24, coding: 0 } }, // rajpal yadav
+    '30-8-Daisies': { '2': { robotics: 16, coding: 0 } }, // riya helode
+    '31-8-Daisies': { '2': { robotics: 40, coding: 0 } }, // rudra tarmale
     '32-8-Daisies': { '2': { robotics: 32, coding: 0 } }, // SANDEEP SETHI
-    '33-8-Daisies': { '2': { robotics: 32, coding: 0 } }, // sarah shirsat
+    '33-8-Daisies': { '2': { robotics: 29, coding: 0 } }, // sarah shirsat
     '34-8-Daisies': { '2': { robotics: 40, coding: 0 } }, // Shriyaan Nalawade
-    '35-8-Daisies': { '2': { robotics: 24, coding: 0 } }, // shubham raj
-    '37-8-Daisies': { '2': { robotics: 19, coding: 0 } }, // sriaadityaa kumar
-    '38-8-Daisies': { '2': { robotics: 29, coding: 0 } }, // Veer mugdiya
+    '35-8-Daisies': { '2': { robotics: 29, coding: 0 } }, // shubham raj
+    '37-8-Daisies': { '2': { robotics: 21, coding: 0 } }, // sriaadityaa kumar
+    '38-8-Daisies': { '2': { robotics: 32, coding: 0 } }, // Veer mugdiya
     '39-8-Daisies': { '2': { robotics: 40, coding: 0 } }, // Vivaan Pokar
 };
 
@@ -189,9 +189,10 @@ function getLocalStorageResults(): { [studentId: string]: { [examId: string]: Ex
     return {};
 }
 
-export function storeResult(studentId: string, examId: string, result: ExamResult) {
+export function storeResult(studentRoll: string, studentClass: string, studentSection: string, examId: string, result: ExamResult) {
     if (typeof window !== 'undefined') {
         const results = getLocalStorageResults();
+        const studentId = `${studentRoll}-${studentClass}-${studentSection}`;
         if (!results[studentId]) {
             results[studentId] = {};
         }
@@ -243,7 +244,7 @@ export function hasAttemptedExam(studentId: string, examId: string): boolean {
     if (typeof window !== 'undefined') {
         // An exam is considered attempted if a result exists for it (either hardcoded or in local storage).
         const uniqueStudentKey = `${studentId}-${examId}`; // This logic might need to be more sophisticated
-        const result = getResultForStudent(studentId, examId);
+        const result = getResultForStudent(uniqueStudentKey, examId);
         if (result) return true;
 
         // Fallback check for manually marked attempts, though the result check should be primary.
