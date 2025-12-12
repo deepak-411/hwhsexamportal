@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { BookCopy, Users, ExternalLink } from "lucide-react";
+import { BookCopy, Users, ExternalLink, Award } from "lucide-react";
 import Link from "next/link";
 import { getStoredUsers, type User } from "@/lib/user-store";
 import { getStoredResults, type ExamResult } from "@/lib/exam-store";
@@ -20,12 +20,42 @@ export default function FacultyDashboard() {
   const [totalStudents, setTotalStudents] = useState(0);
   const [allResults, setAllResults] = useState<{ [key: string]: any }>({});
   const [groupedStudents, setGroupedStudents] = useState<GroupedStudents>({});
+  const [topStudents, setTopStudents] = useState<{ [className: string]: (User & { score: number })[] }>({});
 
   useEffect(() => {
     const users = getStoredUsers();
     const results = getStoredResults();
     setAllResults(results);
     setTotalStudents(users.length);
+
+    const getStudentResult = (student: User): ExamResult | null => {
+      const uniqueStudentKey = `${student.rollNumber.padStart(2, '0')}-${student.class}-${student.section}`;
+      const studentResults = results[uniqueStudentKey];
+      if (studentResults) {
+        const examIds = Object.keys(studentResults);
+        if (examIds.length > 0) {
+          return studentResults[examIds[0]];
+        }
+      }
+      return null;
+    }
+    
+    // Calculate top students
+    const studentsWithScores = users
+      .map(user => {
+        const result = getStudentResult(user);
+        return { ...user, score: result ? result.robotics : 0 };
+      })
+      .filter(user => user.score > 0);
+
+    const topPerformers: { [className: string]: (User & { score: number })[] } = {};
+    ['7', '8'].forEach(className => {
+      topPerformers[className] = studentsWithScores
+        .filter(student => student.class === className)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 2);
+    });
+    setTopStudents(topPerformers);
 
     const grouped = users.reduce((acc, user) => {
       const { class: className, section } = user;
@@ -79,7 +109,7 @@ export default function FacultyDashboard() {
             <div className="container mx-auto">
                 <h1 className="font-headline text-4xl font-bold mb-8">Faculty Dashboard</h1>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Total Students</CardTitle>
@@ -110,6 +140,27 @@ export default function FacultyDashboard() {
                              <Link href="/faculty/evaluate">
                                 <Button className="w-full">Evaluate Coding Submissions</Button>
                             </Link>
+                        </CardContent>
+                    </Card>
+                     <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">Top Performers</CardTitle>
+                            <Award className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          {Object.keys(topStudents).map(className => (
+                              <div key={className}>
+                                  <h4 className="text-sm font-semibold text-primary">Class {className}</h4>
+                                  <ul className="text-xs text-muted-foreground space-y-1 mt-1">
+                                    {topStudents[className].map((student, index) => (
+                                        <li key={student.rollNumber + student.name} className="flex justify-between">
+                                            <span>{index + 1}. {student.name}</span>
+                                            <span className="font-bold">{student.score}/80</span>
+                                        </li>
+                                    ))}
+                                  </ul>
+                              </div>
+                          ))}
                         </CardContent>
                     </Card>
                 </div>
