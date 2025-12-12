@@ -14,10 +14,7 @@ type MarksheetProps = {
     section: string;
     examTitle: string;
     roboticsMarks: number;
-    codingMarks: number | string;
-    totalObtained: number;
-    totalMax: number;
-    isFinal: boolean;
+    codingMarks: number;
 };
 
 export default function Marksheet({
@@ -35,8 +32,10 @@ export default function Marksheet({
         setCurrentDate(new Date().toLocaleDateString());
     }, []);
 
-    const percentage = (roboticsMarks / 80) * 100;
-    const passStatus = percentage >= 35 ? "PASS" : "FAIL";
+    const passPercentage = 35;
+    const totalMarks = 80;
+    const percentage = (roboticsMarks / totalMarks) * 100;
+    const passStatus = percentage >= passPercentage ? "PASS" : "FAIL";
 
     const getGrade = () => {
         if (percentage >= 90) return 'A1';
@@ -50,7 +49,7 @@ export default function Marksheet({
     
     const grade = getGrade();
 
-    const codingStatus = typeof codingMarks === 'number' && codingMarks >= 0 ? "Qualified" : "Not Qualified";
+    const codingStatus = codingMarks >= 0 ? "Qualified" : "Not Qualified";
 
   return (
     <Card className="max-w-4xl mx-auto border-2 border-primary shadow-2xl print:shadow-none print:border-none bg-white text-black printable-content">
@@ -93,7 +92,7 @@ export default function Marksheet({
                     <TableRow>
                         <TableCell>1</TableCell>
                         <TableCell>Robotics & AI (MCQ)</TableCell>
-                        <TableCell className="text-right">80</TableCell>
+                        <TableCell className="text-right">{totalMarks}</TableCell>
                         <TableCell className="text-right">{roboticsMarks}</TableCell>
                     </TableRow>
                      <TableRow>
@@ -106,7 +105,7 @@ export default function Marksheet({
                 <TableFooter>
                     <TableRow className="bg-white">
                         <TableCell colSpan={2} className="font-bold">Total</TableCell>
-                        <TableCell className="text-right font-bold">80</TableCell>
+                        <TableCell className="text-right font-bold">{totalMarks}</TableCell>
                         <TableCell className="text-right font-bold">{roboticsMarks}</TableCell>
                     </TableRow>
                 </TableFooter>

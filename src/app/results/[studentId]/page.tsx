@@ -7,7 +7,7 @@ import { ArrowLeft, Printer, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { findUser, type User } from "@/lib/user-store";
+import { findUser } from "@/lib/user-store";
 import { getStoredResults, type ExamResult } from "@/lib/exam-store";
 
 
@@ -18,8 +18,7 @@ type MarksheetData = {
     section: string;
     exam: string;
     marks: ExamResult;
-    totalMarks: { robotics: number; coding: number; };
-}
+};
 
 export default function ResultPage() {
     const params = useParams();
@@ -61,10 +60,6 @@ export default function ResultPage() {
                         section: userForMarksheet.section,
                         exam: `Robotics and AI Examination 2025`,
                         marks: result,
-                        totalMarks: {
-                            robotics: 80,
-                            coding: 20
-                        },
                     });
                 } else {
                     setError(`No exam result found for ${userForMarksheet.name} (Roll No: ${studentId}).`);
@@ -109,10 +104,6 @@ export default function ResultPage() {
         return <div className="flex h-screen items-center justify-center"><p>An unexpected error occurred while loading the marksheet.</p></div>
     }
 
-    const obtainedTotal = studentResult.marks.robotics >= 0 ? studentResult.marks.robotics : 0;
-    const maximumTotal = studentResult.totalMarks.robotics;
-    const isCodingEvaluated = studentResult.marks.coding >= 0;
-
     return (
         <div className="p-4 sm:p-6 md:p-8">
              <div className="container mx-auto">
@@ -139,9 +130,6 @@ export default function ResultPage() {
                         examTitle={studentResult.exam}
                         roboticsMarks={studentResult.marks.robotics}
                         codingMarks={studentResult.marks.coding}
-                        totalObtained={obtainedTotal}
-                        totalMax={maximumTotal}
-                        isFinal={isCodingEvaluated}
                     />
                 </div>
             </div>
