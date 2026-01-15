@@ -5,24 +5,30 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { BookOpen, Trophy } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getExamForStudent, type ScheduledExam } from "@/lib/exam-store";
+import { getExamForStudent, type ScheduledExam, hasAttemptedExam } from "@/lib/exam-store";
 import { getCurrentUser, clearCurrentUser, type User } from "@/lib/user-store";
 import { useRouter } from "next/navigation";
 
 export default function StudentDashboard() {
   const [activeExam, setActiveExam] = useState<ScheduledExam | null>(null);
   const [student, setStudent] = useState<User | null>(null);
+  const [isResultAvailable, setIsResultAvailable] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     const user = getCurrentUser();
     if (user) {
         setStudent(user);
-        // Find the exam specific to this student's class and section
         const examForStudent = getExamForStudent(user.class, user.section);
         setActiveExam(examForStudent);
+
+        if (examForStudent) {
+            const studentId = `${user.rollNumber.padStart(2, '0')}-${user.class}-${user.section}`;
+            if (hasAttemptedExam(studentId, examForStudent.selectedSet)) {
+                setIsResultAvailable(true);
+            }
+        }
     } else {
-        // Redirect to login if no user is found
         router.push('/auth/student/login');
     }
   }, [router]);
@@ -126,11 +132,15 @@ export default function StudentDashboard() {
                             <CardDescription>Check your published exam results.</CardDescription>
                         </CardHeader>
                          <CardContent>
-                           <p className="text-muted-foreground">Results will be available here after evaluation.</p>
+                           <p className="text-muted-foreground">
+                            {isResultAvailable 
+                                ? "Your results are available. Click the button below to view your marksheet." 
+                                : "Results will be available here after evaluation."}
+                           </p>
                         </CardContent>
                         <CardFooter>
-                            <Button asChild className="w-full" variant="secondary">
-                                <Link href={`/results/${student.rollNumber}`}>View Results</Link>
+                            <Button asChild className="w-full" variant="secondary" disabled={!isResultAvailable}>
+                                <Link href={`/results/${student.rollNumber}?class=${student.class}&section=${student.section}`}>View Results</Link>
                             </Button>
                         </CardFooter>
                     </Card>
