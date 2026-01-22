@@ -14,6 +14,7 @@ type CertificateData = {
     className: string;
     rank: number;
     medal: 'Gold' | 'Silver' | 'Bronze';
+    certificateNumber: string;
 };
 
 export default function CertificatePage() {
@@ -63,14 +64,16 @@ export default function CertificatePage() {
               .sort((a, b) => b.score - a.score);
 
             const rank = studentsInClass.findIndex(u => u.rollNumber === studentId && u.section === studentSection) + 1;
-
+            
             if (rank > 0 && rank <= 3) {
+                 const uniqueCertId = `HWHS-CERT-${user.class}${user.rollNumber}-${new Date().getFullYear()}${rank}`;
                  setCertificateData({
                     name: user.name,
                     rollNumber: user.rollNumber,
                     className: user.class,
                     rank: rank,
                     medal: rank === 1 ? 'Gold' : rank === 2 ? 'Silver' : 'Bronze',
+                    certificateNumber: uniqueCertId,
                 });
             } else {
                  setError(`Student ${user.name} is not a top 3 performer in Class ${studentClass}.`);
@@ -121,7 +124,7 @@ export default function CertificatePage() {
                             <ArrowLeft/>
                         </Button>
                         <h1 className="font-headline text-4xl font-bold">
-                            Certificate of Achievement
+                            Certificate of Excellence
                         </h1>
                     </div>
                      <Button onClick={handlePrint}>
@@ -135,6 +138,7 @@ export default function CertificatePage() {
                     className={certificateData.className}
                     rank={certificateData.rank}
                     medal={certificateData.medal}
+                    certificateNumber={certificateData.certificateNumber}
                 />
             </div>
         </div>

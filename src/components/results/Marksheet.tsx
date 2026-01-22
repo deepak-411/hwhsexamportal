@@ -5,6 +5,7 @@ import Logo from "@/components/Logo";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import Barcode from 'react-barcode';
 
 type MarksheetProps = {
     studentName: string;
@@ -14,6 +15,7 @@ type MarksheetProps = {
     examTitle: string;
     roboticsMarks: number;
     codingMarks: number;
+    marksheetNumber: string;
 };
 
 export default function Marksheet({
@@ -24,11 +26,12 @@ export default function Marksheet({
     examTitle,
     roboticsMarks,
     codingMarks,
+    marksheetNumber,
 }: MarksheetProps) {
     const [currentDate, setCurrentDate] = React.useState("");
 
     React.useEffect(() => {
-        setCurrentDate(new Date().toLocaleDateString());
+        setCurrentDate(new Date().toLocaleDateString('en-GB'));
     }, []);
 
     const passPercentage = 35;
@@ -66,15 +69,16 @@ export default function Marksheet({
             </header>
 
             <div className="my-8 text-center bg-primary text-primary-foreground py-2 rounded-md">
-                <h2 className="font-bold text-xl tracking-wider">{examTitle}</h2>
+                <h2 className="font-bold text-xl tracking-wider">STATEMENT OF MARKS</h2>
             </div>
 
-            <div className="grid grid-cols-2 gap-x-8 gap-y-4 text-base mb-8">
+            <div className="grid grid-cols-2 gap-x-8 gap-y-4 text-base mb-4">
                 <div><span className="font-semibold">Student's Name:</span> {studentName}</div>
                 <div><span className="font-semibold">Roll No:</span> {rollNumber}</div>
                 <div><span className="font-semibold">Class:</span> {className}</div>
                 <div><span className="font-semibold">Section:</span> {section}</div>
             </div>
+             <div className="text-sm mb-8"><span className="font-semibold">Marksheet No:</span> {marksheetNumber}</div>
 
             <Separator className="my-8"/>
 
@@ -117,20 +121,26 @@ export default function Marksheet({
                     <p className="font-bold text-lg">Grade: <span className="text-primary">{grade}</span></p>
                  </div>
                  <div className="text-right self-end">
-                    {currentDate && <p>Date: {currentDate}</p>}
+                    {currentDate && <p>Date of Issue: {currentDate}</p>}
                  </div>
             </div>
-
-            <footer className="flex justify-between mt-24 pt-8 border-t">
-                <div className="text-center">
-                    <div className="h-12"></div>
-                    <p className="border-t border-dashed mt-2 pt-1 font-semibold">Vikas Dalal (Vice Principal)</p>
+            
+            <div className="flex justify-between items-center mt-16">
+                 <div className="flex flex-col items-center">
+                    <Barcode value={marksheetNumber} height={30} width={1} fontSize={10} />
+                    <p className="text-xs text-gray-600 mt-1">Scan to verify</p>
                 </div>
-                 <div className="text-center">
-                    <div className="h-12"></div>
-                    <p className="border-t border-dashed mt-2 pt-1 font-semibold">Subrata Kundu (Principal)</p>
-                </div>
-            </footer>
+                <footer className="flex gap-16">
+                    <div className="text-center">
+                        <div className="h-12"></div>
+                        <p className="border-t border-dashed mt-2 pt-1 font-semibold">Vikas Dalal (Vice Principal)</p>
+                    </div>
+                     <div className="text-center">
+                        <div className="h-12"></div>
+                        <p className="border-t border-dashed mt-2 pt-1 font-semibold">Subrata Kundu (Principal)</p>
+                    </div>
+                </footer>
+            </div>
         </CardContent>
     </Card>
   )

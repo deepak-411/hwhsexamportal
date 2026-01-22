@@ -1,4 +1,3 @@
-
 'use client';
 import Marksheet from "@/components/results/Marksheet";
 import { Button } from "@/components/ui/button";
@@ -18,6 +17,7 @@ type MarksheetData = {
     section: string;
     exam: string;
     marks: ExamResult;
+    marksheetNumber: string;
 };
 
 export default function ResultPage() {
@@ -52,14 +52,17 @@ export default function ResultPage() {
                 if (availableExamIds.length > 0) {
                     const firstExamId = availableExamIds[0];
                     const result = studentResults[firstExamId];
+                    const uniqueMarksheetId = `HWHS-MARK-${userForMarksheet.class}${userForMarksheet.rollNumber}-${new Date().getTime()}`;
+
                     
                     setStudentResult({
                         name: userForMarksheet.name,
                         rollNumber: userForMarksheet.rollNumber,
                         class: userForMarksheet.class,
                         section: userForMarksheet.section,
-                        exam: `Robotics and AI Examination 2025`,
+                        exam: `Robotics and AI Examination 2025-2026`,
                         marks: result,
+                        marksheetNumber: uniqueMarksheetId,
                     });
                 } else {
                     setError(`No exam result found for ${userForMarksheet.name} (Roll No: ${studentId}).`);
@@ -105,7 +108,7 @@ export default function ResultPage() {
     }
 
     return (
-        <div className="p-4 sm:p-6 md:p-8">
+        <div className="p-4 sm:p-6 md:p-8 print:bg-white">
              <div className="container mx-auto">
                 <div className="flex items-center justify-between gap-4 mb-8 print:hidden">
                     <div className="flex items-center gap-4">
@@ -130,6 +133,7 @@ export default function ResultPage() {
                         examTitle={studentResult.exam}
                         roboticsMarks={studentResult.marks.robotics}
                         codingMarks={studentResult.marks.coding}
+                        marksheetNumber={studentResult.marksheetNumber}
                     />
                 </div>
             </div>
