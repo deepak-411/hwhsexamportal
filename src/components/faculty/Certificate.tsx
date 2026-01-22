@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Logo from "@/components/Logo";
-import Barcode from 'react-barcode';
 
 type CertificateProps = {
     studentName: string;
@@ -125,9 +124,6 @@ export default function Certificate({
                             </div>
                         </div>
 
-                        <div className="flex flex-col items-center mt-6">
-                            <Barcode value={certificateNumber} height={40} width={1.5} fontSize={12} displayValue={false} />
-                        </div>
                     </div>
                 </div>
             </div>

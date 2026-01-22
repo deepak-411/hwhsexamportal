@@ -5,7 +5,6 @@ import Logo from "@/components/Logo";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import Barcode from 'react-barcode';
 
 type MarksheetProps = {
     studentName: string;
@@ -125,10 +124,7 @@ export default function Marksheet({
                  </div>
             </div>
             
-            <div className="flex justify-between items-center mt-12">
-                 <div className="flex flex-col items-center">
-                    <Barcode value={marksheetNumber} height={30} width={1} fontSize={10} displayValue={false} />
-                </div>
+            <div className="flex justify-end items-center mt-12">
                 <footer className="flex gap-16">
                     <div className="text-center">
                         <div className="h-12"></div>

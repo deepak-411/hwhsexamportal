@@ -5,9 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { questions } from '@/lib/questions';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Download } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { storeExam } from '@/lib/exam-store';
@@ -37,83 +36,6 @@ export default function ScheduleExamPage() {
     });
 
     router.push('/faculty/dashboard');
-  };
-
-  const handleDownload = async () => {
-    if (!selectedSet) {
-      toast({
-        variant: 'destructive',
-        title: 'No Set Selected',
-        description: 'Please select a question set to download.',
-      });
-      return;
-    }
-    
-    // Lazy-load docx
-    const { Document, Packer, Paragraph, TextRun } = await import('docx');
-    
-    const questionSetIndex = parseInt(selectedSet, 10) - 1;
-    const questionsPerSet = 30;
-    const start = questionSetIndex * questionsPerSet;
-    const end = start + questionsPerSet;
-    const questionPaper = questions.slice(start, end);
-
-    const doc = new Document({
-      sections: [
-        {
-          children: [
-            new Paragraph({
-              text: 'Holy Writ High School and Junior College',
-              heading: 'Title',
-              alignment: 'center',
-            }),
-            new Paragraph({
-              text: `Robotics and AI Examination - Question Set ${selectedSet}`,
-              heading: 'Heading1',
-              alignment: 'center',
-            }),
-            ...questionPaper.flatMap((q, i) => [
-              new Paragraph({
-                children: [
-                  new TextRun({
-                    text: `Q${i + 1}: ${q.question}`,
-                    bold: true,
-                  }),
-                ],
-                spacing: { before: 200 },
-              }),
-              ...q.options.map(
-                (option, j) =>
-                  new Paragraph({
-                    children: [
-                      new TextRun(`${String.fromCharCode(97 + j)}) ${option}`),
-                    ],
-                    indent: { left: 720 }, // Indent options
-                  })
-              ),
-              new Paragraph({
-                children: [
-                  new TextRun({
-                    text: `Answer: ${q.answer}`,
-                    color: 'FF0000', // Red color for the answer
-                  }),
-                ],
-                 indent: { left: 720 },
-              }),
-            ]),
-          ],
-        },
-      ],
-    });
-
-    Packer.toBlob(doc).then(blob => {
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `Question_Set_${selectedSet}.docx`;
-      a.click();
-      window.URL.revokeObjectURL(url);
-    });
   };
 
   return (
@@ -173,12 +95,8 @@ export default function ScheduleExamPage() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col gap-4">
                 <Button onClick={handleSchedule} className="flex-1">Schedule Exam</Button>
-                <Button onClick={handleDownload} variant="secondary" className="flex-1">
-                    <Download className="mr-2" />
-                    Download Questions
-                </Button>
             </div>
           </CardContent>
         </Card>
