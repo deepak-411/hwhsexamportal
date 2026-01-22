@@ -58,7 +58,7 @@ export default function Certificate({
     return (
         <div className="bg-stone-50 text-black max-w-4xl mx-auto p-2 printable-content print:m-0 print:p-0 print:shadow-none print:max-w-none">
             <div className="border-[12px] border-solid border-blue-900 p-6 bg-white relative">
-                 <div className="border-[4px] border-solid border-yellow-500 p-6 relative h-[980px]">
+                 <div className="border-[4px] border-solid border-yellow-500 p-6 relative flex flex-col min-h-[980px]">
                     {/* Watermark */}
                     <div className="absolute inset-0 flex items-center justify-center z-0 opacity-10">
                         <svg width="300" height="300" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -67,64 +67,68 @@ export default function Certificate({
                         </svg>
                     </div>
 
-                    <header className="relative z-10 flex flex-col items-center text-center mb-6">
-                        <div className="w-24 h-24">
-                            <Logo />
-                        </div>
-                        <h1 className="font-headline text-4xl font-bold text-blue-900 mt-4">
-                            Holy Writ High School and Junior College
-                        </h1>
-                        <p className="text-gray-600 mt-1">Pimpoli, Barvi Dam Road, Badlapur (W)</p>
-                    </header>
-                    
-                    <div className="relative z-10 text-center my-8">
-                        <h2 className="text-5xl font-headline font-extrabold text-red-700 tracking-wider uppercase" style={{ fontFamily: "'Times New Roman', serif" }}>
-                            Certificate of Excellence
-                        </h2>
-                    </div>
-
-                    <div className="relative z-10 text-center text-xl space-y-4 my-8">
-                        <p>This is to certify that</p>
-                        <div>
-                            <h3 className="text-4xl font-bold text-blue-900 tracking-wide" style={{ fontFamily: "'Brush Script MT', cursive" }}>
-                                {studentName}
-                            </h3>
-                            <p className="text-lg text-gray-700">Roll Number: {rollNumber}</p>
-                        </div>
-                        <p className="px-8 pt-2">
-                            has demonstrated outstanding academic excellence and secured the <span className="font-bold">{rankSuffix(rank)}</span> position
-                            in the Robotics & AI Examination for Class {className} in the academic year 2025-2026.
-                        </p>
-                    </div>
-
-                    <div className="relative z-10 flex justify-center my-10">
-                        <div className="flex flex-col items-center text-center">
-                            <div className={`relative w-28 h-28 rounded-full ${gradient} flex items-center justify-center shadow-xl ${shadow}`}>
-                                <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/30 to-transparent"></div>
-                                <span className={`font-headline text-6xl font-extrabold ${textColor} drop-shadow`}>{rank}</span>
+                    <div className="flex-grow relative z-10">
+                        <header className="flex flex-col items-center text-center mb-6">
+                            <div className="w-24 h-24">
+                                <Logo />
                             </div>
-                            <p className={`text-3xl font-bold mt-4 ${textColor} drop-shadow-sm`}>{medal} Medal</p>
+                            <h1 className="font-headline text-4xl font-bold text-blue-900 mt-4">
+                                Holy Writ High School and Junior College
+                            </h1>
+                            <p className="text-gray-600 mt-1">Pimpoli, Barvi Dam Road, Badlapur (W)</p>
+                        </header>
+                        
+                        <div className="text-center my-8">
+                            <h2 className="text-5xl font-headline font-extrabold text-red-700 tracking-wider uppercase" style={{ fontFamily: "'Times New Roman', serif" }}>
+                                Certificate of Excellence
+                            </h2>
+                        </div>
+
+                        <div className="text-center text-xl space-y-4 my-8">
+                            <p>This is to certify that</p>
+                            <div>
+                                <h3 className="text-4xl font-bold text-blue-900 tracking-wide" style={{ fontFamily: "'Times New Roman', serif" }}>
+                                    {studentName}
+                                </h3>
+                                <p className="text-lg text-gray-700">Roll Number: {rollNumber}</p>
+                            </div>
+                            <p className="px-8 pt-2">
+                                has demonstrated outstanding academic excellence and secured the <span className="font-bold">{rankSuffix(rank)}</span> position
+                                in the Robotics & AI Examination for Class {className} in the academic year 2025-2026.
+                            </p>
+                        </div>
+
+                        <div className="flex justify-center my-10">
+                            <div className="flex flex-col items-center text-center">
+                                <div className={`relative w-28 h-28 rounded-full ${gradient} flex items-center justify-center shadow-xl ${shadow}`}>
+                                    <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/30 to-transparent"></div>
+                                    <span className={`font-headline text-6xl font-extrabold ${textColor} drop-shadow`}>{rank}</span>
+                                </div>
+                                <p className={`text-3xl font-bold mt-4 ${textColor} drop-shadow-sm`}>{medal} Medal</p>
+                            </div>
                         </div>
                     </div>
                     
-                    <div className="relative z-10 flex justify-between items-end mt-16 text-center">
-                        <div className="w-1/3">
-                            {issuedDate && <p className="text-sm">Date: {issuedDate}</p>}
-                            <p className="text-sm mt-1">Cert. No: {certificateNumber}</p>
+                    <div className="relative z-10 mt-auto pt-8">
+                        <div className="flex justify-between items-end text-center">
+                            <div className="w-1/3">
+                                {issuedDate && <p className="text-sm">Date: {issuedDate}</p>}
+                                <p className="text-sm mt-1">Cert. No: {certificateNumber}</p>
+                            </div>
+                            <div className="w-1/3">
+                                <p className="font-serif text-lg border-t-2 border-gray-700 px-4 pt-1">Vikas Dalal</p>
+                                <p className="text-sm font-semibold">Vice-Principal</p>
+                            </div>
+                            <div className="w-1/3">
+                                <p className="font-serif text-lg border-t-2 border-gray-700 px-4 pt-1">Subrata Kundu</p>
+                                <p className="text-sm font-semibold">Principal</p>
+                            </div>
                         </div>
-                         <div className="w-1/3">
-                            <p className="font-serif text-lg border-t-2 border-gray-700 px-4 pt-1">Vikas Dalal</p>
-                            <p className="text-sm font-semibold">Vice-Principal</p>
-                        </div>
-                         <div className="w-1/3">
-                            <p className="font-serif text-lg border-t-2 border-gray-700 px-4 pt-1">Subrata Kundu</p>
-                            <p className="text-sm font-semibold">Principal</p>
-                        </div>
-                    </div>
 
-                    <div className="relative z-10 flex flex-col items-center mt-6">
-                        <Barcode value={certificateNumber} height={40} width={1.5} fontSize={12} />
-                        <p className="text-xs text-gray-600 mt-1">Scan to verify</p>
+                        <div className="flex flex-col items-center mt-6">
+                            <Barcode value={certificateNumber} height={40} width={1.5} fontSize={12} />
+                            <p className="text-xs text-gray-600 mt-1">Scan to verify</p>
+                        </div>
                     </div>
                 </div>
             </div>
