@@ -70,10 +70,12 @@ const DEFAULT_RESULTS: { [studentId: string]: { [examId: string]: ExamResult } }
     '22-7-Daffodils': { '1': { robotics: 29, coding: -1 } },
     '26-7-Daffodils': { '1': { robotics: 35, coding: -1 } },
     '27-7-Daffodils': { '1': { robotics: 48, coding: -1 } },
+    '28-7-Daffodils': { '1': { robotics: 24, coding: -1 } },
     '30-7-Daffodils': { '1': { robotics: 37, coding: -1 } },
     '31-7-Daffodils': { '1': { robotics: 48, coding: -1 } },
     '03-7-Daisies': { '2': { robotics: 32, coding: -1 } },
     '04-7-Daisies': { '2': { robotics: 32, coding: -1 } },
+    '05-7-Daisies': { '2': { robotics: 29, coding: -1 } },
     '06-7-Daisies': { '2': { robotics: 37, coding: -1 } },
     '11-7-Daisies': { '2': { robotics: 35, coding: -1 } },
     '14-7-Daisies': { '2': { robotics: 21, coding: -1 } },
@@ -81,6 +83,7 @@ const DEFAULT_RESULTS: { [studentId: string]: { [examId: string]: ExamResult } }
     '17-7-Daisies': { '2': { robotics: 37, coding: -1 } },
     '20-7-Daisies': { '2': { robotics: 19, coding: -1 } },
     '23-7-Daisies': { '2': { robotics: 37, coding: -1 } },
+    '24-7-Daisies': { '2': { robotics: 3, coding: -1 } },
     '25-7-Daisies': { '2': { robotics: 27, coding: -1 } },
     '27-7-Daisies': { '2': { robotics: 24, coding: -1 } },
     '28-7-Daisies': { '2': { robotics: 32, coding: -1 } },
@@ -265,7 +268,21 @@ export function getStoredResults(): { [studentId: string]: { [examId: string]: E
         return DEFAULT_RESULTS;
     }
 
-    const localStorageResults = getLocalStorageResults();
+    let localStorageResults = {};
+    try {
+      const stored = window.localStorage.getItem(RESULTS_STORAGE_KEY);
+      if (stored) {
+        localStorageResults = JSON.parse(stored);
+      } else {
+        // If nothing is in local storage, initialize it with defaults
+        window.localStorage.setItem(RESULTS_STORAGE_KEY, JSON.stringify(DEFAULT_RESULTS));
+        localStorageResults = DEFAULT_RESULTS;
+      }
+    } catch (e) {
+      // In case of parsing error, fall back to defaults
+      return DEFAULT_RESULTS;
+    }
+
     // Deep merge, with localStorageResults overriding DEFAULT_RESULTS
     const allResults = JSON.parse(JSON.stringify(DEFAULT_RESULTS));
 
