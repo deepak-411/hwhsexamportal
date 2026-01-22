@@ -11,6 +11,11 @@ type MailOptions = {
 };
 
 export async function sendEmail({ to, subject, text, html }: MailOptions) {
+  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+    console.error('Email credentials not configured. Please set GMAIL_USER and GMAIL_APP_PASSWORD environment variables.');
+    throw new Error('Email service is not configured on the server.');
+  }
+
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
