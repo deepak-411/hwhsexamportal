@@ -52,13 +52,13 @@ export default function Marksheet({
 
   return (
     <Card className="max-w-4xl mx-auto border-2 border-primary shadow-2xl print:shadow-none print:border-none bg-white text-black printable-content">
-        <CardContent className="p-8 md:p-12">
+        <CardContent className="p-10 md:p-14">
             <header className="flex flex-col items-center justify-center text-center gap-4">
                 <div className="bg-white rounded-full">
                     <Logo />
                 </div>
                 <div>
-                    <h1 className="font-headline text-3xl md:text-4xl font-bold text-primary whitespace-nowrap">
+                    <h1 className="font-headline text-4xl md:text-5xl font-bold text-primary whitespace-nowrap">
                         Holy Writ High School and Junior College
                     </h1>
                     <p className="text-muted-foreground">Academic Session: 2025-2026</p>
@@ -69,7 +69,7 @@ export default function Marksheet({
                 <h2 className="font-bold text-xl tracking-wider">{examTitle}</h2>
             </div>
 
-            <div className="grid grid-cols-2 gap-x-8 gap-y-4 text-sm mb-8">
+            <div className="grid grid-cols-2 gap-x-8 gap-y-4 text-base mb-8">
                 <div><span className="font-semibold">Student's Name:</span> {studentName}</div>
                 <div><span className="font-semibold">Roll No:</span> {rollNumber}</div>
                 <div><span className="font-semibold">Class:</span> {className}</div>
@@ -112,11 +112,11 @@ export default function Marksheet({
             
             <div className="grid grid-cols-2 gap-8 mt-8">
                  <div>
-                    <p className="font-bold">Result: <span className="text-primary">{passStatus}</span></p>
-                    <p className="font-bold">Percentage: <span className="text-primary">{percentage.toFixed(2)}%</span></p>
-                    <p className="font-bold">Grade: <span className="text-primary">{grade}</span></p>
+                    <p className="font-bold text-lg">Result: <span className="text-primary">{passStatus}</span></p>
+                    <p className="font-bold text-lg">Percentage: <span className="text-primary">{percentage.toFixed(2)}%</span></p>
+                    <p className="font-bold text-lg">Grade: <span className="text-primary">{grade}</span></p>
                  </div>
-                 <div className="text-right">
+                 <div className="text-right self-end">
                     {currentDate && <p>Date: {currentDate}</p>}
                  </div>
             </div>

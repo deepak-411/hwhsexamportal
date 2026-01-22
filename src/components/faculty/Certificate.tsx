@@ -97,13 +97,10 @@ export default function Certificate({
                     </div>
                 </div>
                 
-                <div className="flex justify-between items-center mt-20 text-center">
+                <div className="flex justify-around items-center mt-20 text-center">
                     <div>
                         <p className="font-serif text-lg border-t-2 border-gray-700 px-4 pt-1">Vikas Dalal</p>
                         <p className="text-sm font-semibold">Vice-Principal</p>
-                    </div>
-                     <div className="text-blue-800/50">
-                       <Stamp size={80} strokeWidth={1}/>
                     </div>
                     <div>
                         <p className="font-serif text-lg border-t-2 border-gray-700 px-4 pt-1">Subrata Kundu</p>
