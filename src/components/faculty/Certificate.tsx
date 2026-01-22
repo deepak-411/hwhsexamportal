@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Logo from "@/components/Logo";
-import { Medal, Stamp } from "lucide-react";
+import { Stamp } from "lucide-react";
 
 type CertificateProps = {
     studentName: string;
@@ -12,10 +12,23 @@ type CertificateProps = {
 };
 
 const medalDetails = {
-    Gold: { color: "text-yellow-500", iconColor: "fill-yellow-500" },
-    Silver: { color: "text-gray-500", iconColor: "fill-gray-500" },
-    Bronze: { color: "text-orange-700", iconColor: "fill-orange-700" },
+    Gold: {
+        gradient: 'bg-gradient-to-br from-yellow-300 via-amber-400 to-yellow-600',
+        shadow: 'shadow-yellow-400/50',
+        textColor: 'text-amber-800'
+    },
+    Silver: {
+        gradient: 'bg-gradient-to-br from-slate-200 via-slate-300 to-slate-400',
+        shadow: 'shadow-slate-400/50',
+        textColor: 'text-slate-600'
+    },
+    Bronze: {
+        gradient: 'bg-gradient-to-br from-amber-500 via-orange-600 to-amber-700',
+        shadow: 'shadow-orange-500/50',
+        textColor: 'text-orange-900'
+    },
 };
+
 
 export default function Certificate({
     studentName,
@@ -36,7 +49,7 @@ export default function Certificate({
         return `${r}th`;
     };
 
-    const { color, iconColor } = medalDetails[medal];
+    const { gradient, shadow, textColor } = medalDetails[medal];
 
     return (
         <div className="bg-stone-50 text-black max-w-4xl mx-auto p-2 printable-content">
@@ -75,9 +88,12 @@ export default function Certificate({
                 </div>
 
                 <div className="flex justify-center my-10">
-                    <div className={`flex flex-col items-center ${color}`}>
-                        <Medal size={80} className={iconColor} strokeWidth={1} />
-                        <p className="text-2xl font-bold mt-2">{medal} Medal</p>
+                    <div className="flex flex-col items-center text-center">
+                        <div className={`relative w-28 h-28 rounded-full ${gradient} flex items-center justify-center shadow-xl ${shadow}`}>
+                            <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/30 to-transparent"></div>
+                            <span className={`font-headline text-6xl font-extrabold ${textColor} drop-shadow`}>{rank}</span>
+                        </div>
+                        <p className={`text-3xl font-bold mt-4 ${textColor} drop-shadow-sm`}>{medal} Medal</p>
                     </div>
                 </div>
                 
