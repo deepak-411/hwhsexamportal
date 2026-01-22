@@ -10,6 +10,7 @@ import { getStoredResults, type ExamResult } from "@/lib/exam-store";
 
 type CertificateData = {
     name: string;
+    rollNumber: string;
     className: string;
     rank: number;
     medal: 'Gold' | 'Silver' | 'Bronze';
@@ -66,6 +67,7 @@ export default function CertificatePage() {
             if (rank > 0 && rank <= 3) {
                  setCertificateData({
                     name: user.name,
+                    rollNumber: user.rollNumber,
                     className: user.class,
                     rank: rank,
                     medal: rank === 1 ? 'Gold' : rank === 2 ? 'Silver' : 'Bronze',
@@ -129,6 +131,7 @@ export default function CertificatePage() {
                 </div>
                 <Certificate 
                     studentName={certificateData.name}
+                    rollNumber={certificateData.rollNumber}
                     className={certificateData.className}
                     rank={certificateData.rank}
                     medal={certificateData.medal}

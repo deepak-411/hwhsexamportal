@@ -5,6 +5,7 @@ import Logo from "@/components/Logo";
 
 type CertificateProps = {
     studentName: string;
+    rollNumber: string;
     className: string;
     rank: number;
     medal: 'Gold' | 'Silver' | 'Bronze';
@@ -31,6 +32,7 @@ const medalDetails = {
 
 export default function Certificate({
     studentName,
+    rollNumber,
     className,
     rank,
     medal,
@@ -75,12 +77,15 @@ export default function Certificate({
                     </h2>
                 </div>
 
-                <div className="text-center text-xl space-y-4 my-8">
+                <div className="text-center text-xl space-y-3 my-8">
                     <p>This certificate is proudly presented to</p>
-                    <h3 className="text-4xl font-bold font-serif text-blue-900 tracking-wide">
-                        {studentName}
-                    </h3>
-                    <p className="px-8">
+                    <div>
+                        <h3 className="text-4xl font-bold font-serif text-blue-900 tracking-wide">
+                            {studentName}
+                        </h3>
+                        <p className="text-lg text-gray-700">Roll Number: {rollNumber}</p>
+                    </div>
+                    <p className="px-8 pt-2">
                         for outstanding academic excellence and securing the <span className="font-bold">{rankSuffix(rank)}</span> position
                         in the Robotics & AI Examination for Class {className} in the academic year 2025-2026.
                     </p>
