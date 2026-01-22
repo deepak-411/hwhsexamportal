@@ -55,21 +55,21 @@ export default function Marksheet({
 
   return (
     <Card className="max-w-4xl mx-auto border-2 border-primary shadow-2xl print:shadow-none print:border-none bg-white text-black printable-content">
-        <CardContent className="p-10 md:p-14">
+        <CardContent className="p-8">
             <header className="flex flex-col items-center justify-center text-center gap-4">
                 <div className="bg-white rounded-full">
                     <Logo />
                 </div>
                 <div>
-                    <h1 className="font-headline text-4xl md:text-5xl font-bold text-primary">
+                    <h1 className="font-headline text-3xl font-bold text-primary">
                         Holy Writ High School and Junior College
                     </h1>
                     <p className="text-muted-foreground">Academic Session: 2025-2026</p>
                 </div>
             </header>
 
-            <div className="my-8 text-center bg-primary text-primary-foreground py-2 rounded-md">
-                <h2 className="font-bold text-xl tracking-wider">STATEMENT OF MARKS</h2>
+            <div className="my-6 text-center bg-primary text-primary-foreground py-2 rounded-md">
+                <h2 className="font-bold text-lg tracking-wider">STATEMENT OF MARKS</h2>
             </div>
 
             <div className="grid grid-cols-2 gap-x-8 gap-y-4 text-base mb-4">
@@ -78,9 +78,9 @@ export default function Marksheet({
                 <div><span className="font-semibold">Class:</span> {className}</div>
                 <div><span className="font-semibold">Section:</span> {section}</div>
             </div>
-             <div className="text-sm mb-8"><span className="font-semibold">Marksheet No:</span> {marksheetNumber}</div>
+             <div className="text-sm mb-6"><span className="font-semibold">Marksheet No:</span> {marksheetNumber}</div>
 
-            <Separator className="my-8"/>
+            <Separator className="my-6"/>
 
             <Table>
                 <TableHeader>
@@ -114,7 +114,7 @@ export default function Marksheet({
                 </TableFooter>
             </Table>
             
-            <div className="grid grid-cols-2 gap-8 mt-8">
+            <div className="grid grid-cols-2 gap-8 mt-6">
                  <div>
                     <p className="font-bold text-lg">Result: <span className="text-primary">{passStatus}</span></p>
                     <p className="font-bold text-lg">Percentage: <span className="text-primary">{percentage.toFixed(2)}%</span></p>
@@ -125,9 +125,9 @@ export default function Marksheet({
                  </div>
             </div>
             
-            <div className="flex justify-between items-center mt-16">
+            <div className="flex justify-between items-center mt-12">
                  <div className="flex flex-col items-center">
-                    <Barcode value={marksheetNumber} height={30} width={1} fontSize={10} />
+                    <Barcode value={marksheetNumber} height={30} width={1} fontSize={10} displayValue={false} />
                 </div>
                 <footer className="flex gap-16">
                     <div className="text-center">

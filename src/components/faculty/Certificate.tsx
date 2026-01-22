@@ -58,7 +58,7 @@ export default function Certificate({
     return (
         <div className="bg-stone-50 text-black max-w-4xl mx-auto p-2 printable-content print:m-0 print:p-0 print:shadow-none print:max-w-none">
             <div className="border-[12px] border-solid border-blue-900 p-6 bg-white relative">
-                 <div className="border-[4px] border-solid border-yellow-500 p-6 relative flex flex-col min-h-[980px]">
+                 <div className="border-[4px] border-solid border-yellow-500 p-6 relative flex flex-col">
                     {/* Watermark */}
                     <div className="absolute inset-0 flex items-center justify-center z-0 opacity-10">
                         <svg width="300" height="300" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -126,7 +126,7 @@ export default function Certificate({
                         </div>
 
                         <div className="flex flex-col items-center mt-6">
-                            <Barcode value={certificateNumber} height={40} width={1.5} fontSize={12} />
+                            <Barcode value={certificateNumber} height={40} width={1.5} fontSize={12} displayValue={false} />
                         </div>
                     </div>
                 </div>
