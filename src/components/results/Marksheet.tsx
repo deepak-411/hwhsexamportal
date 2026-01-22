@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from "react";
@@ -62,7 +61,7 @@ export default function Marksheet({
                     <h1 className="font-headline text-3xl md:text-4xl font-bold text-primary whitespace-nowrap">
                         Holy Writ High School and Junior College
                     </h1>
-                    <p className="text-muted-foreground">Academic Session: 2024-2025</p>
+                    <p className="text-muted-foreground">Academic Session: 2025-2026</p>
                 </div>
             </header>
 

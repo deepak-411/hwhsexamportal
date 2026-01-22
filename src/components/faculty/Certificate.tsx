@@ -70,7 +70,7 @@ export default function Certificate({
                     </h3>
                     <p className="px-8">
                         for outstanding academic excellence and securing the <span className="font-bold">{rankSuffix(rank)}</span> position
-                        in the Robotics & AI Examination for Class {className} in the academic year 2024-2025.
+                        in the Robotics & AI Examination for Class {className} in the academic year 2025-2026.
                     </p>
                 </div>
 
