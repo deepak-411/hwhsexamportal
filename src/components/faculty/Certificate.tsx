@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Logo from "@/components/Logo";
-import { Stamp } from "lucide-react";
 
 type CertificateProps = {
     studentName: string;
@@ -52,7 +51,7 @@ export default function Certificate({
     const { gradient, shadow, textColor } = medalDetails[medal];
 
     return (
-        <div className="bg-stone-50 text-black max-w-4xl mx-auto p-2 printable-content">
+        <div className="bg-stone-50 text-black max-w-4xl mx-auto p-2 printable-content print:m-0 print:p-0 print:shadow-none print:max-w-none">
             <div className="border-[10px] border-solid border-blue-900 p-8 bg-white relative">
                  {/* Decorative Corner Elements */}
                 <div className="absolute top-0 left-0 w-20 h-20 border-t-4 border-l-4 border-yellow-500"></div>

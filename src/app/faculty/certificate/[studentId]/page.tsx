@@ -111,8 +111,8 @@ export default function CertificatePage() {
     }
 
     return (
-        <div className="p-4 sm:p-6 md:p-8 bg-gray-200">
-             <div className="container mx-auto">
+        <div className="bg-gray-200 print:bg-white print:p-0">
+             <div className="container mx-auto p-4 sm:p-6 md:p-8 print:p-0 print:max-w-none">
                 <div className="flex items-center justify-between gap-4 mb-8 print:hidden">
                     <div className="flex items-center gap-4">
                         <Button variant="outline" size="icon" onClick={() => router.back()}>
