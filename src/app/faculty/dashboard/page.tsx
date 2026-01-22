@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { BookCopy, Users, ExternalLink, Award } from "lucide-react";
+import { BookCopy, Users, ExternalLink, Award, FileSignature } from "lucide-react";
 import Link from "next/link";
 import { getStoredUsers, type User } from "@/lib/user-store";
 import { getStoredResults, type ExamResult } from "@/lib/exam-store";
@@ -146,18 +146,27 @@ export default function FacultyDashboard() {
                             <CardTitle className="text-sm font-medium">Top Performers</CardTitle>
                             <Award className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
-                        <CardContent className="space-y-4">
+                        <CardContent className="space-y-2 pt-4">
                           {Object.keys(topStudents).sort((a,b) => Number(a) - Number(b)).map(className => (
                               <div key={className}>
-                                  <h4 className="text-sm font-semibold text-primary">Class {className}</h4>
-                                  <ul className="text-xs text-muted-foreground space-y-1 mt-1">
+                                  <h4 className="text-sm font-semibold text-primary mb-2">Class {className}</h4>
+                                  <div className="space-y-2">
                                     {topStudents[className].map((student, index) => (
-                                        <li key={student.rollNumber + student.name} className="flex justify-between">
-                                            <span>{index + 1}. {student.name}</span>
-                                            <span className="font-bold">{student.score}/80</span>
-                                        </li>
+                                        <div key={student.rollNumber + student.name} className="flex items-center justify-between text-xs">
+                                            <div className="flex items-center">
+                                                <span className="font-bold mr-2">{index + 1}.</span>
+                                                <span className="truncate max-w-[100px]">{student.name}</span>
+                                                <span className="text-muted-foreground ml-2">({student.score}/80)</span>
+                                            </div>
+                                            <Button variant="ghost" size="sm" asChild>
+                                                <Link href={`/faculty/certificate/${student.rollNumber}?class=${student.class}&section=${student.section}`}>
+                                                    <FileSignature className="h-4 w-4 mr-1"/>
+                                                    Cert
+                                                </Link>
+                                            </Button>
+                                        </div>
                                     ))}
-                                  </ul>
+                                  </div>
                               </div>
                           ))}
                         </CardContent>
