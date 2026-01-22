@@ -21,7 +21,6 @@ import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import { Code, Send, Loader2, ShieldAlert, MonitorPlay, AlertTriangle } from "lucide-react";
 import { getCurrentUser, type User } from "@/lib/user-store";
-import { sendSubmissionEmail } from "@/ai/flows/send-submission-email-flow";
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
 import { storeResult, hasAttemptedExam, markExamAsAttempted } from "@/lib/exam-store";
 import { useRouter } from "next/navigation";
@@ -205,50 +204,20 @@ export default function ExamClient({ examId }: { examId: string }) {
 
     const totalMcq = mcqQuestions.length;
     const mcqScore = totalMcq > 0 ? Math.round((mcqCorrect / totalMcq) * 80) : 0;
-    const studentId = `${student.rollNumber}-${student.class}-${student.section}`;
+    const studentId = `${student.rollNumber.padStart(2, '0')}-${student.class}-${student.section}`;
 
 
     storeResult(student.rollNumber, student.class, student.section, examId, { robotics: mcqScore, coding: -1 });
     markExamAsAttempted(studentId, examId);
 
-    const answeredQuestions = mcqQuestions.map(q => ({
-        question: q.question,
-        selectedAnswer: answers[q.id] || "Not Answered",
-        correctAnswer: q.answer,
-        isCorrect: (answers[q.id] === q.answer)
-    }));
-
-    let finalCodingAnswer = codingAnswer;
     if (isAutoSubmit) {
-      finalCodingAnswer = `AUTOMATIC SUBMISSION DUE TO PROCTORING VIOLATION\n\n${codingAnswer}`;
-    }
-
-    try {
-        await sendSubmissionEmail({
-            student,
-            answeredQuestions,
-            codingAnswer: finalCodingAnswer,
-            mcqScore: mcqScore,
-            totalMcqQuestions: totalMcq,
-            mcqCorrect,
-        });
-
-        if (!isAutoSubmit) {
-            toast({
-                title: "Exam Submitted!",
-                description: "Your submission has been recorded. Good luck!",
-            });
-        }
-    } catch (error) {
-        console.error("Failed to process submission:", error);
-        toast({
-            variant: "destructive",
-            title: "Submission Failed",
-            description: "There was an error sending your submission. Please contact faculty.",
-        });
-        setStatus("coding"); // Revert on failure
-        examSubmittedRef.current = false;
-        return;
+      // The violation was already toasted to the user.
+      // No need for a success toast here.
+    } else {
+      toast({
+        title: "Exam Submitted!",
+        description: "Your submission has been recorded. Good luck!",
+      });
     }
 
     // Exit fullscreen after successful submission
