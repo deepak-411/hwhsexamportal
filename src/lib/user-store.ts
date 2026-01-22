@@ -196,26 +196,35 @@ const DEFAULT_USERS: User[] = [
 
 export function getStoredUsers(): User[] {
   if (typeof window !== 'undefined') {
+    const defaultUsers = DEFAULT_USERS;
     const stored = window.localStorage.getItem(USERS_STORAGE_KEY);
-    // If local storage is empty, initialize with default users
-    if (!stored || stored === '[]') {
-      window.localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(DEFAULT_USERS));
-      return DEFAULT_USERS;
-    }
-    // Otherwise, parse the stored users
-    try {
-      const parsedUsers = JSON.parse(stored);
-      // A simple check to see if it's an array, could be more robust
-      if(Array.isArray(parsedUsers)) {
-        return parsedUsers;
-      }
-    } catch (e) {
-      // If parsing fails, fall back to default
-      return DEFAULT_USERS;
-    }
+    const storedUsers = stored ? JSON.parse(stored) : [];
+
+    const userMap = new Map<string, User>();
+
+    // Add default users to map first to ensure all are included
+    defaultUsers.forEach(user => {
+      const key = `${user.rollNumber}-${user.class}-${user.section}`;
+      userMap.set(key, user);
+    });
+
+    // Overwrite with/add any users from local storage to preserve updates
+    storedUsers.forEach((user: User) => {
+      const key = `${user.rollNumber}-${user.class}-${user.section}`;
+      userMap.set(key, user);
+    });
+
+    const mergedUsers = Array.from(userMap.values());
+    
+    // Persist the complete, merged list back to localStorage
+    window.localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(mergedUsers));
+    
+    return mergedUsers;
   }
+  // Return defaults for server-side rendering
   return DEFAULT_USERS;
 }
+
 
 export function storeNewUser(user: User): boolean {
   if (typeof window !== 'undefined') {
