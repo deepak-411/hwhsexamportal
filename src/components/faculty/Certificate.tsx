@@ -127,7 +127,6 @@ export default function Certificate({
 
                         <div className="flex flex-col items-center mt-6">
                             <Barcode value={certificateNumber} height={40} width={1.5} fontSize={12} />
-                            <p className="text-xs text-gray-600 mt-1">Scan to verify</p>
                         </div>
                     </div>
                 </div>

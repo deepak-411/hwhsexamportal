@@ -61,7 +61,7 @@ export default function Marksheet({
                     <Logo />
                 </div>
                 <div>
-                    <h1 className="font-headline text-4xl md:text-5xl font-bold text-primary whitespace-nowrap">
+                    <h1 className="font-headline text-4xl md:text-5xl font-bold text-primary">
                         Holy Writ High School and Junior College
                     </h1>
                     <p className="text-muted-foreground">Academic Session: 2025-2026</p>
@@ -128,7 +128,6 @@ export default function Marksheet({
             <div className="flex justify-between items-center mt-16">
                  <div className="flex flex-col items-center">
                     <Barcode value={marksheetNumber} height={30} width={1} fontSize={10} />
-                    <p className="text-xs text-gray-600 mt-1">Scan to verify</p>
                 </div>
                 <footer className="flex gap-16">
                     <div className="text-center">
