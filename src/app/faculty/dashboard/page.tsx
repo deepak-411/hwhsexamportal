@@ -1,4 +1,3 @@
-
 'use client';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,7 +48,7 @@ export default function FacultyDashboard() {
       .filter(user => user.score > 0);
 
     const topPerformers: { [className: string]: (User & { score: number })[] } = {};
-    ['7', '8', '9'].forEach(className => {
+    ['6', '7', '8', '9'].forEach(className => {
       topPerformers[className] = studentsWithScores
         .filter(student => student.class === className)
         .sort((a, b) => b.score - a.score)
@@ -148,7 +147,7 @@ export default function FacultyDashboard() {
                             <Award className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent className="space-y-4">
-                          {Object.keys(topStudents).map(className => (
+                          {Object.keys(topStudents).sort((a,b) => Number(a) - Number(b)).map(className => (
                               <div key={className}>
                                   <h4 className="text-sm font-semibold text-primary">Class {className}</h4>
                                   <ul className="text-xs text-muted-foreground space-y-1 mt-1">
