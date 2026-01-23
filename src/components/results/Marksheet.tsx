@@ -5,6 +5,7 @@ import Logo from "@/components/Logo";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import QRCode from "react-qr-code";
 
 type MarksheetProps = {
     studentName: string;
@@ -28,9 +29,13 @@ export default function Marksheet({
     marksheetNumber,
 }: MarksheetProps) {
     const [currentDate, setCurrentDate] = React.useState("");
+    const [pageUrl, setPageUrl] = React.useState("");
+
 
     React.useEffect(() => {
         setCurrentDate(new Date().toLocaleDateString('en-GB'));
+        // Ensure this runs only on the client
+        setPageUrl(window.location.href);
     }, []);
 
     const passPercentage = 35;
@@ -70,14 +75,23 @@ export default function Marksheet({
             <div className="my-6 text-center bg-primary text-primary-foreground py-2 rounded-md">
                 <h2 className="font-bold text-lg tracking-wider">STATEMENT OF MARKS</h2>
             </div>
-
-            <div className="grid grid-cols-2 gap-x-8 gap-y-4 text-base mb-4">
-                <div><span className="font-semibold">Student's Name:</span> {studentName}</div>
-                <div><span className="font-semibold">Roll No:</span> {rollNumber}</div>
-                <div><span className="font-semibold">Class:</span> {className}</div>
-                <div><span className="font-semibold">Section:</span> {section}</div>
+            
+            <div className="flex justify-between items-start">
+                <div className="grid grid-cols-2 gap-x-8 gap-y-4 text-base mb-4">
+                    <div><span className="font-semibold">Student's Name:</span> {studentName}</div>
+                    <div><span className="font-semibold">Roll No:</span> {rollNumber}</div>
+                    <div><span className="font-semibold">Class:</span> {className}</div>
+                    <div><span className="font-semibold">Section:</span> {section}</div>
+                </div>
+                {pageUrl && (
+                    <div className="text-center">
+                        <QRCode value={pageUrl} size={80} level="L" />
+                        <p className="text-xs text-muted-foreground mt-1">Scan to verify</p>
+                    </div>
+                )}
             </div>
-             <div className="text-sm mb-6"><span className="font-semibold">Marksheet No:</span> {marksheetNumber}</div>
+
+            <div className="text-sm mb-6 font-medium"><span className="font-semibold">Marksheet No:</span> {marksheetNumber}</div>
 
             <Separator className="my-6"/>
 

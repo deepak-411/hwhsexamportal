@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Logo from "@/components/Logo";
+import QRCode from "react-qr-code";
 
 type CertificateProps = {
     studentName: string;
@@ -40,9 +41,12 @@ export default function Certificate({
     certificateNumber,
 }: CertificateProps) {
     const [issuedDate, setIssuedDate] = useState('');
+    const [pageUrl, setPageUrl] = useState("");
     
     useEffect(() => {
         setIssuedDate(new Date().toLocaleDateString('en-GB'));
+        // This ensures the window object is available.
+        setPageUrl(window.location.href);
     }, []);
 
     const rankSuffix = (r: number) => {
@@ -53,6 +57,8 @@ export default function Certificate({
     };
 
     const { gradient, shadow, textColor } = medalDetails[medal];
+    
+    const qrValue = `Certificate No: ${certificateNumber}\nStudent: ${studentName}\nClass: ${className}\nRank: ${rank}`;
 
     return (
         <div className="bg-stone-50 text-black max-w-4xl mx-auto p-2 printable-content print:m-0 print:p-0 print:shadow-none print:max-w-none">
@@ -109,21 +115,23 @@ export default function Certificate({
                     </div>
                     
                     <div className="relative z-10 mt-auto pt-8">
-                        <div className="flex justify-between items-end text-center">
-                            <div className="w-1/3">
+                        <div className="flex justify-between items-end">
+                            <div className="w-1/3 text-left">
                                 {issuedDate && <p className="text-sm">Date: {issuedDate}</p>}
                                 <p className="text-sm mt-1">Cert. No: {certificateNumber}</p>
+                                <div className="mt-2">
+                                     {pageUrl && <QRCode value={pageUrl} size={64} level="L"/>}
+                                </div>
                             </div>
-                            <div className="w-1/3">
+                            <div className="w-1/3 text-center">
                                 <p className="font-serif text-lg border-t-2 border-gray-700 px-4 pt-1">Vikas Dalal</p>
                                 <p className="text-sm font-semibold">Vice-Principal</p>
                             </div>
-                            <div className="w-1/3">
+                            <div className="w-1/3 text-center">
                                 <p className="font-serif text-lg border-t-2 border-gray-700 px-4 pt-1">Subrata Kundu</p>
                                 <p className="text-sm font-semibold">Principal</p>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
