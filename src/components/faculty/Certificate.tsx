@@ -41,12 +41,9 @@ export default function Certificate({
     certificateNumber,
 }: CertificateProps) {
     const [issuedDate, setIssuedDate] = useState('');
-    const [pageUrl, setPageUrl] = useState("");
     
     useEffect(() => {
         setIssuedDate(new Date().toLocaleDateString('en-GB'));
-        // This ensures the window object is available.
-        setPageUrl(window.location.href);
     }, []);
 
     const rankSuffix = (r: number) => {
@@ -58,7 +55,7 @@ export default function Certificate({
 
     const { gradient, shadow, textColor } = medalDetails[medal];
     
-    const qrValue = `Certificate No: ${certificateNumber}\nStudent: ${studentName}\nClass: ${className}\nRank: ${rank}`;
+    const qrValue = `Certificate No: ${certificateNumber}\nStudent: ${studentName}\nRoll No: ${rollNumber}`;
 
     return (
         <div className="bg-stone-50 text-black max-w-4xl mx-auto p-2 printable-content print:m-0 print:p-0 print:shadow-none print:max-w-none">
@@ -120,7 +117,7 @@ export default function Certificate({
                                 {issuedDate && <p className="text-sm">Date: {issuedDate}</p>}
                                 <p className="text-sm mt-1">Cert. No: {certificateNumber}</p>
                                 <div className="mt-2">
-                                     {pageUrl && <QRCode value={pageUrl} size={64} level="L"/>}
+                                     <QRCode value={qrValue} size={64} level="L"/>
                                 </div>
                             </div>
                             <div className="w-1/3 text-center">

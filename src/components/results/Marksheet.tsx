@@ -29,13 +29,10 @@ export default function Marksheet({
     marksheetNumber,
 }: MarksheetProps) {
     const [currentDate, setCurrentDate] = React.useState("");
-    const [pageUrl, setPageUrl] = React.useState("");
 
 
     React.useEffect(() => {
         setCurrentDate(new Date().toLocaleDateString('en-GB'));
-        // Ensure this runs only on the client
-        setPageUrl(window.location.href);
     }, []);
 
     const passPercentage = 35;
@@ -56,6 +53,8 @@ export default function Marksheet({
     const grade = getGrade();
 
     const codingStatus = codingMarks >= 0 ? "Qualified" : "Not Qualified";
+
+    const qrValue = `Marksheet No: ${marksheetNumber}\nStudent: ${studentName}\nRoll No: ${rollNumber}`;
 
   return (
     <Card className="max-w-4xl mx-auto border-2 border-primary shadow-2xl print:shadow-none print:border-none bg-white text-black printable-content">
@@ -83,12 +82,10 @@ export default function Marksheet({
                     <div><span className="font-semibold">Class:</span> {className}</div>
                     <div><span className="font-semibold">Section:</span> {section}</div>
                 </div>
-                {pageUrl && (
-                    <div className="text-center">
-                        <QRCode value={pageUrl} size={80} level="L" />
-                        <p className="text-xs text-muted-foreground mt-1">Scan to verify</p>
-                    </div>
-                )}
+                <div className="text-center">
+                    <QRCode value={qrValue} size={80} level="L" />
+                    <p className="text-xs text-muted-foreground mt-1">Scan to verify</p>
+                </div>
             </div>
 
             <div className="text-sm mb-6 font-medium"><span className="font-semibold">Marksheet No:</span> {marksheetNumber}</div>
