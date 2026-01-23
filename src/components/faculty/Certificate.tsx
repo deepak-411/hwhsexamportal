@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Logo from "@/components/Logo";
 import QRCode from "react-qr-code";
+import Image from "next/image";
 
 type CertificateProps = {
     studentName: string;
@@ -62,11 +63,13 @@ export default function Certificate({
             <div className="border-[12px] border-solid border-blue-900 p-6 bg-white relative">
                  <div className="border-[4px] border-solid border-yellow-500 p-6 relative flex flex-col">
                     {/* Watermark */}
-                    <div className="absolute inset-0 flex items-center justify-center z-0 opacity-10">
-                        <svg width="300" height="300" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="#0d3b66" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="M9.5 14.5L11 16L14.5 12.5" stroke="#0d3b66" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
+                    <div className="absolute inset-0 flex items-center justify-center z-0 opacity-10 grayscale">
+                        <Image
+                            src="https://mychildmate.in/AdmissionForm/img/holywritlogo_512_512.png"
+                            alt="School Logo Watermark"
+                            width={300}
+                            height={300}
+                        />
                     </div>
 
                     <div className="flex-grow relative z-10">
