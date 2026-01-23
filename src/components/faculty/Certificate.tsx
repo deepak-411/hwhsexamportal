@@ -67,8 +67,8 @@ export default function Certificate({
                         <Image
                             src="https://mychildmate.in/AdmissionForm/img/holywritlogo_512_512.png"
                             alt="School Logo Watermark"
-                            width={300}
-                            height={300}
+                            width={400}
+                            height={400}
                         />
                     </div>
 
