@@ -33,7 +33,7 @@ export default function FacultyLoginForm() {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    if (data.password === "123") {
+    if (data.password === "HWS@2026") {
       toast({
         title: "Login Successful",
         description: "Welcome, faculty member!",

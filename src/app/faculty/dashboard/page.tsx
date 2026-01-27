@@ -108,6 +108,26 @@ export default function FacultyDashboard() {
             <div className="container mx-auto">
                 <h1 className="font-headline text-4xl font-bold mb-8">Faculty Dashboard</h1>
 
+                <Card className="mb-8">
+                    <CardHeader>
+                        <CardTitle>Faculty Details</CardTitle>
+                    </CardHeader>
+                    <CardContent className="grid sm:grid-cols-3 gap-4">
+                        <div>
+                            <p className="text-sm font-medium text-muted-foreground">Instructor</p>
+                            <p className="font-semibold">Mr. Deepak Kumar</p>
+                        </div>
+                        <div>
+                            <p className="text-sm font-medium text-muted-foreground">Subject</p>
+                            <p className="font-semibold">Robotics and AI</p>
+                        </div>
+                        <div>
+                            <p className="text-sm font-medium text-muted-foreground">Classes</p>
+                            <p className="font-semibold">6 to 9</p>
+                        </div>
+                    </CardContent>
+                </Card>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
