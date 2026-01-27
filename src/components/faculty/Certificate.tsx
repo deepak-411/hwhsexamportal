@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from "react";
@@ -64,8 +63,8 @@ export default function Certificate({
             <div className="border-[12px] border-solid border-blue-900 p-6 bg-white relative print:border-[10px] print:p-4 w-full">
                  <div className="border-[4px] border-solid border-yellow-500 p-4 relative flex flex-col print:p-2 print:border-2">
                     {/* Watermark */}
-                    <div className="absolute inset-0 flex items-center justify-center z-0 opacity-5 grayscale">
-                        <div className="w-[500px] h-[500px] print:w-[400px] print:h-[400px]">
+                    <div className="absolute inset-0 flex items-center justify-center z-0 opacity-10 grayscale print:opacity-20">
+                        <div className="w-[500px] h-[500px] print:w-[400px] print:h-[400px] relative">
                         <Image
                             src="https://mychildmate.in/AdmissionForm/img/holywritlogo_512_512.png"
                             alt="School Logo Watermark"
@@ -76,7 +75,7 @@ export default function Certificate({
                     </div>
 
                     <div className="relative z-10 flex flex-col flex-grow">
-                        <header className="flex flex-col items-center text-center mb-4 print:mb-2">
+                        <header className="flex flex-col items-center text-center mb-4 print:mb-2 print:text-lg">
                             <div className="w-24 h-24 print:w-20 print:h-20">
                                 <Logo />
                             </div>
@@ -112,7 +111,7 @@ export default function Certificate({
                                     <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/30 to-transparent"></div>
                                     <span className={`font-headline text-6xl print:text-7xl font-extrabold ${textColor} drop-shadow`}>{rank}</span>
                                 </div>
-                                <p className={`text-3xl print:text-4xl font-bold mt-2 print:mt-1 ${textColor} drop-shadow-sm`}>{medal} Medal</p>
+                                <p className={`text-3xl print:text-4xl font-bold mt-2 print:mt-1 ${textColor} drop-shadow-sm`}>{medal}</p>
                             </div>
                         </div>
                     </div>
