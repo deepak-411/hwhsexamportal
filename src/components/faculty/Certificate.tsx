@@ -63,7 +63,7 @@ export default function Certificate({
             <div className="border-[12px] border-solid border-blue-900 p-6 bg-white relative print:border-[10px] print:p-4 w-full">
                  <div className="border-[4px] border-solid border-yellow-500 p-4 relative flex flex-col print:p-2 print:border-2">
                     {/* Watermark */}
-                    <div className="absolute inset-0 flex items-center justify-center z-0 opacity-10 grayscale print:opacity-20">
+                    <div className="absolute inset-0 flex items-center justify-center z-0 opacity-20 grayscale print:opacity-20">
                         <div className="w-[500px] h-[500px] print:w-[400px] print:h-[400px] relative">
                         <Image
                             src="https://mychildmate.in/AdmissionForm/img/holywritlogo_512_512.png"
@@ -126,12 +126,12 @@ export default function Certificate({
                                 </div>
                             </div>
                             <div className="w-1/3 text-center">
-                                <p className="font-serif text-lg print:text-xl border-t-2 border-gray-700 px-4 pt-1">Vikas Dalal</p>
-                                <p className="text-sm print:text-base font-semibold">Vice-Principal</p>
+                                <div className="h-16 print:h-12"></div>
+                                <p className="font-serif text-lg print:text-xl border-t-2 border-gray-700 px-4 pt-1">Vice-Principal</p>
                             </div>
                             <div className="w-1/3 text-center">
-                                <p className="font-serif text-lg print:text-xl border-t-2 border-gray-700 px-4 pt-1">Subrata Kundu</p>
-                                <p className="text-sm print:text-base font-semibold">Principal</p>
+                                <div className="h-16 print:h-12"></div>
+                                <p className="font-serif text-lg print:text-xl border-t-2 border-gray-700 px-4 pt-1">Principal</p>
                             </div>
                         </div>
                     </div>

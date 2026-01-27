@@ -139,11 +139,11 @@ export default function Marksheet({
                 <footer className="flex gap-16">
                     <div className="text-center">
                         <div className="h-12"></div>
-                        <p className="border-t border-dashed mt-2 pt-1 font-semibold">Vikas Dalal (Vice Principal)</p>
+                        <p className="border-t border-dashed mt-2 pt-1 font-semibold">Vice Principal</p>
                     </div>
                      <div className="text-center">
                         <div className="h-12"></div>
-                        <p className="border-t border-dashed mt-2 pt-1 font-semibold">Subrata Kundu (Principal)</p>
+                        <p className="border-t border-dashed mt-2 pt-1 font-semibold">Principal</p>
                     </div>
                 </footer>
             </div>
