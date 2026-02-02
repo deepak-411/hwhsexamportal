@@ -43,7 +43,7 @@ const DEFAULT_RESULTS: { [studentId: string]: { [examId: string]: ExamResult } }
     '25-6-Daffodils': { '1': { robotics: 29, coding: -1 } },
     '26-6-Daffodils': { '1': { robotics: 32, coding: -1 } },
     '27-6-Daffodils': { '1': { robotics: 40, coding: -1 } },
-    '28-6-Daffodils': { '1': { robotics: 40, coding: -1 } },
+    '28-6-Daffodils': { '1': { robotics: 45, coding: -1 } },
     '29-6-Daffodils': { '1': { robotics: 19, coding: -1 } },
     '30-6-Daffodils': { '1': { robotics: 19, coding: -1 } },
     '31-6-Daffodils': { '1': { robotics: 35, coding: -1 } },
@@ -317,3 +317,6 @@ export function hasAttemptedExam(studentId: string, examId: string): boolean {
     return false;
 }
 
+
+
+    
