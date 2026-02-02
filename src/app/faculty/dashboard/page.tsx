@@ -48,12 +48,11 @@ export default function FacultyDashboard() {
       .filter(user => user.score > 0);
 
     const topPerformers: { [className: string]: (User & { score: number })[] } = {};
-    ['6', '7', '8', '9'].forEach(className => {
-      topPerformers[className] = studentsWithScores
-        .filter(student => student.class === className)
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 3);
-    });
+    const className = '6';
+    topPerformers[className] = studentsWithScores
+      .filter(student => student.class === className)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 4);
     setTopStudents(topPerformers);
 
     const grouped = users.reduce((acc, user) => {
