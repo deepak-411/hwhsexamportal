@@ -61,9 +61,9 @@ export default function Certificate({
     return (
         <div className="bg-stone-50 text-black max-w-4xl mx-auto p-2 printable-content print:m-0 print:p-0 print:shadow-none print:w-full print:h-screen print:flex print:items-center print:justify-center">
             <div className="border-[12px] border-solid border-blue-900 p-6 bg-white relative print:border-[10px] print:p-4 w-full">
-                 <div className="border-[4px] border-solid border-yellow-500 p-4 relative flex flex-col print:p-2 print:border-2">
+                 <div className="border-[4px] border-solid border-yellow-500 p-4 relative flex flex-col print:p-2 print:border-2 h-full">
                     {/* Watermark */}
-                    <div className="absolute inset-0 flex items-center justify-center z-0 opacity-50 grayscale print:opacity-50">
+                    <div className="absolute inset-0 flex items-center justify-center z-0 opacity-10 grayscale print:opacity-10">
                         <div className="w-[500px] h-[500px] print:w-[400px] print:h-[400px] relative">
                         <Image
                             src="https://mychildmate.in/AdmissionForm/img/holywritlogo_512_512.png"
@@ -118,20 +118,24 @@ export default function Certificate({
                     
                     <div className="relative z-10 pt-4 print:pt-2">
                         <div className="flex justify-between items-end">
-                            <div className="w-1/3 text-left">
+                           <div className="w-1/3 text-left">
                                 {issuedDate && <p className="text-sm print:text-base">Date: {issuedDate}</p>}
                                 <p className="text-sm print:text-base mt-1">Cert. No: {certificateNumber}</p>
                                 <div className="mt-2">
                                      <QRCode value={qrValue} size={60} level="L"/>
                                 </div>
                             </div>
-                            <div className="w-1/3 text-center">
-                                <div className="h-16 print:h-12"></div>
-                                <p className="font-serif text-lg print:text-xl border-t-2 border-gray-700 px-4 pt-1">Vice-Principal</p>
-                            </div>
-                            <div className="w-1/3 text-center">
-                                <div className="h-16 print:h-12"></div>
-                                <p className="font-serif text-lg print:text-xl border-t-2 border-gray-700 px-4 pt-1">Principal</p>
+                            <div className="w-2/3 flex justify-around items-end">
+                                {medal !== 'Gold' && (
+                                    <div className="text-center">
+                                        <div className="h-16 print:h-12"></div>
+                                        <p className="font-serif text-lg print:text-xl border-t-2 border-gray-700 px-4 pt-1">Vice-Principal</p>
+                                    </div>
+                                )}
+                                <div className="text-center">
+                                    <div className="h-16 print:h-12"></div>
+                                    <p className="font-serif text-lg print:text-xl border-t-2 border-gray-700 px-4 pt-1">Principal</p>
+                                </div>
                             </div>
                         </div>
                     </div>
