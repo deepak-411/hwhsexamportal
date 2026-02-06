@@ -136,11 +136,7 @@ export default function Marksheet({
             </div>
             
             <div className="flex justify-end items-center mt-12">
-                <footer className="flex gap-16">
-                    <div className="text-center">
-                        <div className="h-12"></div>
-                        <p className="border-t border-dashed mt-2 pt-1 font-semibold">Vice Principal</p>
-                    </div>
+                <footer>
                      <div className="text-center">
                         <div className="h-12"></div>
                         <p className="border-t border-dashed mt-2 pt-1 font-semibold">Principal</p>
