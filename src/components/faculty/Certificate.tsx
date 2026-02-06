@@ -63,7 +63,7 @@ export default function Certificate({
             <div className="border-[12px] border-solid border-blue-900 p-6 bg-white relative print:border-[10px] print:p-4 w-full">
                  <div className="border-[4px] border-solid border-yellow-500 p-4 relative flex flex-col print:p-2 print:border-2 h-full">
                     {/* Watermark */}
-                    <div className="absolute inset-0 flex items-center justify-center z-0 opacity-10 grayscale print:opacity-10">
+                    <div className="absolute inset-0 flex items-center justify-center z-0 opacity-5 grayscale print:opacity-5">
                         <div className="w-[500px] h-[500px] print:w-[400px] print:h-[400px] relative">
                         <Image
                             src="https://mychildmate.in/AdmissionForm/img/holywritlogo_512_512.png"
@@ -79,7 +79,7 @@ export default function Certificate({
                             <h1 className="font-headline text-4xl print:text-5xl font-bold text-blue-900">
                                 Holy Writ High School and Junior College
                             </h1>
-                            <p className="text-gray-600 mt-1 text-sm print:text-base">Pimpoli, Barvi Dam Road, Badlapur (W)</p>
+                            <p className="text-gray-600 mt-1 text-base print:text-lg">Pimpoli, Barvi Dam Road, Badlapur (W)</p>
                             <div className="w-32 h-32 print:w-28 print:h-28 mt-4">
                                 <Logo />
                             </div>
@@ -126,12 +126,6 @@ export default function Certificate({
                                 </div>
                             </div>
                             <div className="w-2/3 flex justify-around items-end">
-                                {medal !== 'Gold' && (
-                                    <div className="text-center">
-                                        <div className="h-16 print:h-12"></div>
-                                        <p className="font-serif text-lg print:text-xl border-t-2 border-gray-700 px-4 pt-1">Vice-Principal</p>
-                                    </div>
-                                )}
                                 <div className="text-center">
                                     <div className="h-16 print:h-12"></div>
                                     <p className="font-serif text-lg print:text-xl border-t-2 border-gray-700 px-4 pt-1">Principal</p>
