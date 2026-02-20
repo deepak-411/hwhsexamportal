@@ -5,11 +5,12 @@ export type ScheduledExam = {
   selectedClass: string;
   selectedSection: string;
   selectedSet: string;
+  subject?: string;
 };
 
 export type ExamResult = {
     robotics: number; // MCQ score
-    coding: number; // -1 if pending, 0 if evaluated as 0, or other score
+    coding: number; // -1 if pending, 0 if evaluated as 0, or other score, -2 for Computer Paper
 }
 
 const EXAMS_STORAGE_KEY = 'activeExams';
@@ -25,6 +26,7 @@ const DEFAULT_EXAMS: ScheduledExam[] = [
     { selectedClass: '7', selectedSection: 'A', selectedSet: '3' },
     { selectedClass: '8', selectedSection: 'Daffodils', selectedSet: '1' },
     { selectedClass: '8', selectedSection: 'Daisies', selectedSet: '2' },
+    { selectedClass: '9', selectedSection: 'Daisies', selectedSet: 'COMP-ANNUAL-9', subject: 'Computer' },
 ];
 
 const DEFAULT_RESULTS: { [studentId: string]: { [examId: string]: ExamResult } } = {
@@ -148,64 +150,6 @@ const DEFAULT_RESULTS: { [studentId: string]: { [examId: string]: ExamResult } }
     '37-8-Daisies': { '2': { robotics: 21, coding: -1 } },
     '38-8-Daisies': { '2': { robotics: 32, coding: -1 } },
     '39-8-Daisies': { '2': { robotics: 40, coding: -1 } },
-    
-    // Class 9 Daffodils
-    "01-9-Daffodils": { "4": { "robotics": 16, "coding": -1 } },
-    "02-9-Daffodils": { "4": { "robotics": 21, "coding": -1 } },
-    "03-9-Daffodils": { "4": { "robotics": 13, "coding": -1 } },
-    "04-9-Daffodils": { "4": { "robotics": 21, "coding": -1 } },
-    "05-9-Daffodils": { "4": { "robotics": 40, "coding": -1 } },
-    "07-9-Daffodils": { "4": { "robotics": 3, "coding": -1 } },
-    "09-9-Daffodils": { "4": { "robotics": 29, "coding": -1 } },
-    "10-9-Daffodils": { "4": { "robotics": 21, "coding": -1 } },
-    "11-9-Daffodils": { "4": { "robotics": 0, "coding": -1 } },
-    "12-9-Daffodils": { "4": { "robotics": 0, "coding": -1 } },
-    "13-9-Daffodils": { "4": { "robotics": 16, "coding": -1 } },
-    "14-9-Daffodils": { "4": { "robotics": 40, "coding": -1 } },
-    "15-9-Daffodils": { "4": { "robotics": 16, "coding": -1 } },
-    "16-9-Daffodils": { "4": { "robotics": 0, "coding": -1 } },
-    "19-9-Daffodils": { "4": { "robotics": 3, "coding": -1 } },
-    "20-9-Daffodils": { "4": { "robotics": 37, "coding": -1 } },
-    "21-9-Daffodils": { "4": { "robotics": 29, "coding": -1 } },
-    "22-9-Daffodils": { "4": { "robotics": 0, "coding": -1 } },
-    "23-9-Daffodils": { "4": { "robotics": 16, "coding": -1 } },
-    "24-9-Daffodils": { "4": { "robotics": 0, "coding": -1 } },
-    "25-9-Daffodils": { "4": { "robotics": 0, "coding": -1 } },
-    "26-9-Daffodils": { "4": { "robotics": 0, "coding": -1 } },
-    "27-9-Daffodils": { "4": { "robotics": 11, "coding": -1 } },
-    "28-9-Daffodils": { "4": { "robotics": 29, "coding": -1 } },
-    "29-9-Daffodils": { "4": { "robotics": 40, "coding": -1 } },
-    "30-9-Daffodils": { "4": { "robotics": 29, "coding": -1 } },
-    "33-9-Daffodils": { "4": { "robotics": 32, "coding": -1 } },
-    "35-9-Daffodils": { "4": { "robotics": 51, "coding": -1 } },
-    "36-9-Daffodils": { "4": { "robotics": 5, "coding": -1 } },
-    "37-9-Daffodils": { "4": { "robotics": 0, "coding": -1 } },
-    "38-9-Daffodils": { "4": { "robotics": 0, "coding": -1 } },
-    "39-9-Daffodils": { "4": { "robotics": 13, "coding": -1 } },
-    "40-9-Daffodils": { "4": { "robotics": 11, "coding": -1 } },
-    
-    // Class 9 Daisies
-    "02-9-Daisies": { "5": { "robotics": 3, "coding": -1 } },
-    "03-9-Daisies": { "5": { "robotics": 3, "coding": -1 } },
-    "05-9-Daisies": { "5": { "robotics": 37, "coding": -1 } },
-    "06-9-Daisies": { "5": { "robotics": 16, "coding": -1 } },
-    "08-9-Daisies": { "5": { "robotics": 24, "coding": -1 } },
-    "09-9-Daisies": { "5": { "robotics": 0, "coding": -1 } },
-    "10-9-Daisies": { "5": { "robotics": 0, "coding": -1 } },
-    "13-9-Daisies": { "5": { "robotics": 0, "coding": -1 } },
-    "14-9-Daisies": { "5": { "robotics": 29, "coding": -1 } },
-    "15-9-Daisies": { "5": { "robotics": 29, "coding": -1 } },
-    "16-9-Daisies": { "5": { "robotics": 0, "coding": -1 } },
-    "19-9-Daisies": { "5": { "robotics": 29, "coding": -1 } },
-    "20-9-Daisies": { "5": { "robotics": 16, "coding": -1 } },
-    "21-9-Daisies": { "5": { "robotics": 3, "coding": -1 } },
-    "23-9-Daisies": { "5": { "robotics": 37, "coding": -1 } },
-    "26-9-Daisies": { "5": { "robotics": 32, "coding": -1 } },
-    "27-9-Daisies": { "5": { "robotics": 27, "coding": -1 } },
-    "28-9-Daisies": { "5": { "robotics": 0, "coding": -1 } },
-    "30-9-Daisies": { "5": { "robotics": 0, "coding": -1 } },
-    "33-9-Daisies": { "5": { "robotics": 24, "coding": -1 } },
-    "35-9-Daisies": { "5": { "robotics": 0, "coding": -1 } },
 };
 
 
@@ -316,7 +260,3 @@ export function hasAttemptedExam(studentId: string, examId: string): boolean {
     }
     return false;
 }
-
-
-
-    

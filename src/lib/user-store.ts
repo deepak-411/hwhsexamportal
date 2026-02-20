@@ -184,6 +184,7 @@ const DEFAULT_USERS: User[] = [
   { name: 'nikita mali', rollNumber: '20', class: '9', section: 'Daisies' },
   { name: 'NISHANT BRAMHARAKSHAS', rollNumber: '21', class: '9', section: 'Daisies' },
   { name: 'RAJ kante', rollNumber: '23', class: '9', section: 'Daisies' },
+  { name: 'tanishka gaikwad', rollNumber: '29', class: '9', section: 'Daisies' },
   { name: 'SOHAM MARBHAL', rollNumber: '26', class: '9', section: 'Daisies' },
   { name: 'Soham mishra', rollNumber: '27', class: '9', section: 'Daisies' },
   { name: 'SUYASH.RAUL', rollNumber: '28', class: '9', section: 'Daisies' },

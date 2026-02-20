@@ -46,6 +46,8 @@ export default function StudentDashboard() {
     );
   }
 
+  const examLink = activeExam?.subject === 'Computer' ? '/exam/computer' : `/exam/${activeExam?.selectedSet}`;
+
   return (
     <div className="min-h-screen flex flex-col">
        <header className="sticky top-0 z-50 w-full border-b bg-card/80 shadow-sm backdrop-blur">
@@ -106,18 +108,18 @@ export default function StudentDashboard() {
                             <>
                                 <CardContent className="space-y-4">
                                     <div className="p-4 bg-muted rounded-lg">
-                                        <h3 className="font-bold text-lg">Robotics and AI Examination (Set {activeExam.selectedSet})</h3>
+                                        <h3 className="font-bold text-lg">{activeExam.subject === 'Computer' ? 'Annual Computer Exam 2025-26' : `Robotics and AI Examination (Set ${activeExam.selectedSet})`}</h3>
                                         <div className="grid grid-cols-2 gap-2 mt-2 text-sm">
                                             <p><strong>Class:</strong> {activeExam.selectedClass}</p>
                                             <p><strong>Section:</strong> {activeExam.selectedSection}</p>
-                                            <p><strong>Duration:</strong> 30 Minutes</p>
-                                            <p><strong>Questions:</strong> 30 MCQs + 1 Coding</p>
+                                            <p><strong>Duration:</strong> {activeExam.subject === 'Computer' ? '60 Minutes' : '30 Minutes'}</p>
+                                            <p><strong>Questions:</strong> {activeExam.subject === 'Computer' ? '17 Combined' : '30 MCQs + 1 Coding'}</p>
                                         </div>
                                     </div>
                                 </CardContent>
                                 <CardFooter>
                                     <Button asChild className="w-full">
-                                        <Link href={`/exam/${activeExam.selectedSet}`}>Start Exam</Link>
+                                        <Link href={examLink}>Start Exam</Link>
                                     </Button>
                                 </CardFooter>
                             </>
