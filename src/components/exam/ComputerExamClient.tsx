@@ -20,12 +20,18 @@ import { sendComputerSubmissionEmail } from "@/ai/flows/send-computer-submission
 export default function ComputerExamClient() {
     const [status, setStatus] = useState<"loading" | "prompt" | "exam" | "submitting" | "submitted" | "blocked">("loading");
     const [answers, setAnswers] = useState<{ [key: string]: string }>({});
+    const answersRef = useRef<{ [key: string]: string }>({});
     const [student, setStudent] = useState<User | null>(null);
     
     const { toast } = useToast();
     const router = useRouter();
     const examSubmittedRef = useRef(false);
     const isViolationRef = useRef(false);
+
+    // Synchronize Ref with State for proctoring capture
+    useEffect(() => {
+        answersRef.current = answers;
+    }, [answers]);
 
     useEffect(() => {
         const user = getCurrentUser();
@@ -98,13 +104,16 @@ export default function ComputerExamClient() {
     const handleSubmit = async (isAuto = false) => {
         if (examSubmittedRef.current) return;
         examSubmittedRef.current = true;
+        
+        // Final capture of answers from Ref to ensure nothing is lost
+        const finalAnswers = answersRef.current;
         setStatus("submitting");
 
         if (!student) return;
 
         let mcqCorrect = 0;
         computerPaper.sections[0].questions.forEach(q => {
-            if (answers[q.id] === q.answer) mcqCorrect++;
+            if (finalAnswers[q.id] === q.answer) mcqCorrect++;
         });
 
         const studentId = `${student.rollNumber.padStart(2, '0')}-${student.class}-${student.section}`;
@@ -118,7 +127,7 @@ export default function ComputerExamClient() {
         try {
             await sendComputerSubmissionEmail({
                 student: student,
-                answers: answers,
+                answers: finalAnswers,
                 isViolation: isViolationRef.current || isAuto,
                 examTitle: `${computerPaper.exam} - ${computerPaper.subject}`
             });

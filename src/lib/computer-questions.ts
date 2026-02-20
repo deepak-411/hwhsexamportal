@@ -1,4 +1,3 @@
-
 export type ComputerQuestion = {
     id: string;
     section: 'A' | 'B' | 'C';
@@ -27,8 +26,8 @@ export const computerPaper = {
                     section: 'A',
                     type: 'MCQ',
                     text: "Q1. Communication Process\n\nYour school is planning an inter-school cultural event. The student council is responsible for organizing different activities such as dance, drama, and music competitions. Aman is selected as the coordinator. He prepares a detailed plan and shares it with his team through email and school notice boards. After reading the message, some students misunderstand their responsibilities because they did not read the instructions carefully. Aman calls a meeting and explains the tasks again. He also encourages students to ask questions and give feedback so that confusion can be avoided. During the preparation, he regularly checks whether everyone has understood their roles. Because of this, teamwork improves, and the event becomes successful. The principal appreciates Aman for using effective communication and coordination. This situation shows how important communication is in real life.\n\nWhich option correctly shows the communication cycle in this case?",
-                    options: ["A. Speaking, writing, reading", "B. Message, channel, audience", "C. Sender, receiver, feedback", "D. Thinking, speaking, listening"],
-                    answer: "C. Sender, receiver, feedback",
+                    options: ["Speaking, writing, reading", "Message, channel, audience", "Sender, receiver, feedback", "Thinking, speaking, listening"],
+                    answer: "Sender, receiver, feedback",
                     marks: 1
                 },
                 {
@@ -36,8 +35,8 @@ export const computerPaper = {
                     section: 'A',
                     type: 'MCQ',
                     text: "Q2. Self-Confidence\n\nMeera comes from a small town and studies in a government school. She gets an opportunity to represent her school in a state-level debate competition. Initially, she feels nervous because she has never spoken in front of a large audience. Some classmates also make fun of her English. However, her teacher motivates her to practice daily. She starts reading newspapers, improving her vocabulary, and practicing in front of her family. She also records her speech and works on her mistakes. On the day of the competition, she speaks clearly and confidently. She answers the judges’ questions calmly and wins second prize. Her success inspires other students to participate in competitions. This case shows that confidence develops through preparation and belief in oneself.\n\nWhich action best represents self-confidence in this case?",
-                    options: ["A. Avoiding participation", "B. Practicing and believing in her abilities", "C. Ignoring preparation", "D. Asking someone else to speak"],
-                    answer: "B. Practicing and believing in her abilities",
+                    options: ["Avoiding participation", "Practicing and believing in her abilities", "Ignoring preparation", "Asking someone else to speak"],
+                    answer: "Practicing and believing in her abilities",
                     marks: 1
                 },
                 {
@@ -45,8 +44,8 @@ export const computerPaper = {
                     section: 'A',
                     type: 'MCQ',
                     text: "Q3. ICT in Daily Life\n\nDuring the pandemic, Ritu’s school shifted to online classes. She used a portable digital device to attend live sessions, read e-books, submit assignments, and communicate with teachers. She also used this device to search for information, watch educational videos, and collaborate with classmates. This helped her continue learning even when schools were closed. After schools reopened, she continued using technology for projects and presentations. Her parents realized that ICT tools play an important role in modern education and future careers.\n\nWhich ICT tool is Ritu using?",
-                    options: ["A. Television", "B. Radio", "C. Tablet", "D. Printer"],
-                    answer: "C. Tablet",
+                    options: ["Television", "Radio", "Tablet", "Printer"],
+                    answer: "Tablet",
                     marks: 1
                 },
                 {
@@ -54,8 +53,8 @@ export const computerPaper = {
                     section: 'A',
                     type: 'MCQ',
                     text: "Q4. Types of Business\n\nRohan started a small business where he provides home cleaning and maintenance services. He does not manufacture any product but earns by offering professional services. His business became popular because he provides quality work and customer satisfaction. Later, he hires more workers and expands his services to nearby cities. Many unemployed youth also get jobs through his business.\n\nWhat type of business is this?",
-                    options: ["A. Manufacturing", "B. Service-based", "C. Product-based", "D. Trading"],
-                    answer: "B. Service-based",
+                    options: ["Manufacturing", "Service-based", "Product-based", "Trading"],
+                    answer: "Service-based",
                     marks: 1
                 },
                 {
@@ -63,8 +62,8 @@ export const computerPaper = {
                     section: 'A',
                     type: 'MCQ',
                     text: "Q5. Role of ICT in Business\n\nAn entrepreneur starts a company that handles customer complaints, data entry, and online support for international clients. Employees work on computers and communicate through the internet. The company provides services to many countries and creates employment opportunities. This type of service is growing rapidly in India and contributes to economic development.\n\nAnother name for this type of service is:",
-                    options: ["A. Hardware services", "B. Web-enabled services", "C. Software coding", "D. Mechanical services"],
-                    answer: "B. Web-enabled services",
+                    options: ["Hardware services", "Web-enabled services", "Software coding", "Mechanical services"],
+                    answer: "Web-enabled services",
                     marks: 1
                 },
                 {
@@ -72,8 +71,8 @@ export const computerPaper = {
                     section: 'A',
                     type: 'MCQ',
                     text: "Q6. Communication Barriers\n\nDuring a classroom discussion, loud traffic noise outside the school disturbs students. Many students cannot hear the teacher properly and misunderstand the topic. As a result, they perform poorly in the test. Later, the teacher explains that external disturbances affect understanding and learning.\n\nWhich of the following is the barrier to communication in this case?",
-                    options: ["A. Feedback", "B. Noise", "C. Listening", "D. Message"],
-                    answer: "B. Noise",
+                    options: ["Feedback", "Noise", "Listening", "Message"],
+                    answer: "Noise",
                     marks: 1
                 }
             ]
