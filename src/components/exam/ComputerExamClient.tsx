@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useRef } from "react";
@@ -9,12 +8,13 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, ShieldAlert, MonitorPlay, Send, BookOpen, FileText } from "lucide-react";
+import { Loader2, ShieldAlert, MonitorPlay, Send, BookOpen, FileText, UserCircle } from "lucide-react";
 import { getCurrentUser, type User } from "@/lib/user-store";
 import { storeResult, markExamAsAttempted, hasAttemptedExam } from "@/lib/exam-store";
 import { useRouter } from "next/navigation";
 import Timer from "./Timer";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { sendComputerSubmissionEmail } from "@/ai/flows/send-computer-submission-email";
 
 export default function ComputerExamClient() {
     const [status, setStatus] = useState<"loading" | "prompt" | "exam" | "submitting" | "submitted" | "blocked">("loading");
@@ -23,6 +23,7 @@ export default function ComputerExamClient() {
     const { toast } = useToast();
     const router = useRouter();
     const examSubmittedRef = useRef(false);
+    const isViolationRef = useRef(false);
 
     useEffect(() => {
         const user = getCurrentUser();
@@ -51,22 +52,43 @@ export default function ComputerExamClient() {
 
     const handleTabSwitch = () => {
         if (status === "exam" && !examSubmittedRef.current) {
-            toast({ variant: "destructive", title: "Violation Detected", description: "Tab switching is forbidden. Submitting now." });
+            isViolationRef.current = true;
+            toast({ 
+                variant: "destructive", 
+                title: "CHEATING DETECTED", 
+                description: "Window switching is prohibited. Your exam is being submitted immediately." 
+            });
             handleSubmit(true);
         }
     };
 
     useEffect(() => {
-        document.addEventListener("visibilitychange", handleTabSwitch);
-        document.addEventListener("fullscreenchange", () => {
-            if (!document.fullscreenElement && status === "exam") handleTabSwitch();
-        });
+        if (status !== "exam") return;
+
+        const onVisibilityChange = () => {
+            if (document.hidden) handleTabSwitch();
+        };
+
+        const onBlur = () => {
+            handleTabSwitch();
+        };
+
+        const onFullscreenChange = () => {
+            if (!document.fullscreenElement) handleTabSwitch();
+        };
+
+        document.addEventListener("visibilitychange", onVisibilityChange);
+        window.addEventListener("blur", onBlur);
+        document.addEventListener("fullscreenchange", onFullscreenChange);
+
         return () => {
-            document.removeEventListener("visibilitychange", handleTabSwitch);
+            document.removeEventListener("visibilitychange", onVisibilityChange);
+            window.removeEventListener("blur", onBlur);
+            document.removeEventListener("fullscreenchange", onFullscreenChange);
         };
     }, [status]);
 
-    const handleSubmit = (isAuto = false) => {
+    const handleSubmit = async (isAuto = false) => {
         if (examSubmittedRef.current) return;
         examSubmittedRef.current = true;
         setStatus("submitting");
@@ -80,11 +102,25 @@ export default function ComputerExamClient() {
         });
 
         const studentId = `${student.rollNumber.padStart(2, '0')}-${student.class}-${student.section}`;
+        
+        // Save locally
         storeResult(student.rollNumber, student.class, student.section, 'COMP-ANNUAL-9', {
-            robotics: mcqCorrect, // Using robotics field as primary MCQ store for now
-            coding: -2 // Specialized code for Written/Computer Paper
+            robotics: mcqCorrect,
+            coding: -2 
         });
         markExamAsAttempted(studentId, 'COMP-ANNUAL-9');
+
+        // Send Email via Server Action
+        try {
+            await sendComputerSubmissionEmail({
+                student: student,
+                answers: answers,
+                isViolation: isViolationRef.current || isAuto,
+                examTitle: `${computerPaper.exam} - ${computerPaper.subject}`
+            });
+        } catch (error) {
+            console.error("Failed to send submission email", error);
+        }
 
         if (document.fullscreenElement) document.exitFullscreen();
         setStatus("submitted");
@@ -114,19 +150,16 @@ export default function ComputerExamClient() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="bg-muted p-4 rounded-md text-sm">
-                            <h4 className="font-bold mb-2">Instructions:</h4>
+                            <h4 className="font-bold mb-2 text-destructive">CHEATING POLICY:</h4>
                             <ul className="list-disc list-inside space-y-1">
-                                <li>Time Limit: 60 Minutes</li>
-                                <li>Total Marks: 30</li>
-                                <li>The exam is in Split-Screen mode.</li>
-                                <li>Left side: Question Paper (Reference)</li>
-                                <li>Right side: Answer Copy (Input Area)</li>
-                                <li>Do not exit fullscreen or switch tabs.</li>
+                                <li><strong>Auto-Submit:</strong> Switching tabs, minimizing, or exiting full-screen will result in immediate automatic submission.</li>
+                                <li><strong>Answer Copy:</strong> Your answers will be mailed directly to the examiner.</li>
+                                <li><strong>Time Limit:</strong> 60 Minutes.</li>
                             </ul>
                         </div>
                     </CardContent>
                     <CardFooter>
-                        <Button className="w-full" size="lg" onClick={startExam}><MonitorPlay className="mr-2" /> Start Official Exam</Button>
+                        <Button className="w-full" size="lg" onClick={startExam}><MonitorPlay className="mr-2" /> Accept & Start Exam</Button>
                     </CardFooter>
                 </Card>
             </div>
@@ -138,7 +171,7 @@ export default function ComputerExamClient() {
             <div className="flex h-screen items-center justify-center p-4">
                 <Card className="max-w-md w-full text-center">
                     <CardHeader><CardTitle className="text-2xl font-bold">Submission Successful</CardTitle></CardHeader>
-                    <CardContent><p>Your Computer Annual Exam has been submitted. The written section will be evaluated by the subject teacher soon.</p></CardContent>
+                    <CardContent><p>Your Answer Copy has been dispatched to the faculty for evaluation. Thank you.</p></CardContent>
                     <CardFooter><Button className="w-full" onClick={() => router.push('/student/dashboard')}>Return Home</Button></CardFooter>
                 </Card>
             </div>
@@ -146,7 +179,7 @@ export default function ComputerExamClient() {
     }
 
     return (
-        <div className="h-screen w-screen flex flex-col bg-background">
+        <div className="h-screen w-screen flex flex-col bg-background select-none">
             {/* Header */}
             <header className="h-16 border-b flex items-center justify-between px-6 bg-card shrink-0">
                 <div className="flex items-center gap-2">
@@ -155,13 +188,13 @@ export default function ComputerExamClient() {
                 </div>
                 <div className="flex items-center gap-6">
                     <Timer initialTime={3600} onTimeUp={() => handleSubmit(true)} />
-                    <Button variant="destructive" size="sm" onClick={() => handleSubmit(false)}>Submit Final <Send className="ml-2 h-4 w-4" /></Button>
+                    <Button variant="destructive" size="sm" onClick={() => handleSubmit(false)}>Hand Over Copy <Send className="ml-2 h-4 w-4" /></Button>
                 </div>
             </header>
 
             {/* Split Screen Content */}
             <div className="flex-1 flex overflow-hidden">
-                {/* Left: Question Paper (Reference) */}
+                {/* Left: Question Paper */}
                 <div className="w-1/2 border-r bg-muted/30 flex flex-col">
                     <div className="p-4 bg-primary/10 border-b flex items-center gap-2 font-bold">
                         <FileText className="h-4 w-4" /> Question Paper (Reference)
@@ -198,51 +231,92 @@ export default function ComputerExamClient() {
                     </ScrollArea>
                 </div>
 
-                {/* Right: Answer Sheet (CBSE Style) */}
-                <div className="w-1/2 flex flex-col bg-background">
-                    <div className="p-4 bg-accent/10 border-b flex items-center gap-2 font-bold">
-                        <ShieldAlert className="h-4 w-4 text-accent" /> Official Answer Copy
+                {/* Right: CBSE Style Answer Copy */}
+                <div className="w-1/2 flex flex-col bg-[#fff9e6]">
+                    <div className="p-4 bg-[#f0ebda] border-b flex items-center justify-between font-bold text-blue-900">
+                        <div className="flex items-center gap-2">
+                            <ShieldAlert className="h-4 w-4 text-red-600" /> OFFICIAL CBSE ANSWER SCRIPT
+                        </div>
+                        <div className="flex items-center gap-2 text-xs">
+                            <UserCircle className="h-4 w-4" />
+                            {student?.name} ({student?.rollNumber})
+                        </div>
                     </div>
-                    <ScrollArea className="flex-1 p-6">
-                        <div className="max-w-2xl mx-auto space-y-10 pb-20">
-                            {computerPaper.sections.map(section => (
-                                <div key={section.id} className="space-y-8">
-                                    <div className="bg-primary/5 p-2 rounded-md border text-center font-bold text-primary">
-                                        ANSWERS FOR {section.title}
-                                    </div>
+                    
+                    <ScrollArea className="flex-1 p-0">
+                        <div className="min-h-full w-full bg-[#fff9e6] relative pb-40">
+                            {/* Paper Lines & Margin */}
+                            <div className="absolute left-[60px] top-0 bottom-0 w-[2px] bg-red-400" />
+                            <div className="absolute inset-0 pointer-events-none" style={{
+                                backgroundImage: 'linear-gradient(#d1d5db 1px, transparent 1px)',
+                                backgroundSize: '100% 30px',
+                                marginTop: '40px'
+                            }} />
 
-                                    {section.questions.map(q => (
-                                        <div key={q.id} className="space-y-3">
-                                            <div className="flex items-center gap-2">
-                                                <Badge variant="outline" className="rounded-sm">Answer {q.id}</Badge>
-                                                <span className="text-xs text-muted-foreground">Type: {q.type}</span>
-                                            </div>
-                                            
-                                            {q.type === 'MCQ' ? (
-                                                <RadioGroup 
-                                                    onValueChange={(val) => setAnswers({...answers, [q.id]: val})}
-                                                    value={answers[q.id]}
-                                                    className="grid grid-cols-2 gap-2"
-                                                >
-                                                    {q.options?.map((opt, i) => (
-                                                        <div key={i} className="flex items-center space-x-2 border p-3 rounded-md hover:bg-muted/50 cursor-pointer">
-                                                            <RadioGroupItem value={opt} id={`${q.id}-${i}`} />
-                                                            <Label htmlFor={`${q.id}-${i}`} className="flex-1 cursor-pointer">{opt}</Label>
-                                                        </div>
-                                                    ))}
-                                                </RadioGroup>
-                                            ) : (
-                                                <Textarea 
-                                                    placeholder={`Write your answer for ${q.id} here...`}
-                                                    className="min-h-[150px] font-body bg-muted/20 focus:bg-white transition-colors"
-                                                    onChange={(e) => setAnswers({...answers, [q.id]: e.target.value})}
-                                                    value={answers[q.id]}
-                                                />
-                                            )}
-                                        </div>
-                                    ))}
+                            <div className="relative z-10 p-8 pl-20 space-y-12">
+                                {/* Copy Header */}
+                                <div className="border-b-2 border-black pb-4 mb-8">
+                                    <div className="grid grid-cols-2 gap-4 text-sm font-bold text-blue-900">
+                                        <p>Candidate Name: <span className="underline">{student?.name}</span></p>
+                                        <p>Roll No: <span className="underline">{student?.rollNumber}</span></p>
+                                        <p>Subject: <span className="underline">{computerPaper.subject}</span></p>
+                                        <p>Section: <span className="underline">{student?.section}</span></p>
+                                    </div>
                                 </div>
-                            ))}
+
+                                {computerPaper.sections.map(section => (
+                                    <div key={section.id} className="space-y-10">
+                                        <div className="bg-blue-900 text-white px-4 py-1 inline-block font-bold rounded-sm">
+                                            ANSWERS FOR {section.title}
+                                        </div>
+
+                                        {section.questions.map(q => (
+                                            <div key={q.id} className="space-y-4">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="font-bold text-blue-900 border-b border-blue-900 px-2">Ans {q.id}.</span>
+                                                    <span className="text-[10px] uppercase text-gray-500">[{q.type}]</span>
+                                                </div>
+                                                
+                                                {q.type === 'MCQ' ? (
+                                                    <RadioGroup 
+                                                        onValueChange={(val) => setAnswers({...answers, [q.id]: val})}
+                                                        value={answers[q.id]}
+                                                        className="grid grid-cols-1 gap-2"
+                                                    >
+                                                        {q.options?.map((opt, i) => (
+                                                            <div key={i} className="flex items-center space-x-2 bg-white/50 p-2 rounded border border-gray-200">
+                                                                <RadioGroupItem value={opt} id={`${q.id}-${i}`} />
+                                                                <Label htmlFor={`${q.id}-${i}`} className="flex-1 cursor-pointer font-medium">{String.fromCharCode(65+i)}. {opt}</Label>
+                                                            </div>
+                                                        ))}
+                                                    </RadioGroup>
+                                                ) : (
+                                                    <Textarea 
+                                                        placeholder="Write your answer here..."
+                                                        className="min-h-[200px] font-mono bg-transparent border-none focus-visible:ring-0 shadow-none text-blue-900 text-lg leading-[30px] p-0 resize-none"
+                                                        style={{ background: 'transparent' }}
+                                                        onChange={(e) => setAnswers({...answers, [q.id]: e.target.value})}
+                                                        value={answers[q.id]}
+                                                    />
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                ))}
+
+                                {/* Signature Space */}
+                                <div className="pt-20 flex justify-between items-end border-t border-black/20">
+                                    <div className="text-center">
+                                        <div className="w-32 border-b border-black mb-1" />
+                                        <p className="text-[10px] font-bold">INVIGILATOR SIGNATURE</p>
+                                    </div>
+                                    <div className="text-center">
+                                        <p className="font-headline italic text-blue-900 opacity-50">{student?.name}</p>
+                                        <div className="w-32 border-b border-black mb-1" />
+                                        <p className="text-[10px] font-bold">CANDIDATE SIGNATURE</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </ScrollArea>
                 </div>
@@ -250,9 +324,3 @@ export default function ComputerExamClient() {
         </div>
     );
 }
-
-const Badge = ({ children, variant, className }: any) => (
-    <div className={`px-2 py-0.5 text-xs font-bold border ${className}`}>
-        {children}
-    </div>
-);
