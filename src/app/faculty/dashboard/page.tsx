@@ -3,11 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { BookCopy, Users, ExternalLink, Award, FileSignature } from "lucide-react";
+import { BookCopy, Users, ExternalLink, Award, FileSignature, RotateCcw } from "lucide-react";
 import Link from "next/link";
 import { getStoredUsers, type User } from "@/lib/user-store";
-import { getStoredResults, type ExamResult } from "@/lib/exam-store";
+import { getStoredResults, type ExamResult, clearAttempt, getExamForStudent } from "@/lib/exam-store";
 import { useEffect, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 type GroupedStudents = {
   [className: string]: {
@@ -20,8 +21,9 @@ export default function FacultyDashboard() {
   const [allResults, setAllResults] = useState<{ [key: string]: any }>({});
   const [groupedStudents, setGroupedStudents] = useState<GroupedStudents>({});
   const [topStudents, setTopStudents] = useState<{ [className: string]: (User & { score: number })[] }>({});
+  const { toast } = useToast();
 
-  useEffect(() => {
+  const loadData = () => {
     const users = getStoredUsers();
     const results = getStoredResults();
     setAllResults(results);
@@ -70,11 +72,14 @@ export default function FacultyDashboard() {
         acc[className][section] = [];
       }
       acc[className][section].push(user);
-      // Sort by roll number, treating roll number as a number
       acc[className][section].sort((a, b) => parseInt(a.rollNumber) - parseInt(b.rollNumber));
       return acc;
     }, {} as GroupedStudents);
     setGroupedStudents(grouped);
+  };
+
+  useEffect(() => {
+    loadData();
   }, []);
 
   const getStudentResult = (student: User): ExamResult | null => {
@@ -87,6 +92,26 @@ export default function FacultyDashboard() {
       }
     }
     return null;
+  }
+
+  const handleResetAttempt = (student: User) => {
+    const studentId = `${student.rollNumber.padStart(2, '0')}-${student.class}-${student.section}`;
+    const scheduledExam = getExamForStudent(student.class, student.section);
+    
+    if (scheduledExam) {
+        clearAttempt(studentId, scheduledExam.selectedSet);
+        toast({
+            title: "Attempt Reset",
+            description: `Exam attempt for ${student.name} has been cleared. They can now retake the exam.`,
+        });
+        loadData(); // Refresh UI
+    } else {
+        toast({
+            variant: "destructive",
+            title: "Error",
+            description: "No scheduled exam found for this class/section to reset.",
+        });
+    }
   }
 
   return (
@@ -190,7 +215,7 @@ export default function FacultyDashboard() {
                 <Card>
                   <CardHeader>
                     <CardTitle>Student Directory & Results</CardTitle>
-                    <CardDescription>Browse all registered students and their exam scores.</CardDescription>
+                    <CardDescription>Browse students, view results, or reset attempts for retakes.</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <Accordion type="single" collapsible className="w-full">
@@ -205,29 +230,38 @@ export default function FacultyDashboard() {
                                   <Table>
                                     <TableHeader>
                                       <TableRow>
-                                        <TableHead className="w-[100px]">Roll No.</TableHead>
+                                        <TableHead className="w-[80px]">Roll No.</TableHead>
                                         <TableHead>Student Name</TableHead>
-                                        <TableHead className="text-center">MCQ Score (/80)</TableHead>
-                                        <TableHead className="text-center">Coding Score (/20)</TableHead>
+                                        <TableHead className="text-center">MCQ Score</TableHead>
+                                        <TableHead className="text-center">Coding</TableHead>
                                         <TableHead className="text-right">Actions</TableHead>
                                       </TableRow>
                                     </TableHeader>
                                     <TableBody>
                                       {groupedStudents[className][section].map(student => {
                                         const result = getStudentResult(student);
-                                        // Create a more robust unique key
                                         const uniqueKey = `${student.class}-${student.section}-${student.rollNumber}-${student.name}`;
                                         return (
                                           <TableRow key={uniqueKey}>
                                             <TableCell className="font-medium">{student.rollNumber}</TableCell>
-                                            <TableCell>{student.name}</TableCell>
-                                            <TableCell className="text-center">{result ? `${result.robotics}` : 'N/A'}</TableCell>
-                                            <TableCell className="text-center font-medium">{result ? (result.coding === -1 ? 'Pending' : `${result.coding}`) : 'N/A'}</TableCell>
-                                            <TableCell className="text-right">
+                                            <TableCell className="font-medium">{student.name}</TableCell>
+                                            <TableCell className="text-center">{result ? `${result.robotics}/80` : 'N/A'}</TableCell>
+                                            <TableCell className="text-center">{result ? (result.coding === -1 ? 'Pending' : (result.coding === -2 ? 'N/A' : `${result.coding}/20`)) : 'N/A'}</TableCell>
+                                            <TableCell className="text-right flex items-center justify-end gap-2">
+                                              {result && (
+                                                <Button 
+                                                  variant="ghost" 
+                                                  size="sm" 
+                                                  onClick={() => handleResetAttempt(student)}
+                                                  className="text-destructive hover:text-destructive"
+                                                >
+                                                  <RotateCcw className="h-4 w-4 mr-1" />
+                                                  Reset
+                                                </Button>
+                                              )}
                                               <Button variant="outline" size="sm" asChild>
                                                 <Link href={`/results/${student.rollNumber}?class=${student.class}&section=${student.section}`}>
-                                                  View Marksheet
-                                                  <ExternalLink className="ml-2 h-4 w-4" />
+                                                  <ExternalLink className="h-4 w-4" />
                                                 </Link>
                                               </Button>
                                             </TableCell>

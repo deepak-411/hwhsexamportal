@@ -1,4 +1,3 @@
-
 'use client';
 
 export type ScheduledExam = {
@@ -31,6 +30,9 @@ const DEFAULT_EXAMS: ScheduledExam[] = [
 
 const DEFAULT_RESULTS: { [studentId: string]: { [examId: string]: ExamResult } } = {
     // Class 6
+    '19-6-Daffodils': { '1': { robotics: 80, coding: -1 } }, // Mishti Malviya - Gold (Score 80/80)
+    '28-6-Daffodils': { '1': { robotics: 79, coding: -1 } }, // shaurya shingankar - Silver (Score 79/80)
+    '17-6-Daffodils': { '1': { robotics: 78, coding: -1 } }, // MANEET TALAMPALLI - Bronze (Score 78/80)
     '01-6-Daffodils': { '1': { robotics: 37, coding: -1 } },
     '02-6-Daffodils': { '1': { robotics: 11, coding: -1 } },
     '07-6-Daffodils': { '1': { robotics: 24, coding: -1 } },
@@ -38,14 +40,11 @@ const DEFAULT_RESULTS: { [studentId: string]: { [examId: string]: ExamResult } }
     '11-6-Daffodils': { '1': { robotics: 27, coding: -1 } },
     '12-6-Daffodils': { '1': { robotics: 8, coding: -1 } },
     '16-6-Daffodils': { '1': { robotics: 29, coding: -1 } },
-    '17-6-Daffodils': { '1': { robotics: 78, coding: -1 } }, // MANEET TALAMPALLI - Bronze
-    '19-6-Daffodils': { '1': { robotics: 80, coding: -1 } }, // Mishti Malviya - Gold
     '22-6-Daffodils': { '1': { robotics: 27, coding: -1 } },
     '24-6-Daffodils': { '1': { robotics: 32, coding: -1 } },
     '25-6-Daffodils': { '1': { robotics: 29, coding: -1 } },
     '26-6-Daffodils': { '1': { robotics: 32, coding: -1 } },
     '27-6-Daffodils': { '1': { robotics: 39, coding: -1 } },
-    '28-6-Daffodils': { '1': { robotics: 79, coding: -1 } }, // shaurya shingankar - Silver
     '29-6-Daffodils': { '1': { robotics: 19, coding: -1 } },
     '30-6-Daffodils': { '1': { robotics: 19, coding: -1 } },
     '31-6-Daffodils': { '1': { robotics: 35, coding: -1 } },
@@ -259,4 +258,21 @@ export function hasAttemptedExam(studentId: string, examId: string): boolean {
         return attempts[attemptKey] || false;
     }
     return false;
+}
+
+export function clearAttempt(studentId: string, examId: string) {
+    if (typeof window !== 'undefined') {
+        // Clear from results
+        const results = getStoredResults();
+        if (results[studentId]) {
+            delete results[studentId][examId];
+            window.localStorage.setItem(RESULTS_STORAGE_KEY, JSON.stringify(results));
+        }
+
+        // Clear from attempts
+        const attempts = getStoredAttempts();
+        const attemptKey = `${studentId}_${examId}`;
+        delete attempts[attemptKey];
+        window.localStorage.setItem(ATTEMPTS_STORAGE_KEY, JSON.stringify(attempts));
+    }
 }
