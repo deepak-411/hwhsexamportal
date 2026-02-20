@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Loader2, ShieldAlert, MonitorPlay, Send, BookOpen, FileText, UserCircle, Camera, Mic, AlertTriangle } from "lucide-react";
+import { Loader2, ShieldAlert, MonitorPlay, Send, BookOpen, FileText, UserCircle, Camera, AlertTriangle } from "lucide-react";
 import { getCurrentUser, type User } from "@/lib/user-store";
 import { storeResult, markExamAsAttempted, hasAttemptedExam } from "@/lib/exam-store";
 import { useRouter } from "next/navigation";
@@ -22,13 +22,10 @@ export default function ComputerExamClient() {
     const [answers, setAnswers] = useState<{ [key: string]: string }>({});
     const [student, setStudent] = useState<User | null>(null);
     const [hasCameraPermission, setHasCameraPermission] = useState(false);
-    const [hasMicPermission, setHasMicPermission] = useState(false);
     
     const { toast } = useToast();
     const router = useRouter();
     const videoRef = useRef<HTMLVideoElement>(null);
-    const audioContextRef = useRef<AudioContext | null>(null);
-    const analyserRef = useRef<AnalyserNode | null>(null);
     const examSubmittedRef = useRef(false);
     const isViolationRef = useRef(false);
 
@@ -51,50 +48,20 @@ export default function ComputerExamClient() {
     // Permissions check
     const requestPermissions = async () => {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             setHasCameraPermission(true);
-            setHasMicPermission(true);
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
             }
-            
-            // Setup Audio Analysis for voice detection
-            audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
-            const source = audioContextRef.current.createMediaStreamSource(stream);
-            analyserRef.current = audioContextRef.current.createAnalyser();
-            source.connect(analyserRef.current);
-            analyserRef.current.fftSize = 256;
-            
-            checkAudioLevels();
             return true;
         } catch (error) {
-            console.error('Error accessing media devices:', error);
+            console.error('Error accessing camera:', error);
             toast({
                 variant: 'destructive',
-                title: 'Hardware Access Denied',
-                description: 'Camera and Microphone are mandatory for this proctored exam.',
+                title: 'Camera Access Denied',
+                description: 'Camera access is mandatory for this proctored exam.',
             });
             return false;
-        }
-    };
-
-    const checkAudioLevels = () => {
-        if (!analyserRef.current || examSubmittedRef.current) return;
-        
-        const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
-        analyserRef.current.getByteFrequencyData(dataArray);
-        
-        let sum = 0;
-        for (let i = 0; i < dataArray.length; i++) {
-            sum += dataArray[i];
-        }
-        const average = sum / dataArray.length;
-
-        // Threshold for voice detection (35 is a sensitive but reasonable ambient limit)
-        if (average > 45) {
-            triggerViolation("VOICE DETECTED: Talking during the exam is prohibited.");
-        } else {
-            requestAnimationFrame(checkAudioLevels);
         }
     };
 
@@ -103,7 +70,7 @@ export default function ComputerExamClient() {
         isViolationRef.current = true;
         toast({ 
             variant: "destructive", 
-            title: "PROCTORING ALERT: CHEATING SUSPECTED", 
+            title: "PROCTORING ALERT: VIOLATION DETECTED", 
             description: reason 
         });
         handleSubmit(true);
@@ -150,10 +117,6 @@ export default function ComputerExamClient() {
             document.removeEventListener("visibilitychange", onVisibilityChange);
             window.removeEventListener("blur", onBlur);
             document.removeEventListener("fullscreenchange", onFullscreenChange);
-            
-            if (audioContextRef.current) {
-                audioContextRef.current.close();
-            }
         };
     }, [status]);
 
@@ -190,7 +153,7 @@ export default function ComputerExamClient() {
 
         if (document.fullscreenElement) document.exitFullscreen();
         
-        // Stop all tracks
+        // Stop camera tracks
         if (videoRef.current && videoRef.current.srcObject) {
             const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
             tracks.forEach(track => track.stop());
@@ -227,21 +190,20 @@ export default function ComputerExamClient() {
                                 <ShieldAlert className="h-5 w-5" /> PROCTORING WARNING
                             </h4>
                             <ul className="list-disc list-inside space-y-2 mt-2 text-sm">
-                                <li><strong>Camera & Mic Required:</strong> Continuous video and audio monitoring will be active.</li>
-                                <li><strong>Voice Detection:</strong> Talking or external noise will trigger immediate auto-submit.</li>
+                                <li><strong>Camera Required:</strong> Continuous video monitoring will be active.</li>
+                                <li><strong>Face Forward:</strong> Stay in front of your camera at all times.</li>
                                 <li><strong>Tab Switching:</strong> Any attempt to leave this page or use other devices will terminate the exam.</li>
                                 <li><strong>AI Analysis:</strong> Your activity is being monitored for cheating patterns.</li>
                             </ul>
                         </div>
                         
                         <div className="flex items-center gap-4 justify-center">
-                             <div className="flex items-center gap-2 text-muted-foreground"><Camera className="h-4 w-4"/> Camera</div>
-                             <div className="flex items-center gap-2 text-muted-foreground"><Mic className="h-4 w-4"/> Mic</div>
-                             <div className="flex items-center gap-2 text-muted-foreground"><MonitorPlay className="h-4 w-4"/> Fullscreen</div>
+                             <div className="flex items-center gap-2 text-muted-foreground"><Camera className="h-4 w-4"/> Camera Active</div>
+                             <div className="flex items-center gap-2 text-muted-foreground"><MonitorPlay className="h-4 w-4"/> Fullscreen Mode</div>
                         </div>
                     </CardContent>
                     <CardFooter>
-                        <Button className="w-full" size="lg" onClick={startExam}><MonitorPlay className="mr-2" /> Enable Hardware & Start</Button>
+                        <Button className="w-full" size="lg" onClick={startExam}><MonitorPlay className="mr-2" /> Enable Camera & Start</Button>
                     </CardFooter>
                 </Card>
             </div>
@@ -333,7 +295,7 @@ export default function ComputerExamClient() {
                         </div>
                         <div className="flex items-center gap-4 text-xs">
                              <div className="flex items-center gap-1 text-green-600">
-                                <div className="w-2 h-2 rounded-full bg-green-600 animate-pulse" /> REC ACTIVE
+                                <div className="w-2 h-2 rounded-full bg-green-600 animate-pulse" /> PROCTORING ACTIVE
                              </div>
                             <div className="flex items-center gap-2">
                                 <UserCircle className="h-4 w-4" />
