@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Loader2, ShieldAlert, MonitorPlay, Send, BookOpen, FileText, UserCircle, Camera, AlertTriangle } from "lucide-react";
+import { Loader2, ShieldAlert, MonitorPlay, Send, BookOpen, FileText, UserCircle, AlertTriangle } from "lucide-react";
 import { getCurrentUser, type User } from "@/lib/user-store";
 import { storeResult, markExamAsAttempted, hasAttemptedExam } from "@/lib/exam-store";
 import { useRouter } from "next/navigation";
@@ -21,11 +21,9 @@ export default function ComputerExamClient() {
     const [status, setStatus] = useState<"loading" | "prompt" | "exam" | "submitting" | "submitted" | "blocked">("loading");
     const [answers, setAnswers] = useState<{ [key: string]: string }>({});
     const [student, setStudent] = useState<User | null>(null);
-    const [hasCameraPermission, setHasCameraPermission] = useState(false);
     
     const { toast } = useToast();
     const router = useRouter();
-    const videoRef = useRef<HTMLVideoElement>(null);
     const examSubmittedRef = useRef(false);
     const isViolationRef = useRef(false);
 
@@ -45,26 +43,6 @@ export default function ComputerExamClient() {
         }
     }, [router]);
 
-    // Permissions check
-    const requestPermissions = async () => {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            setHasCameraPermission(true);
-            if (videoRef.current) {
-                videoRef.current.srcObject = stream;
-            }
-            return true;
-        } catch (error) {
-            console.error('Error accessing camera:', error);
-            toast({
-                variant: 'destructive',
-                title: 'Camera Access Denied',
-                description: 'Camera access is mandatory for this proctored exam.',
-            });
-            return false;
-        }
-    };
-
     const triggerViolation = (reason: string) => {
         if (examSubmittedRef.current) return;
         isViolationRef.current = true;
@@ -77,9 +55,6 @@ export default function ComputerExamClient() {
     };
 
     const startExam = async () => {
-        const permitted = await requestPermissions();
-        if (!permitted) return;
-
         try {
             await document.documentElement.requestFullscreen();
             setStatus("exam");
@@ -152,13 +127,6 @@ export default function ComputerExamClient() {
         }
 
         if (document.fullscreenElement) document.exitFullscreen();
-        
-        // Stop camera tracks
-        if (videoRef.current && videoRef.current.srcObject) {
-            const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
-            tracks.forEach(track => track.stop());
-        }
-
         setStatus("submitted");
     };
 
@@ -190,20 +158,18 @@ export default function ComputerExamClient() {
                                 <ShieldAlert className="h-5 w-5" /> PROCTORING WARNING
                             </h4>
                             <ul className="list-disc list-inside space-y-2 mt-2 text-sm">
-                                <li><strong>Camera Required:</strong> Continuous video monitoring will be active.</li>
-                                <li><strong>Face Forward:</strong> Stay in front of your camera at all times.</li>
                                 <li><strong>Tab Switching:</strong> Any attempt to leave this page or use other devices will terminate the exam.</li>
+                                <li><strong>Fullscreen Required:</strong> Staying in fullscreen mode is mandatory.</li>
                                 <li><strong>AI Analysis:</strong> Your activity is being monitored for cheating patterns.</li>
                             </ul>
                         </div>
                         
                         <div className="flex items-center gap-4 justify-center">
-                             <div className="flex items-center gap-2 text-muted-foreground"><Camera className="h-4 w-4"/> Camera Active</div>
-                             <div className="flex items-center gap-2 text-muted-foreground"><MonitorPlay className="h-4 w-4"/> Fullscreen Mode</div>
+                             <div className="flex items-center gap-2 text-muted-foreground"><MonitorPlay className="h-4 w-4"/> Fullscreen Mode Only</div>
                         </div>
                     </CardContent>
                     <CardFooter>
-                        <Button className="w-full" size="lg" onClick={startExam}><MonitorPlay className="mr-2" /> Enable Camera & Start</Button>
+                        <Button className="w-full" size="lg" onClick={startExam}><MonitorPlay className="mr-2" /> Start Exam in Fullscreen</Button>
                     </CardFooter>
                 </Card>
             </div>
@@ -236,7 +202,6 @@ export default function ComputerExamClient() {
 
     return (
         <div className="h-screen w-screen flex flex-col bg-background select-none">
-            {/* Header */}
             <header className="h-16 border-b flex items-center justify-between px-6 bg-card shrink-0">
                 <div className="flex items-center gap-2">
                     <BookOpen className="text-primary" />
@@ -248,9 +213,7 @@ export default function ComputerExamClient() {
                 </div>
             </header>
 
-            {/* Split Screen Content */}
             <div className="flex-1 flex overflow-hidden">
-                {/* Left: Question Paper */}
                 <div className="w-1/2 border-r bg-muted/30 flex flex-col">
                     <div className="p-4 bg-primary/10 border-b flex items-center gap-2 font-bold">
                         <FileText className="h-4 w-4" /> Question Paper (Reference)
@@ -287,7 +250,6 @@ export default function ComputerExamClient() {
                     </ScrollArea>
                 </div>
 
-                {/* Right: CBSE Style Answer Copy */}
                 <div className="w-1/2 flex flex-col bg-[#fff9e6]">
                     <div className="p-4 bg-[#f0ebda] border-b flex items-center justify-between font-bold text-blue-900">
                         <div className="flex items-center gap-2">
@@ -306,7 +268,6 @@ export default function ComputerExamClient() {
                     
                     <ScrollArea className="flex-1 p-0">
                         <div className="min-h-full w-full bg-[#fff9e6] relative pb-40">
-                            {/* Paper Lines & Margin */}
                             <div className="absolute left-[60px] top-0 bottom-0 w-[2px] bg-red-400" />
                             <div className="absolute inset-0 pointer-events-none" style={{
                                 backgroundImage: 'linear-gradient(#d1d5db 1px, transparent 1px)',
@@ -315,15 +276,6 @@ export default function ComputerExamClient() {
                             }} />
 
                             <div className="relative z-10 p-8 pl-20 space-y-12">
-                                {/* Proctoring Preview */}
-                                <div className="flex justify-end mb-4">
-                                    <div className="w-32 aspect-video bg-black rounded border-2 border-primary overflow-hidden shadow-lg relative">
-                                        <video ref={videoRef} autoPlay muted className="w-full h-full object-cover" />
-                                        <div className="absolute top-1 left-1 bg-red-600 px-1 rounded text-[8px] text-white font-bold">LIVE</div>
-                                    </div>
-                                </div>
-
-                                {/* Copy Header */}
                                 <div className="border-b-2 border-black pb-4 mb-8">
                                     <div className="grid grid-cols-2 gap-4 text-sm font-bold text-blue-900">
                                         <p>Candidate Name: <span className="underline">{student?.name}</span></p>
@@ -373,7 +325,6 @@ export default function ComputerExamClient() {
                                     </div>
                                 ))}
 
-                                {/* Signature Space */}
                                 <div className="pt-20 flex justify-between items-end border-t border-black/20">
                                     <div className="text-center">
                                         <div className="w-32 border-b border-black mb-1" />
