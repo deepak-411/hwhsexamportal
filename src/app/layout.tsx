@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "HWHS Exam Portal",
@@ -37,8 +38,11 @@ export default function RootLayout({
           "bg-cover bg-center bg-fixed"
         )}
       >
-        <main className="min-h-screen w-full bg-background/80 backdrop-blur-sm">
-          {children}
+        <main className="min-h-screen w-full bg-background/80 backdrop-blur-sm flex flex-col">
+          <div className="flex-1 flex flex-col">
+            {children}
+          </div>
+          <Footer />
           <Toaster />
         </main>
       </body>
