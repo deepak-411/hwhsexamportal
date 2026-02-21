@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Loader2, ShieldAlert, MonitorPlay, Send, BookOpen, FileText, UserCircle, AlertTriangle, Video, Mic } from "lucide-react";
+import { Loader2, ShieldAlert, MonitorPlay, Send, BookOpen, FileText, UserCircle, AlertTriangle, Video } from "lucide-react";
 import { getCurrentUser, type User } from "@/lib/user-store";
 import { storeResult, markExamAsAttempted, hasAttemptedExam } from "@/lib/exam-store";
 import { useRouter } from "next/navigation";
@@ -29,7 +29,6 @@ export default function ComputerExamClient() {
     const videoRef = useRef<HTMLVideoElement>(null);
     const examSubmittedRef = useRef(false);
     const isViolationRef = useRef(false);
-    const audioContextRef = useRef<AudioContext | null>(null);
 
     // Synchronize Ref with State for proctoring capture
     useEffect(() => {
@@ -63,57 +62,26 @@ export default function ComputerExamClient() {
         handleSubmit(true);
     };
 
-    // Camera and Mic Proctoring
+    // Camera Proctoring
     useEffect(() => {
         if (status !== 'exam') return;
 
         const getMediaPermissions = async () => {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 setHasCameraPermission(true);
 
                 if (videoRef.current) {
                     videoRef.current.srcObject = stream;
                 }
-
-                // Audio level analysis for voice/cheating detection
-                const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-                audioContextRef.current = audioContext;
-                const source = audioContext.createMediaStreamSource(stream);
-                const analyser = audioContext.createAnalyser();
-                analyser.fftSize = 256;
-                source.connect(analyser);
-
-                const dataArray = new Uint8Array(analyser.frequencyBinCount);
-                
-                const checkAudio = () => {
-                    if (examSubmittedRef.current) return;
-                    analyser.getByteFrequencyData(dataArray);
-                    const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
-                    
-                    // Threshold for detecting voice/noise
-                    if (average > 60) {
-                        triggerViolation("Talking or external noise detected. Automatic submission initiated.");
-                        return;
-                    }
-                    requestAnimationFrame(checkAudio);
-                };
-                checkAudio();
-
             } catch (error) {
                 console.error('Error accessing proctoring devices:', error);
                 setHasCameraPermission(false);
-                triggerViolation("Camera and Microphone access are mandatory for this exam.");
+                triggerViolation("Camera access is mandatory for this exam.");
             }
         };
 
         getMediaPermissions();
-
-        return () => {
-            if (audioContextRef.current) {
-                audioContextRef.current.close();
-            }
-        };
     }, [status]);
 
     const startExam = async () => {
@@ -222,8 +190,7 @@ export default function ComputerExamClient() {
                                 <ShieldAlert className="h-5 w-5" /> PROCTORING WARNING
                             </h4>
                             <ul className="list-disc list-inside space-y-2 mt-2 text-sm">
-                                <li><strong>Camera & Mic:</strong> Must remain active. Denial will block the exam.</li>
-                                <li><strong>Voice Detection:</strong> Talking or external help will result in auto-submission.</li>
+                                <li><strong>Camera:</strong> Must remain active. Denial will block the exam.</li>
                                 <li><strong>Tab Switching:</strong> Leaving this page terminates the exam instantly.</li>
                                 <li><strong>Fullscreen:</strong> Mandatory throughout the duration.</li>
                             </ul>
@@ -231,7 +198,6 @@ export default function ComputerExamClient() {
                         
                         <div className="flex items-center gap-4 justify-center text-sm text-muted-foreground">
                              <div className="flex items-center gap-2"><Video className="h-4 w-4"/> Camera Required</div>
-                             <div className="flex items-center gap-2"><Mic className="h-4 w-4"/> Audio Monitoring</div>
                              <div className="flex items-center gap-2"><MonitorPlay className="h-4 w-4"/> Fullscreen Mode</div>
                         </div>
                     </CardContent>
@@ -254,7 +220,7 @@ export default function ComputerExamClient() {
                                 <AlertTriangle className="h-4 w-4" />
                                 <AlertTitle>Proctoring Violation Recorded</AlertTitle>
                                 <AlertDescription>
-                                    Your exam was auto-submitted due to a detected violation (Voice/Tab/Focus). This has been reported.
+                                    Your exam was auto-submitted due to a detected violation (Tab/Focus/Camera Exit). This has been reported.
                                 </AlertDescription>
                              </Alert>
                         ) : (
