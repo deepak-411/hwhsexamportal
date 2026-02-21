@@ -115,6 +115,7 @@ export default function ComputerExamClient() {
             } catch (error) {
                 console.error('Error accessing proctoring devices:', error);
                 setHasCameraPermission(false);
+                // We keep visual proctoring active - failure to provide camera triggers violation
                 triggerViolation("Camera access is mandatory for this exam.");
             }
         };
@@ -248,6 +249,7 @@ export default function ComputerExamClient() {
             </header>
 
             <div className="flex-1 flex overflow-hidden">
+                {/* Question Paper Section */}
                 <div className="w-1/2 border-r bg-muted/30 flex flex-col">
                     <div className="p-4 bg-primary/10 border-b flex items-center gap-2 font-bold">
                         <FileText className="h-4 w-4" /> Question Paper (Reference)
@@ -284,6 +286,7 @@ export default function ComputerExamClient() {
                     </ScrollArea>
                 </div>
 
+                {/* Answer Sheet Section */}
                 <div className="w-1/2 flex flex-col bg-[#fff9e6]">
                     <div className="p-4 bg-[#f0ebda] border-b flex items-center justify-between font-bold text-blue-900">
                         <div className="flex items-center gap-2">
@@ -302,6 +305,7 @@ export default function ComputerExamClient() {
                     
                     <ScrollArea className="flex-1 p-0">
                         <div className="min-h-full w-full bg-[#fff9e6] relative pb-40">
+                            {/* Physical Paper Styling */}
                             <div className="absolute left-[60px] top-0 bottom-0 w-[2px] bg-red-400" />
                             <div className="absolute inset-0 pointer-events-none" style={{
                                 backgroundImage: 'linear-gradient(#d1d5db 1px, transparent 1px)',
@@ -373,6 +377,7 @@ export default function ComputerExamClient() {
                                     </div>
                                 ))}
 
+                                {/* Signatures Footer */}
                                 <div className="pt-20 flex justify-between items-end border-t border-black/20 mt-20">
                                     <div className="text-center flex flex-col items-center">
                                         <span className="font-signature text-3xl text-blue-800 -mb-2">Deepak Kumar</span>
