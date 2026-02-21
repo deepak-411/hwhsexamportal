@@ -1,7 +1,6 @@
-
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface TimerProps {
   initialTime: number;
@@ -10,10 +9,16 @@ interface TimerProps {
 
 export default function Timer({ initialTime, onTimeUp }: TimerProps) {
   const [timeLeft, setTimeLeft] = useState(initialTime);
+  const onTimeUpRef = useRef(onTimeUp);
+
+  // Sync ref with latest callback to prevent effect restarts
+  useEffect(() => {
+    onTimeUpRef.current = onTimeUp;
+  }, [onTimeUp]);
 
   useEffect(() => {
     if (timeLeft <= 0) {
-      onTimeUp();
+      onTimeUpRef.current();
       return;
     }
 
@@ -22,7 +27,7 @@ export default function Timer({ initialTime, onTimeUp }: TimerProps) {
     }, 1000);
 
     return () => clearInterval(intervalId);
-  }, [timeLeft, onTimeUp]);
+  }, [timeLeft]);
 
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;

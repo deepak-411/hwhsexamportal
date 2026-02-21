@@ -13,6 +13,7 @@ export default {
         body: ['Inter', 'sans-serif'],
         headline: ['Space Grotesk', 'sans-serif'],
         code: ['Source Code Pro', 'monospace'],
+        signature: ['Dancing Script', 'cursive'],
       },
       colors: {
         background: 'hsl(var(--background))',

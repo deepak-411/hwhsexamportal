@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { computerPaper } from "@/lib/computer-questions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -51,7 +51,45 @@ export default function ComputerExamClient() {
         }
     }, [router]);
 
-    const triggerViolation = (reason: string) => {
+    const handleSubmit = useCallback(async (isAuto = false) => {
+        if (examSubmittedRef.current) return;
+        examSubmittedRef.current = true;
+        
+        const finalAnswers = answersRef.current;
+        setStatus("submitting");
+
+        const currentUser = getCurrentUser();
+        if (!currentUser) return;
+
+        let mcqCorrect = 0;
+        computerPaper.sections[0].questions.forEach(q => {
+            if (finalAnswers[q.id] === q.answer) mcqCorrect++;
+        });
+
+        const studentId = `${currentUser.rollNumber.padStart(2, '0')}-${currentUser.class}-${currentUser.section}`;
+        
+        storeResult(currentUser.rollNumber, currentUser.class, currentUser.section, 'COMP-ANNUAL-9', {
+            robotics: mcqCorrect,
+            coding: -2 
+        });
+        markExamAsAttempted(studentId, 'COMP-ANNUAL-9');
+
+        try {
+            await sendComputerSubmissionEmail({
+                student: currentUser,
+                answers: finalAnswers,
+                isViolation: isViolationRef.current || isAuto,
+                examTitle: `${computerPaper.exam} - ${computerPaper.subject}`
+            });
+        } catch (error) {
+            console.error("Failed to send submission email", error);
+        }
+
+        if (document.fullscreenElement) document.exitFullscreen();
+        setStatus("submitted");
+    }, []);
+
+    const triggerViolation = useCallback((reason: string) => {
         if (examSubmittedRef.current) return;
         isViolationRef.current = true;
         toast({ 
@@ -60,7 +98,7 @@ export default function ComputerExamClient() {
             description: reason 
         });
         handleSubmit(true);
-    };
+    }, [toast, handleSubmit]);
 
     // Camera Proctoring
     useEffect(() => {
@@ -82,7 +120,7 @@ export default function ComputerExamClient() {
         };
 
         getMediaPermissions();
-    }, [status]);
+    }, [status, triggerViolation]);
 
     const startExam = async () => {
         try {
@@ -93,14 +131,14 @@ export default function ComputerExamClient() {
         }
     };
 
-    const handleTabSwitch = () => {
-        if (status === "exam" && !examSubmittedRef.current) {
-            triggerViolation("Window switching or focus loss detected. Automatic submission initiated.");
-        }
-    };
-
     useEffect(() => {
         if (status !== "exam") return;
+
+        const handleTabSwitch = () => {
+            if (status === "exam" && !examSubmittedRef.current) {
+                triggerViolation("Window switching or focus loss detected. Automatic submission initiated.");
+            }
+        };
 
         const onVisibilityChange = () => {
             if (document.hidden) handleTabSwitch();
@@ -123,44 +161,7 @@ export default function ComputerExamClient() {
             window.removeEventListener("blur", onBlur);
             document.removeEventListener("fullscreenchange", onFullscreenChange);
         };
-    }, [status]);
-
-    const handleSubmit = async (isAuto = false) => {
-        if (examSubmittedRef.current) return;
-        examSubmittedRef.current = true;
-        
-        const finalAnswers = answersRef.current;
-        setStatus("submitting");
-
-        if (!student) return;
-
-        let mcqCorrect = 0;
-        computerPaper.sections[0].questions.forEach(q => {
-            if (finalAnswers[q.id] === q.answer) mcqCorrect++;
-        });
-
-        const studentId = `${student.rollNumber.padStart(2, '0')}-${student.class}-${student.section}`;
-        
-        storeResult(student.rollNumber, student.class, student.section, 'COMP-ANNUAL-9', {
-            robotics: mcqCorrect,
-            coding: -2 
-        });
-        markExamAsAttempted(studentId, 'COMP-ANNUAL-9');
-
-        try {
-            await sendComputerSubmissionEmail({
-                student: student,
-                answers: finalAnswers,
-                isViolation: isViolationRef.current || isAuto,
-                examTitle: `${computerPaper.exam} - ${computerPaper.subject}`
-            });
-        } catch (error) {
-            console.error("Failed to send submission email", error);
-        }
-
-        if (document.fullscreenElement) document.exitFullscreen();
-        setStatus("submitted");
-    };
+    }, [status, triggerViolation]);
 
     if (status === "loading") return <div className="flex h-screen items-center justify-center"><Loader2 className="animate-spin" /></div>;
 
@@ -372,15 +373,16 @@ export default function ComputerExamClient() {
                                     </div>
                                 ))}
 
-                                <div className="pt-20 flex justify-between items-end border-t border-black/20">
-                                    <div className="text-center">
-                                        <div className="w-32 border-b border-black mb-1" />
-                                        <p className="text-[10px] font-bold">INVIGILATOR SIGNATURE</p>
+                                <div className="pt-20 flex justify-between items-end border-t border-black/20 mt-20">
+                                    <div className="text-center flex flex-col items-center">
+                                        <span className="font-signature text-3xl text-blue-800 -mb-2">Deepak Kumar</span>
+                                        <div className="w-40 h-[1.5px] bg-black" />
+                                        <p className="text-[10px] font-bold mt-1 uppercase">Invigilator Signature</p>
                                     </div>
-                                    <div className="text-center">
-                                        <p className="font-headline italic text-blue-900 opacity-50">{student?.name}</p>
-                                        <div className="w-32 border-b border-black mb-1" />
-                                        <p className="text-[10px] font-bold">CANDIDATE SIGNATURE</p>
+                                    <div className="text-center flex flex-col items-center">
+                                        <span className="font-signature text-3xl text-blue-800 -mb-2 opacity-50">{student?.name}</span>
+                                        <div className="w-40 h-[1.5px] bg-black" />
+                                        <p className="text-[10px] font-bold mt-1 uppercase">Candidate Signature</p>
                                     </div>
                                 </div>
                             </div>
