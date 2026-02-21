@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Loader2, ShieldAlert, MonitorPlay, Send, BookOpen, FileText, UserCircle, AlertTriangle } from "lucide-react";
+import { Loader2, ShieldAlert, MonitorPlay, Send, BookOpen, FileText, UserCircle, AlertTriangle, Video, Mic } from "lucide-react";
 import { getCurrentUser, type User } from "@/lib/user-store";
 import { storeResult, markExamAsAttempted, hasAttemptedExam } from "@/lib/exam-store";
 import { useRouter } from "next/navigation";
@@ -22,11 +22,14 @@ export default function ComputerExamClient() {
     const [answers, setAnswers] = useState<{ [key: string]: string }>({});
     const answersRef = useRef<{ [key: string]: string }>({});
     const [student, setStudent] = useState<User | null>(null);
+    const [hasCameraPermission, setHasCameraPermission] = useState(false);
     
     const { toast } = useToast();
     const router = useRouter();
+    const videoRef = useRef<HTMLVideoElement>(null);
     const examSubmittedRef = useRef(false);
     const isViolationRef = useRef(false);
+    const audioContextRef = useRef<AudioContext | null>(null);
 
     // Synchronize Ref with State for proctoring capture
     useEffect(() => {
@@ -60,6 +63,59 @@ export default function ComputerExamClient() {
         handleSubmit(true);
     };
 
+    // Camera and Mic Proctoring
+    useEffect(() => {
+        if (status !== 'exam') return;
+
+        const getMediaPermissions = async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                setHasCameraPermission(true);
+
+                if (videoRef.current) {
+                    videoRef.current.srcObject = stream;
+                }
+
+                // Audio level analysis for voice/cheating detection
+                const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+                audioContextRef.current = audioContext;
+                const source = audioContext.createMediaStreamSource(stream);
+                const analyser = audioContext.createAnalyser();
+                analyser.fftSize = 256;
+                source.connect(analyser);
+
+                const dataArray = new Uint8Array(analyser.frequencyBinCount);
+                
+                const checkAudio = () => {
+                    if (examSubmittedRef.current) return;
+                    analyser.getByteFrequencyData(dataArray);
+                    const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
+                    
+                    // Threshold for detecting voice/noise
+                    if (average > 60) {
+                        triggerViolation("Talking or external noise detected. Automatic submission initiated.");
+                        return;
+                    }
+                    requestAnimationFrame(checkAudio);
+                };
+                checkAudio();
+
+            } catch (error) {
+                console.error('Error accessing proctoring devices:', error);
+                setHasCameraPermission(false);
+                triggerViolation("Camera and Microphone access are mandatory for this exam.");
+            }
+        };
+
+        getMediaPermissions();
+
+        return () => {
+            if (audioContextRef.current) {
+                audioContextRef.current.close();
+            }
+        };
+    }, [status]);
+
     const startExam = async () => {
         try {
             await document.documentElement.requestFullscreen();
@@ -71,7 +127,7 @@ export default function ComputerExamClient() {
 
     const handleTabSwitch = () => {
         if (status === "exam" && !examSubmittedRef.current) {
-            triggerViolation("Window switching detected. Automatic submission initiated.");
+            triggerViolation("Window switching or focus loss detected. Automatic submission initiated.");
         }
     };
 
@@ -105,7 +161,6 @@ export default function ComputerExamClient() {
         if (examSubmittedRef.current) return;
         examSubmittedRef.current = true;
         
-        // Final capture of answers from Ref to ensure nothing is lost
         const finalAnswers = answersRef.current;
         setStatus("submitting");
 
@@ -159,7 +214,7 @@ export default function ComputerExamClient() {
                 <Card className="max-w-2xl w-full">
                     <CardHeader className="text-center">
                         <CardTitle className="text-3xl font-headline">Annual Computer Exam 2025-26</CardTitle>
-                        <CardDescription>Advanced Proctored Environment</CardDescription>
+                        <CardDescription>Mandatory Proctored Environment</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                         <div className="bg-destructive/10 border-l-4 border-destructive p-4 rounded-md">
@@ -167,18 +222,21 @@ export default function ComputerExamClient() {
                                 <ShieldAlert className="h-5 w-5" /> PROCTORING WARNING
                             </h4>
                             <ul className="list-disc list-inside space-y-2 mt-2 text-sm">
-                                <li><strong>Tab Switching:</strong> Any attempt to leave this page or use other devices will terminate the exam.</li>
-                                <li><strong>Fullscreen Required:</strong> Staying in fullscreen mode is mandatory.</li>
-                                <li><strong>AI Analysis:</strong> Your activity is being monitored for cheating patterns.</li>
+                                <li><strong>Camera & Mic:</strong> Must remain active. Denial will block the exam.</li>
+                                <li><strong>Voice Detection:</strong> Talking or external help will result in auto-submission.</li>
+                                <li><strong>Tab Switching:</strong> Leaving this page terminates the exam instantly.</li>
+                                <li><strong>Fullscreen:</strong> Mandatory throughout the duration.</li>
                             </ul>
                         </div>
                         
-                        <div className="flex items-center gap-4 justify-center">
-                             <div className="flex items-center gap-2 text-muted-foreground"><MonitorPlay className="h-4 w-4"/> Fullscreen Mode Only</div>
+                        <div className="flex items-center gap-4 justify-center text-sm text-muted-foreground">
+                             <div className="flex items-center gap-2"><Video className="h-4 w-4"/> Camera Required</div>
+                             <div className="flex items-center gap-2"><Mic className="h-4 w-4"/> Audio Monitoring</div>
+                             <div className="flex items-center gap-2"><MonitorPlay className="h-4 w-4"/> Fullscreen Mode</div>
                         </div>
                     </CardContent>
                     <CardFooter>
-                        <Button className="w-full" size="lg" onClick={startExam}><MonitorPlay className="mr-2" /> Start Exam in Fullscreen</Button>
+                        <Button className="w-full" size="lg" onClick={startExam}><MonitorPlay className="mr-2" /> Accept & Start Exam</Button>
                     </CardFooter>
                 </Card>
             </div>
@@ -196,7 +254,7 @@ export default function ComputerExamClient() {
                                 <AlertTriangle className="h-4 w-4" />
                                 <AlertTitle>Proctoring Violation Recorded</AlertTitle>
                                 <AlertDescription>
-                                    Your exam was auto-submitted due to a detected violation. This has been reported to the faculty.
+                                    Your exam was auto-submitted due to a detected violation (Voice/Tab/Focus). This has been reported.
                                 </AlertDescription>
                              </Alert>
                         ) : (
@@ -285,6 +343,20 @@ export default function ComputerExamClient() {
                             }} />
 
                             <div className="relative z-10 p-8 pl-20 space-y-12">
+                                {/* Proctoring Feed */}
+                                <div className="absolute top-4 right-4 z-50 w-32 aspect-video bg-black rounded-lg overflow-hidden border-2 border-primary shadow-xl">
+                                    <video ref={videoRef} autoPlay muted className="w-full h-full object-cover" />
+                                    <div className="absolute top-1 left-1 flex gap-1">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />
+                                        <span className="text-[6px] text-white font-bold uppercase">Proctor Feed</span>
+                                    </div>
+                                    {!hasCameraPermission && (
+                                        <div className="absolute inset-0 flex items-center justify-center bg-gray-900 text-[8px] text-white text-center p-1">
+                                            No Signal
+                                        </div>
+                                    )}
+                                </div>
+
                                 <div className="border-b-2 border-black pb-4 mb-8">
                                     <div className="grid grid-cols-2 gap-4 text-sm font-bold text-blue-900">
                                         <p>Candidate Name: <span className="underline">{student?.name}</span></p>
