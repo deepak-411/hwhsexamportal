@@ -57,90 +57,101 @@ export default function Marksheet({
     const qrValue = `Marksheet No: ${marksheetNumber}\nStudent: ${studentName}\nRoll No: ${rollNumber}`;
 
   return (
-    <Card className="max-w-4xl mx-auto border-2 border-primary shadow-2xl print:shadow-none print:border-none bg-white text-black printable-content">
-        <CardContent className="p-8">
-            <header className="flex flex-col items-center justify-center text-center gap-4">
-                <div className="bg-white rounded-full">
+    <Card className="max-w-4xl mx-auto border-2 border-primary shadow-2xl print:shadow-none print:border-none bg-white text-black printable-content print:w-[210mm] print:h-[297mm] print:m-0 print:p-0 flex flex-col overflow-hidden">
+        <CardContent className="p-10 flex-grow flex flex-col">
+            <header className="flex flex-col items-center justify-center text-center gap-4 mb-8">
+                <div className="bg-white rounded-full p-1 border-2 border-primary/20">
                     <Logo />
                 </div>
                 <div>
-                    <h1 className="font-headline text-3xl font-bold text-primary">
+                    <h1 className="font-headline text-4xl font-bold text-primary uppercase tracking-tight">
                         Holy Writ High School and Junior College
                     </h1>
-                    <p className="text-muted-foreground">Academic Session: 2025-2026</p>
+                    <p className="text-xl font-medium text-gray-600 mt-1">Academic Session: 2025-2026</p>
+                    <p className="text-sm text-gray-500 uppercase tracking-widest mt-2 font-bold">Pimpoli, Barvi Dam Road, Badlapur (W)</p>
                 </div>
             </header>
 
-            <div className="my-6 text-center bg-primary text-primary-foreground py-2 rounded-md">
-                <h2 className="font-bold text-lg tracking-wider">STATEMENT OF MARKS</h2>
+            <div className="my-6 text-center bg-primary text-white py-3 rounded-sm shadow-md">
+                <h2 className="font-bold text-2xl tracking-[0.2em] uppercase">Statement of Marks</h2>
             </div>
             
-            <div className="flex justify-between items-start">
-                <div className="grid grid-cols-2 gap-x-8 gap-y-4 text-base mb-4">
-                    <div><span className="font-semibold">Student's Name:</span> {studentName}</div>
-                    <div><span className="font-semibold">Roll No:</span> {rollNumber}</div>
-                    <div><span className="font-semibold">Class:</span> {className}</div>
-                    <div><span className="font-semibold">Section:</span> {section}</div>
+            <div className="flex justify-between items-center bg-stone-50 p-6 rounded-lg border border-gray-100 mb-8">
+                <div className="grid grid-cols-1 gap-y-3 text-lg flex-grow">
+                    <div className="flex"><span className="font-bold w-40 text-primary">Student's Name:</span> <span className="uppercase font-medium">{studentName}</span></div>
+                    <div className="flex"><span className="font-bold w-40 text-primary">Roll Number:</span> <span className="font-medium">{rollNumber}</span></div>
+                    <div className="flex"><span className="font-bold w-40 text-primary">Class & Section:</span> <span className="font-medium">{className} - {section}</span></div>
+                    <div className="flex"><span className="font-bold w-40 text-primary">Examination:</span> <span className="font-medium">{examTitle}</span></div>
                 </div>
-                <div className="text-center">
-                    <QRCode value={qrValue} size={80} level="L" />
-                    <p className="text-xs text-muted-foreground mt-1">Scan to verify</p>
+                <div className="text-center bg-white p-3 rounded border border-gray-200 shadow-sm ml-8">
+                    <QRCode value={qrValue} size={90} level="L" />
+                    <p className="text-[10px] font-bold text-gray-400 mt-2 uppercase">Verify Result</p>
                 </div>
             </div>
 
-            <div className="text-sm mb-6 font-medium"><span className="font-semibold">Marksheet No:</span> {marksheetNumber}</div>
+            <div className="text-sm mb-6 font-mono text-gray-500 font-bold uppercase tracking-tighter">
+                Ref No: {marksheetNumber}
+            </div>
 
-            <Separator className="my-6"/>
-
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead className="w-[100px]">S.No.</TableHead>
-                        <TableHead>Subject</TableHead>
-                        <TableHead className="text-right">Max Marks</TableHead>
-                        <TableHead className="text-right">Marks Obtained</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    <TableRow>
-                        <TableCell>1</TableCell>
-                        <TableCell>Robotics & AI (MCQ)</TableCell>
-                        <TableCell className="text-right">{totalMarks}</TableCell>
-                        <TableCell className="text-right">{roboticsMarks}</TableCell>
-                    </TableRow>
-                     <TableRow>
-                        <TableCell>2</TableCell>
-                        <TableCell>Robotics & AI (Coding)</TableCell>
-                        <TableCell className="text-right">Qualifying</TableCell>
-                        <TableCell className="text-right font-bold">{codingStatus}</TableCell>
-                    </TableRow>
-                </TableBody>
-                <TableFooter>
-                    <TableRow className="bg-white">
-                        <TableCell colSpan={2} className="font-bold">Total</TableCell>
-                        <TableCell className="text-right font-bold">{totalMarks}</TableCell>
-                        <TableCell className="text-right font-bold">{roboticsMarks}</TableCell>
-                    </TableRow>
-                </TableFooter>
-            </Table>
-            
-            <div className="grid grid-cols-2 gap-8 mt-6">
-                 <div>
-                    <p className="font-bold text-lg">Result: <span className="text-primary">{passStatus}</span></p>
-                    <p className="font-bold text-lg">Percentage: <span className="text-primary">{percentage.toFixed(2)}%</span></p>
-                    <p className="font-bold text-lg">Grade: <span className="text-primary">{grade}</span></p>
-                 </div>
-                 <div className="text-right self-end">
-                    {currentDate && <p>Date of Issue: {currentDate}</p>}
-                 </div>
+            <div className="flex-grow">
+                <Table className="border rounded-md overflow-hidden">
+                    <TableHeader className="bg-primary/5">
+                        <TableRow>
+                            <TableHead className="w-[80px] font-bold text-primary">S.No.</TableHead>
+                            <TableHead className="font-bold text-primary">Subject Components</TableHead>
+                            <TableHead className="text-center font-bold text-primary">Maximum Marks</TableHead>
+                            <TableHead className="text-right font-bold text-primary">Marks Obtained</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow className="text-lg">
+                            <TableCell className="font-medium">01</TableCell>
+                            <TableCell className="font-medium">Robotics & AI (Objective - MCQ)</TableCell>
+                            <TableCell className="text-center">{totalMarks}</TableCell>
+                            <TableCell className="text-right font-bold">{roboticsMarks}</TableCell>
+                        </TableRow>
+                        <TableRow className="text-lg">
+                            <TableCell className="font-medium">02</TableCell>
+                            <TableCell className="font-medium">Robotics & AI (Practical - Coding)</TableCell>
+                            <TableCell className="text-center">Qualifying</TableCell>
+                            <TableCell className="text-right font-bold text-green-600">{codingStatus}</TableCell>
+                        </TableRow>
+                    </TableBody>
+                    <TableFooter className="bg-stone-50">
+                        <TableRow className="text-xl">
+                            <TableCell colSpan={2} className="font-black text-primary uppercase">Grand Total</TableCell>
+                            <TableCell className="text-center font-black">{totalMarks}</TableCell>
+                            <TableCell className="text-right font-black text-primary">{roboticsMarks}</TableCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
             </div>
             
-            <div className="flex justify-end items-center mt-12">
-                <footer>
-                     <div className="text-center">
-                        <div className="h-12"></div>
-                        <p className="border-t border-dashed mt-2 pt-1 font-semibold">Principal</p>
+            <div className="grid grid-cols-2 gap-8 mt-12 bg-primary/5 p-8 rounded-lg border border-primary/10">
+                 <div className="space-y-3">
+                    <p className="font-bold text-2xl flex items-center gap-4">Result Status: <span className={`px-4 py-1 rounded ${passStatus === 'PASS' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'}`}>{passStatus}</span></p>
+                    <p className="font-bold text-2xl">Aggregate Percentage: <span className="text-primary">{percentage.toFixed(2)}%</span></p>
+                    <p className="font-bold text-2xl">Performance Grade: <span className="text-primary font-black">{grade}</span></p>
+                 </div>
+                 <div className="text-right flex flex-col justify-center items-end">
+                    <div className="p-4 border-2 border-primary/20 rounded-md bg-white">
+                        <p className="text-sm font-bold text-gray-400 uppercase">Grade Scale</p>
+                        <p className="text-xs font-medium">A1: 90-100 | A2: 80-89 | B1: 70-79</p>
+                        <p className="text-xs font-medium">B2: 60-69 | C1: 50-59 | C2: 35-49</p>
                     </div>
+                 </div>
+            </div>
+            
+            <div className="flex justify-between items-end mt-16 pt-8 border-t border-dashed border-gray-300">
+                <div className="text-left">
+                    {currentDate && <p className="font-bold text-gray-600">Issued On: {currentDate}</p>}
+                    <p className="text-xs text-gray-400 mt-1 uppercase font-bold">Advance Technology Lab - HWHS</p>
+                </div>
+                <footer className="w-64 text-center">
+                    <div className="h-20 flex items-center justify-center">
+                         {/* Placeholder for actual digital signature if needed */}
+                    </div>
+                    <p className="border-t-2 border-primary mt-2 pt-2 font-black text-xl text-primary uppercase">Principal</p>
                 </footer>
             </div>
         </CardContent>

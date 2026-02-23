@@ -59,12 +59,12 @@ export default function Certificate({
     const qrValue = `Certificate No: ${certificateNumber}\nStudent: ${studentName}\nRoll No: ${rollNumber}`;
 
     return (
-        <div className="bg-stone-50 text-black max-w-4xl mx-auto p-2 printable-content print:m-0 print:p-0 print:shadow-none print:w-full print:h-screen print:flex print:items-center print:justify-center">
-            <div className="border-[12px] border-solid border-blue-900 p-6 bg-white relative print:border-[10px] print:p-4 w-full">
-                 <div className="border-[4px] border-solid border-yellow-500 p-4 relative flex flex-col print:p-2 print:border-2 h-full">
+        <div className="bg-stone-50 text-black max-w-4xl mx-auto p-4 printable-content print:m-0 print:p-0 print:shadow-none print:w-[297mm] print:h-[210mm] print:flex print:items-center print:justify-center print:bg-white overflow-hidden">
+            <div className="border-[12px] border-solid border-blue-900 p-8 bg-white relative print:border-[15px] print:p-6 w-full h-full flex flex-col">
+                 <div className="border-[4px] border-solid border-yellow-500 p-6 relative flex flex-col print:p-4 print:border-4 flex-grow">
                     {/* Watermark */}
-                    <div className="absolute inset-0 flex items-center justify-center z-0 opacity-5 grayscale print:opacity-[0.02]">
-                        <div className="w-[500px] h-[500px] print:w-[400px] print:h-[400px] relative">
+                    <div className="absolute inset-0 flex items-center justify-center z-0 opacity-5 grayscale print:opacity-[0.03]">
+                        <div className="w-[500px] h-[500px] print:w-[600px] print:h-[600px] relative">
                         <Image
                             src="https://mychildmate.in/AdmissionForm/img/holywritlogo_512_512.png"
                             alt="School Logo Watermark"
@@ -74,61 +74,61 @@ export default function Certificate({
                         </div>
                     </div>
 
-                    <div className="relative z-10 flex flex-col flex-grow">
-                        <header className="flex flex-col items-center text-center mb-4 print:mb-2 print:text-lg">
-                            <h1 className="font-headline text-4xl print:text-5xl font-bold text-blue-900">
+                    <div className="relative z-10 flex flex-col flex-grow items-center justify-between text-center">
+                        <header className="flex flex-col items-center">
+                            <h1 className="font-headline text-4xl print:text-5xl font-bold text-blue-900 uppercase tracking-tight">
                                 Holy Writ High School and Junior College
                             </h1>
-                            <p className="text-gray-600 mt-1 text-lg print:text-xl">Pimpoli, Barvi Dam Road, Badlapur (W)</p>
-                            <div className="w-32 h-32 print:w-28 print:h-28 mt-4">
+                            <p className="text-gray-600 mt-1 text-lg print:text-xl font-medium">Pimpoli, Barvi Dam Road, Badlapur (W)</p>
+                            <div className="w-28 h-28 print:w-32 print:h-32 mt-4">
                                 <Logo />
                             </div>
                         </header>
                         
-                        <div className="text-center my-4 print:my-2">
-                            <h2 className="text-5xl print:text-6xl font-headline font-extrabold text-red-700 tracking-wider uppercase" style={{ fontFamily: "'Times New Roman', serif" }}>
+                        <div className="my-2">
+                            <h2 className="text-5xl print:text-7xl font-headline font-extrabold text-red-700 tracking-wider uppercase" style={{ fontFamily: "'Times New Roman', serif" }}>
                                 Certificate of Excellence
                             </h2>
                         </div>
 
-                        <div className="text-center text-lg print:text-2xl space-y-2 print:space-y-4 my-4 print:my-6 flex-grow">
-                            <p>This is to certify that</p>
+                        <div className="text-lg print:text-2xl space-y-4 my-2 max-w-2xl mx-auto">
+                            <p className="italic text-gray-700">This is to certify that</p>
                             <div>
-                                <h3 className="text-4xl print:text-5xl font-bold text-blue-900 tracking-wide" style={{ fontFamily: "'Times New Roman', serif" }}>
+                                <h3 className="text-5xl print:text-6xl font-bold text-blue-900 tracking-wide border-b-2 border-blue-900 inline-block px-8 pb-2" style={{ fontFamily: "'Times New Roman', serif" }}>
                                     {studentName}
                                 </h3>
-                                <p className="text-lg print:text-xl text-gray-700">Roll Number: {rollNumber}</p>
+                                <p className="text-xl print:text-2xl text-gray-700 mt-2 font-bold uppercase">Roll Number: {rollNumber}</p>
                             </div>
-                            <p className="px-8 print:px-4 pt-1">
-                                has demonstrated outstanding academic excellence and secured the <span className="font-bold">{rankSuffix(rank)}</span> position
+                            <p className="px-4 leading-relaxed font-medium">
+                                has demonstrated outstanding academic excellence and secured the <span className="font-bold text-blue-900 underline underline-offset-4">{rankSuffix(rank)}</span> position
                                 in the Robotics & AI Examination for Class {className} in the academic year 2025-2026.
                             </p>
                         </div>
 
-                        <div className="flex justify-center my-4 print:my-8">
+                        <div className="flex justify-center my-4">
                             <div className="flex flex-col items-center text-center">
-                                <div className={`relative w-28 h-28 print:w-24 print:h-24 rounded-full ${gradient} flex items-center justify-center shadow-xl ${shadow}`}>
-                                    <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/30 to-transparent"></div>
-                                    <span className={`font-headline text-6xl print:text-7xl font-extrabold ${textColor} drop-shadow`}>{rank}</span>
+                                <div className={`relative w-28 h-28 print:w-36 print:h-36 rounded-full ${gradient} flex items-center justify-center shadow-2xl ${shadow} border-4 border-white/30`}>
+                                    <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/40 to-transparent"></div>
+                                    <span className={`font-headline text-6xl print:text-8xl font-extrabold ${textColor} drop-shadow-lg`}>{rank}</span>
                                 </div>
-                                <p className={`text-3xl print:text-4xl font-bold mt-2 print:mt-1 ${textColor} drop-shadow-sm`}>{medal}</p>
+                                <p className={`text-3xl print:text-4xl font-black mt-2 print:mt-3 ${textColor} drop-shadow uppercase tracking-widest`}>{medal}</p>
                             </div>
                         </div>
                     </div>
                     
-                    <div className="relative z-10 pt-4 print:pt-2">
-                        <div className="flex justify-between items-end">
-                           <div className="w-1/3 text-left">
-                                {issuedDate && <p className="text-sm print:text-base">Date: {issuedDate}</p>}
-                                <p className="text-sm print:text-base mt-1">Cert. No: {certificateNumber}</p>
-                                <div className="mt-2">
-                                     <QRCode value={qrValue} size={60} level="L"/>
+                    <div className="relative z-10 pt-4 mt-auto">
+                        <div className="flex justify-between items-end border-t-2 border-blue-900/10 pt-6">
+                           <div className="w-1/3 text-left space-y-2">
+                                {issuedDate && <p className="text-sm print:text-lg font-bold">Date: {issuedDate}</p>}
+                                <p className="text-xs print:text-base text-gray-500 font-mono uppercase">Cert ID: {certificateNumber}</p>
+                                <div className="mt-4 bg-white p-2 inline-block rounded shadow-sm">
+                                     <QRCode value={qrValue} size={70} level="L"/>
                                 </div>
                             </div>
                             <div className="w-2/3 flex justify-around items-end">
                                 <div className="text-center">
-                                    <div className="h-16 print:h-12"></div>
-                                    <p className="font-serif text-lg print:text-xl border-t-2 border-gray-700 px-4 pt-1">Principal</p>
+                                    <div className="h-20 print:h-24"></div>
+                                    <p className="font-serif text-xl print:text-2xl border-t-2 border-blue-900 px-12 pt-2 font-bold text-blue-900">Principal</p>
                                 </div>
                             </div>
                         </div>

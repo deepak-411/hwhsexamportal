@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ArrowLeft, Printer, AlertTriangle } from "lucide-react";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { findUser, type User, getStoredUsers } from "@/lib/user-store";
 import { getStoredResults, type ExamResult } from "@/lib/exam-store";
 
@@ -17,7 +17,7 @@ type CertificateData = {
     certificateNumber: string;
 };
 
-export default function CertificatePage() {
+function CertificateContent() {
     const params = useParams();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -116,20 +116,20 @@ export default function CertificatePage() {
     }
 
     return (
-        <div className="bg-gray-200 print:bg-white print:p-0 print:h-screen">
-             <div className="container mx-auto p-4 sm:p-6 md:p-8 print:p-0 print:max-w-none print:h-full">
-                <div className="flex items-center justify-between gap-4 mb-8 print:hidden">
+        <div className="bg-gray-200 print:bg-white min-h-screen">
+             <div className="container mx-auto p-4 sm:p-6 md:p-8 print:p-0 print:max-w-none">
+                <div className="flex items-center justify-between gap-4 mb-8 no-print">
                     <div className="flex items-center gap-4">
                         <Button variant="outline" size="icon" onClick={() => router.back()}>
                             <ArrowLeft/>
                         </Button>
                         <h1 className="font-headline text-4xl font-bold">
-                            Certificate of Excellence
+                            Certificate Preview
                         </h1>
                     </div>
-                     <Button onClick={handlePrint}>
+                     <Button onClick={handlePrint} size="lg">
                         <Printer className="mr-2"/>
-                        Print Certificate
+                        Print A4 Full Page
                     </Button>
                 </div>
                 <Certificate 
@@ -143,4 +143,12 @@ export default function CertificatePage() {
             </div>
         </div>
     )
+}
+
+export default function CertificatePage() {
+    return (
+        <Suspense fallback={<div className="flex h-screen items-center justify-center"><p>Loading...</p></div>}>
+            <CertificateContent />
+        </Suspense>
+    );
 }
