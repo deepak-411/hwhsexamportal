@@ -60,8 +60,8 @@ export default function Certificate({
 
     return (
         <div className={cn(
-            "bg-stone-50 text-black max-w-4xl mx-auto p-4 printable-content print-container",
-            "print:m-0 print:p-0 print:shadow-none print:w-[100vw] print:h-[100vh] print:max-w-none print:bg-white overflow-hidden flex items-center justify-center certificate-print-mode"
+            "bg-stone-50 text-black max-w-4xl mx-auto p-4",
+            "print:fixed print:inset-0 print:m-0 print:p-0 print:shadow-none print:w-[100vw] print:h-[100vh] print:max-w-none print:bg-white overflow-hidden flex items-center justify-center certificate-print-mode printable-content"
         )}>
             <style jsx global>{`
                 @media print {
@@ -74,7 +74,7 @@ export default function Certificate({
             <div className="border-[12px] border-solid border-blue-900 p-8 bg-white relative print:border-[15px] print:p-6 w-full h-full flex flex-col box-border">
                  <div className="border-[4px] border-solid border-yellow-500 p-6 relative flex flex-col print:p-4 print:border-4 flex-grow box-border">
                     {/* Watermark */}
-                    <div className="absolute inset-0 flex items-center justify-center z-0 opacity-5 grayscale print:opacity-[0.03]">
+                    <div className="absolute inset-0 flex items-center justify-center z-0 opacity-5 grayscale print:opacity-[0.03] pointer-events-none">
                         <div className="w-[500px] h-[500px] print:w-[700px] print:h-[700px] relative">
                         <Image
                             src="https://mychildmate.in/AdmissionForm/img/holywritlogo_512_512.png"

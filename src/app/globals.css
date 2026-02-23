@@ -64,6 +64,7 @@
 @media print {
   @page {
     margin: 0 !important;
+    size: auto;
   }
 
   /* Force landscape for certificates specifically */
@@ -71,10 +72,6 @@
     page-break-after: always;
   }
   
-  @page {
-    size: auto; /* Allow the component to control via internal classes if needed, but margin 0 is key */
-  }
-
   /* Marksheet is usually portrait */
   .marksheet-print-mode {
     page-break-after: always;
@@ -92,15 +89,6 @@
     overflow: hidden !important;
   }
 
-  /* Hide EVERYTHING by default in print */
-  body > *:not(main) {
-    display: none !important;
-  }
-
-  main > *:not(.print-container) {
-    display: none !important;
-  }
-
   /* Specific utility to hide unwanted UI elements */
   .no-print, 
   header, 
@@ -110,11 +98,14 @@
   .toaster, 
   .alert, 
   .breadcrumb,
-  [role="status"] {
+  [role="status"],
+  .no-print-element {
     display: none !important;
     visibility: hidden !important;
     height: 0 !important;
     width: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 
   /* The printable content must fill the viewport exactly */
@@ -129,7 +120,7 @@
     box-shadow: none !important;
     border: none !important;
     z-index: 99999 !important;
-    display: block !important;
+    display: flex !important;
     visibility: visible !important;
     background-color: white !important;
   }

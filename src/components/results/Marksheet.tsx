@@ -31,7 +31,6 @@ export default function Marksheet({
 }: MarksheetProps) {
     const [currentDate, setCurrentDate] = React.useState("");
 
-
     React.useEffect(() => {
         setCurrentDate(new Date().toLocaleDateString('en-GB'));
     }, []);
@@ -52,15 +51,13 @@ export default function Marksheet({
     };
     
     const grade = getGrade();
-
     const codingStatus = codingMarks >= 0 ? "Qualified" : "Not Qualified";
-
     const qrValue = `Marksheet No: ${marksheetNumber}\nStudent: ${studentName}\nRoll No: ${rollNumber}`;
 
   return (
     <Card className={cn(
-        "max-w-4xl mx-auto border-2 border-primary shadow-2xl bg-white text-black print-container marksheet-print-mode",
-        "print:shadow-none print:border-none printable-content print:w-[100vw] print:h-[100vh] print:m-0 print:p-0 flex flex-col overflow-hidden"
+        "max-w-4xl mx-auto border-2 border-primary shadow-2xl bg-white text-black marksheet-print-mode",
+        "print:fixed print:inset-0 print:shadow-none print:border-none printable-content print:w-[100vw] print:h-[100vh] print:m-0 print:p-0 flex flex-col overflow-hidden"
     )}>
         <style jsx global>{`
             @media print {
@@ -161,7 +158,6 @@ export default function Marksheet({
                 </div>
                 <footer className="w-64 text-center">
                     <div className="h-20 flex items-center justify-center">
-                         {/* Placeholder for actual digital signature if needed */}
                     </div>
                     <p className="border-t-2 border-primary mt-2 pt-2 font-black text-xl text-primary uppercase">Principal</p>
                 </footer>
