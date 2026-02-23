@@ -59,9 +59,9 @@ export default function Certificate({
     const qrValue = `Certificate No: ${certificateNumber}\nStudent: ${studentName}\nRoll No: ${rollNumber}`;
 
     return (
-        <div className="bg-stone-50 text-black max-w-4xl mx-auto p-4 printable-content print:m-0 print:p-0 print:shadow-none print:w-[297mm] print:h-[210mm] print:flex print:items-center print:justify-center print:bg-white overflow-hidden">
-            <div className="border-[12px] border-solid border-blue-900 p-8 bg-white relative print:border-[15px] print:p-6 w-full h-full flex flex-col">
-                 <div className="border-[4px] border-solid border-yellow-500 p-6 relative flex flex-col print:p-4 print:border-4 flex-grow">
+        <div className="bg-stone-50 text-black max-w-4xl mx-auto p-4 printable-content print:m-0 print:p-0 print:shadow-none print:w-screen print:h-screen print:max-h-screen print:flex print:items-center print:justify-center print:bg-white overflow-hidden">
+            <div className="border-[12px] border-solid border-blue-900 p-8 bg-white relative print:border-[15px] print:p-6 w-full h-full flex flex-col box-border">
+                 <div className="border-[4px] border-solid border-yellow-500 p-6 relative flex flex-col print:p-4 print:border-4 flex-grow box-border">
                     {/* Watermark */}
                     <div className="absolute inset-0 flex items-center justify-center z-0 opacity-5 grayscale print:opacity-[0.03]">
                         <div className="w-[500px] h-[500px] print:w-[600px] print:h-[600px] relative">
