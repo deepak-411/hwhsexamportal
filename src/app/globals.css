@@ -64,17 +64,7 @@
 @media print {
   @page {
     margin: 0 !important;
-    size: auto;
-  }
-
-  /* Force landscape for certificates specifically */
-  .certificate-print-mode {
-    page-break-after: always;
-  }
-  
-  /* Marksheet is usually portrait */
-  .marksheet-print-mode {
-    page-break-after: always;
+    size: A4 portrait !important;
   }
 
   html, body {
@@ -89,7 +79,6 @@
     overflow: hidden !important;
   }
 
-  /* Specific utility to hide unwanted UI elements */
   .no-print, 
   header, 
   footer, 
@@ -105,10 +94,8 @@
     height: 0 !important;
     width: 0 !important;
     opacity: 0 !important;
-    pointer-events: none !important;
   }
 
-  /* The printable content must fill the viewport exactly */
   .printable-content {
     position: fixed !important;
     top: 0 !important;
