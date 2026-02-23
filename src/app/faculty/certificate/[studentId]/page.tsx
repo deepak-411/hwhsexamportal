@@ -117,7 +117,7 @@ function CertificateContent() {
 
     return (
         <div className="bg-gray-200 print:bg-white min-h-screen">
-             <div className="container mx-auto p-4 sm:p-6 md:p-8 print:p-0 print:max-w-none">
+             <div className="container mx-auto p-4 sm:p-6 md:p-8 print:p-0 print:max-w-none print:m-0">
                 <div className="flex items-center justify-between gap-4 mb-8 no-print">
                     <div className="flex items-center gap-4">
                         <Button variant="outline" size="icon" onClick={() => router.back()}>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Logo from "@/components/Logo";
 import QRCode from "react-qr-code";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 type CertificateProps = {
     studentName: string;
@@ -32,7 +33,6 @@ const medalDetails = {
     },
 };
 
-
 export default function Certificate({
     studentName,
     rollNumber,
@@ -59,12 +59,15 @@ export default function Certificate({
     const qrValue = `Certificate No: ${certificateNumber}\nStudent: ${studentName}\nRoll No: ${rollNumber}`;
 
     return (
-        <div className="bg-stone-50 text-black max-w-4xl mx-auto p-4 printable-content print:m-0 print:p-0 print:shadow-none print:w-screen print:h-screen print:max-h-screen print:flex print:items-center print:justify-center print:bg-white overflow-hidden">
+        <div className={cn(
+            "bg-stone-50 text-black max-w-4xl mx-auto p-4 printable-content",
+            "print:m-0 print:p-0 print:shadow-none print:w-screen print:h-screen print:max-w-none print:bg-white overflow-hidden flex items-center justify-center"
+        )}>
             <div className="border-[12px] border-solid border-blue-900 p-8 bg-white relative print:border-[15px] print:p-6 w-full h-full flex flex-col box-border">
                  <div className="border-[4px] border-solid border-yellow-500 p-6 relative flex flex-col print:p-4 print:border-4 flex-grow box-border">
                     {/* Watermark */}
                     <div className="absolute inset-0 flex items-center justify-center z-0 opacity-5 grayscale print:opacity-[0.03]">
-                        <div className="w-[500px] h-[500px] print:w-[600px] print:h-[600px] relative">
+                        <div className="w-[500px] h-[500px] print:w-[700px] print:h-[700px] relative">
                         <Image
                             src="https://mychildmate.in/AdmissionForm/img/holywritlogo_512_512.png"
                             alt="School Logo Watermark"
@@ -80,21 +83,21 @@ export default function Certificate({
                                 Holy Writ High School and Junior College
                             </h1>
                             <p className="text-gray-600 mt-1 text-lg print:text-xl font-medium">Pimpoli, Barvi Dam Road, Badlapur (W)</p>
-                            <div className="w-28 h-28 print:w-32 print:h-32 mt-4">
+                            <div className="w-24 h-24 print:w-32 print:h-32 mt-2">
                                 <Logo />
                             </div>
                         </header>
                         
-                        <div className="my-2">
+                        <div className="my-1 print:my-2">
                             <h2 className="text-5xl print:text-7xl font-headline font-extrabold text-red-700 tracking-wider uppercase" style={{ fontFamily: "'Times New Roman', serif" }}>
                                 Certificate of Excellence
                             </h2>
                         </div>
 
-                        <div className="text-lg print:text-2xl space-y-4 my-2 max-w-2xl mx-auto">
+                        <div className="text-lg print:text-2xl space-y-4 my-2 max-w-3xl mx-auto">
                             <p className="italic text-gray-700">This is to certify that</p>
                             <div>
-                                <h3 className="text-5xl print:text-6xl font-bold text-blue-900 tracking-wide border-b-2 border-blue-900 inline-block px-8 pb-2" style={{ fontFamily: "'Times New Roman', serif" }}>
+                                <h3 className="text-5xl print:text-6xl font-bold text-blue-900 tracking-wide border-b-2 border-blue-900 inline-block px-8 pb-1" style={{ fontFamily: "'Times New Roman', serif" }}>
                                     {studentName}
                                 </h3>
                                 <p className="text-xl print:text-2xl text-gray-700 mt-2 font-bold uppercase">Roll Number: {rollNumber}</p>
@@ -105,9 +108,9 @@ export default function Certificate({
                             </p>
                         </div>
 
-                        <div className="flex justify-center my-4">
+                        <div className="flex justify-center my-2 print:my-4">
                             <div className="flex flex-col items-center text-center">
-                                <div className={`relative w-28 h-28 print:w-36 print:h-36 rounded-full ${gradient} flex items-center justify-center shadow-2xl ${shadow} border-4 border-white/30`}>
+                                <div className={`relative w-28 h-28 print:w-40 print:h-40 rounded-full ${gradient} flex items-center justify-center shadow-2xl ${shadow} border-4 border-white/30`}>
                                     <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/40 to-transparent"></div>
                                     <span className={`font-headline text-6xl print:text-8xl font-extrabold ${textColor} drop-shadow-lg`}>{rank}</span>
                                 </div>
@@ -117,17 +120,17 @@ export default function Certificate({
                     </div>
                     
                     <div className="relative z-10 pt-4 mt-auto">
-                        <div className="flex justify-between items-end border-t-2 border-blue-900/10 pt-6">
+                        <div className="flex justify-between items-end border-t-2 border-blue-900/10 pt-4 print:pt-6">
                            <div className="w-1/3 text-left space-y-2">
                                 {issuedDate && <p className="text-sm print:text-lg font-bold">Date: {issuedDate}</p>}
                                 <p className="text-xs print:text-base text-gray-500 font-mono uppercase">Cert ID: {certificateNumber}</p>
-                                <div className="mt-4 bg-white p-2 inline-block rounded shadow-sm">
-                                     <QRCode value={qrValue} size={70} level="L"/>
+                                <div className="mt-2 bg-white p-2 inline-block rounded shadow-sm">
+                                     <QRCode value={qrValue} size={60} print-size={80} level="L"/>
                                 </div>
                             </div>
                             <div className="w-2/3 flex justify-around items-end">
                                 <div className="text-center">
-                                    <div className="h-20 print:h-24"></div>
+                                    <div className="h-16 print:h-24"></div>
                                     <p className="font-serif text-xl print:text-2xl border-t-2 border-blue-900 px-12 pt-2 font-bold text-blue-900">Principal</p>
                                 </div>
                             </div>
