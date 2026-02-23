@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import QRCode from "react-qr-code";
+import { cn } from "@/lib/utils";
 
 type MarksheetProps = {
     studentName: string;
@@ -57,8 +58,19 @@ export default function Marksheet({
     const qrValue = `Marksheet No: ${marksheetNumber}\nStudent: ${studentName}\nRoll No: ${rollNumber}`;
 
   return (
-    <Card className="max-w-4xl mx-auto border-2 border-primary shadow-2xl print:shadow-none print:border-none bg-white text-black printable-content print:w-[210mm] print:h-[297mm] print:m-0 print:p-0 flex flex-col overflow-hidden">
-        <CardContent className="p-10 flex-grow flex flex-col">
+    <Card className={cn(
+        "max-w-4xl mx-auto border-2 border-primary shadow-2xl bg-white text-black print-container marksheet-print-mode",
+        "print:shadow-none print:border-none printable-content print:w-[100vw] print:h-[100vh] print:m-0 print:p-0 flex flex-col overflow-hidden"
+    )}>
+        <style jsx global>{`
+            @media print {
+                @page {
+                    size: A4 portrait;
+                    margin: 0;
+                }
+            }
+        `}</style>
+        <CardContent className="p-10 flex-grow flex flex-col print:p-8">
             <header className="flex flex-col items-center justify-center text-center gap-4 mb-8">
                 <div className="bg-white rounded-full p-1 border-2 border-primary/20">
                     <Logo />
@@ -83,7 +95,7 @@ export default function Marksheet({
                     <div className="flex"><span className="font-bold w-40 text-primary">Class & Section:</span> <span className="font-medium">{className} - {section}</span></div>
                     <div className="flex"><span className="font-bold w-40 text-primary">Examination:</span> <span className="font-medium">{examTitle}</span></div>
                 </div>
-                <div className="text-center bg-white p-3 rounded border border-gray-200 shadow-sm ml-8">
+                <div className="text-center bg-white p-3 rounded border border-gray-200 shadow-sm ml-8 no-print">
                     <QRCode value={qrValue} size={90} level="L" />
                     <p className="text-[10px] font-bold text-gray-400 mt-2 uppercase">Verify Result</p>
                 </div>

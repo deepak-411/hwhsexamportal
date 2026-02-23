@@ -60,9 +60,17 @@ export default function Certificate({
 
     return (
         <div className={cn(
-            "bg-stone-50 text-black max-w-4xl mx-auto p-4 printable-content",
-            "print:m-0 print:p-0 print:shadow-none print:w-screen print:h-screen print:max-w-none print:bg-white overflow-hidden flex items-center justify-center"
+            "bg-stone-50 text-black max-w-4xl mx-auto p-4 printable-content print-container",
+            "print:m-0 print:p-0 print:shadow-none print:w-[100vw] print:h-[100vh] print:max-w-none print:bg-white overflow-hidden flex items-center justify-center certificate-print-mode"
         )}>
+            <style jsx global>{`
+                @media print {
+                    @page {
+                        size: A4 landscape;
+                        margin: 0;
+                    }
+                }
+            `}</style>
             <div className="border-[12px] border-solid border-blue-900 p-8 bg-white relative print:border-[15px] print:p-6 w-full h-full flex flex-col box-border">
                  <div className="border-[4px] border-solid border-yellow-500 p-6 relative flex flex-col print:p-4 print:border-4 flex-grow box-border">
                     {/* Watermark */}
@@ -124,8 +132,8 @@ export default function Certificate({
                            <div className="w-1/3 text-left space-y-2">
                                 {issuedDate && <p className="text-sm print:text-lg font-bold">Date: {issuedDate}</p>}
                                 <p className="text-xs print:text-base text-gray-500 font-mono uppercase">Cert ID: {certificateNumber}</p>
-                                <div className="mt-2 bg-white p-2 inline-block rounded shadow-sm">
-                                     <QRCode value={qrValue} size={60} print-size={80} level="L"/>
+                                <div className="mt-2 bg-white p-2 inline-block rounded shadow-sm no-print">
+                                     <QRCode value={qrValue} size={60} level="L"/>
                                 </div>
                             </div>
                             <div className="w-2/3 flex justify-around items-end">

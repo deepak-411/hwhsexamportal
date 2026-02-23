@@ -63,10 +63,23 @@
 
 @media print {
   @page {
-    size: A4 landscape;
     margin: 0 !important;
   }
+
+  /* Force landscape for certificates specifically */
+  .certificate-print-mode {
+    page-break-after: always;
+  }
   
+  @page {
+    size: auto; /* Allow the component to control via internal classes if needed, but margin 0 is key */
+  }
+
+  /* Marksheet is usually portrait */
+  .marksheet-print-mode {
+    page-break-after: always;
+  }
+
   html, body {
     margin: 0 !important;
     padding: 0 !important;
@@ -74,38 +87,39 @@
     background-color: #ffffff !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
-    width: 100vw !important;
-    height: 100vh !important;
+    width: 100% !important;
+    height: 100% !important;
     overflow: hidden !important;
   }
 
-  /* Force the A4 Marksheet to portrait if needed, but since we use landscape for certs mostly: */
-  .portrait-print {
-    page-break-after: always;
-  }
-  .portrait-print @page {
-    size: A4 portrait;
+  /* Hide EVERYTHING by default in print */
+  body > *:not(main) {
+    display: none !important;
   }
 
-  /* Hide everything except printable content */
-  .no-print, footer, header, nav, button, .toaster, .alert, .no-print * {
+  main > *:not(.print-container) {
+    display: none !important;
+  }
+
+  /* Specific utility to hide unwanted UI elements */
+  .no-print, 
+  header, 
+  footer, 
+  nav, 
+  button, 
+  .toaster, 
+  .alert, 
+  .breadcrumb,
+  [role="status"] {
     display: none !important;
     visibility: hidden !important;
     height: 0 !important;
     width: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
   }
 
-  main {
-    background: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    backdrop-filter: none !important;
-  }
-
+  /* The printable content must fill the viewport exactly */
   .printable-content {
-    position: absolute !important;
+    position: fixed !important;
     top: 0 !important;
     left: 0 !important;
     width: 100vw !important;
@@ -117,5 +131,6 @@
     z-index: 99999 !important;
     display: block !important;
     visibility: visible !important;
+    background-color: white !important;
   }
 }
