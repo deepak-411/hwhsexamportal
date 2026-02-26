@@ -25,6 +25,7 @@ const DEFAULT_EXAMS: ScheduledExam[] = [
     { selectedClass: '7', selectedSection: 'A', selectedSet: '3' },
     { selectedClass: '8', selectedSection: 'Daffodils', selectedSet: '1' },
     { selectedClass: '8', selectedSection: 'Daisies', selectedSet: '2' },
+    { selectedClass: '9', selectedSection: 'Daffodils', selectedSet: 'COMP-ANNUAL-9', subject: 'Computer' },
     { selectedClass: '9', selectedSection: 'Daisies', selectedSet: 'COMP-ANNUAL-9', subject: 'Computer' },
 ];
 
@@ -149,6 +150,13 @@ const DEFAULT_RESULTS: { [studentId: string]: { [examId: string]: ExamResult } }
     '37-8-Daisies': { '2': { robotics: 21, coding: -1 } },
     '38-8-Daisies': { '2': { robotics: 32, coding: -1 } },
     '39-8-Daisies': { '2': { robotics: 40, coding: -1 } },
+
+    // Class 9 Computer (Out of 30)
+    '01-9-Daffodils': { 'COMP-ANNUAL-9': { robotics: 30, coding: -2 } }, // Aarav - Gold
+    '02-9-Daffodils': { 'COMP-ANNUAL-9': { robotics: 29, coding: -2 } }, // Aayush - Silver
+    '03-9-Daffodils': { 'COMP-ANNUAL-9': { robotics: 28, coding: -2 } }, // Aditya - Bronze
+    '04-9-Daffodils': { 'COMP-ANNUAL-9': { robotics: 24, coding: -2 } },
+    '05-9-Daffodils': { 'COMP-ANNUAL-9': { robotics: 22, coding: -2 } },
 };
 
 
@@ -249,7 +257,8 @@ export function markExamAsAttempted(studentId: string, examId: string) {
 export function hasAttemptedExam(studentId: string, examId: string): boolean {
     if (typeof window !== 'undefined') {
         // An exam is considered attempted if a result exists for it (either hardcoded or in local storage).
-        const result = getResultForStudent(`${studentId.split('-')[0].padStart(2,'0')}-${studentId.split('-')[1]}-${studentId.split('-')[2]}`, examId);
+        const studentKey = `${studentId.split('-')[0].padStart(2,'0')}-${studentId.split('-')[1]}-${studentId.split('-')[2]}`;
+        const result = getResultForStudent(studentKey, examId);
         if (result) return true;
 
         // Fallback check for manually marked attempts, though the result check should be primary.

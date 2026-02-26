@@ -149,7 +149,7 @@ export default function FacultyDashboard() {
                         </div>
                         <div>
                             <p className="text-sm font-medium text-muted-foreground">Subject</p>
-                            <p className="font-semibold">Robotics and AI</p>
+                            <p className="font-semibold">Robotics and AI / Computer</p>
                         </div>
                         <div>
                             <p className="text-sm font-medium text-muted-foreground">Classes</p>
@@ -195,7 +195,7 @@ export default function FacultyDashboard() {
                                             <div className="flex items-center">
                                                 <span className="font-bold mr-2">{index + 1}.</span>
                                                 <span className="truncate max-w-[100px]">{student.name}</span>
-                                                <span className="text-muted-foreground ml-2">({student.score}/80)</span>
+                                                <span className="text-muted-foreground ml-2">({student.score}/{className === '9' ? '30' : '80'})</span>
                                             </div>
                                             <Button variant="ghost" size="sm" asChild>
                                                 <Link href={`/faculty/certificate/${student.rollNumber}?class=${student.class}&section=${student.section}`}>
@@ -241,11 +241,12 @@ export default function FacultyDashboard() {
                                       {groupedStudents[className][section].map(student => {
                                         const result = getStudentResult(student);
                                         const uniqueKey = `${student.class}-${student.section}-${student.rollNumber}-${student.name}`;
+                                        const maxScore = className === '9' ? 30 : 80;
                                         return (
                                           <TableRow key={uniqueKey}>
                                             <TableCell className="font-medium">{student.rollNumber}</TableCell>
                                             <TableCell className="font-medium">{student.name}</TableCell>
-                                            <TableCell className="text-center">{result ? `${result.robotics}/80` : 'N/A'}</TableCell>
+                                            <TableCell className="text-center">{result ? `${result.robotics}/${maxScore}` : 'N/A'}</TableCell>
                                             <TableCell className="text-center">{result ? (result.coding === -1 ? 'Pending' : (result.coding === -2 ? 'N/A' : `${result.coding}/20`)) : 'N/A'}</TableCell>
                                             <TableCell className="text-right flex items-center justify-end gap-2">
                                               {result && (
