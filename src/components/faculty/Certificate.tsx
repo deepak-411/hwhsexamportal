@@ -61,8 +61,8 @@ export default function Certificate({
             "bg-stone-50 text-black w-full max-w-[800px] aspect-[1/1.414] mx-auto relative shadow-2xl printable-content",
             "print:fixed print:inset-0 print:m-0 print:p-0 print:shadow-none print:w-[210mm] print:h-[297mm] print:max-w-none flex items-center justify-center overflow-hidden"
         )}>
-            <div className="border-[12px] border-solid border-[#1e3a8a] p-2 bg-white w-full h-full flex flex-col box-border">
-                 <div className="border-[4px] border-solid border-[#eab308] p-8 print:p-12 relative flex flex-col items-center justify-between flex-grow box-border">
+            <div className="border-[12px] border-solid border-[#1e3a8a] p-1 bg-white w-full h-full flex flex-col box-border">
+                 <div className="border-[6px] border-solid border-[#eab308] p-8 print:p-12 relative flex flex-col items-center justify-between flex-grow box-border">
                     
                     {/* Header Section */}
                     <div className="w-full text-center space-y-2">
@@ -116,7 +116,7 @@ export default function Certificate({
                             <div className="pt-2">
                                 <QRCode value={qrValue} size={64} level="L" />
                             </div>
-                            <p className="text-[10px] print:text-xs text-gray-400 font-mono mt-2">Cert. No: {certificateNumber}</p>
+                            <p className="text-[12px] print:text-sm text-black font-mono font-bold mt-2">Cert. No: {certificateNumber}</p>
                         </div>
                         
                         <div className="text-center w-48 mb-4">
