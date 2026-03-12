@@ -13,7 +13,7 @@ function OMRContent() {
   
   const className = searchParams.get('class') || 'VI';
   const subject = searchParams.get('subject') || 'Computer';
-  const set = searchParams.get('set') || '1';
+  const set = searchParams.get('set') || '2';
   const marks = searchParams.get('marks') || '30';
   const time = searchParams.get('time') || '1.30 hours';
   const date = searchParams.get('date') || '14/03/2026';
@@ -55,16 +55,16 @@ function OMRContent() {
   return (
     <div className="min-h-screen bg-gray-100 print:bg-white p-0 sm:p-8">
       {/* Controls - Hidden during print */}
-      <div className="max-w-[1000px] mx-auto mb-6 flex justify-between items-center print:hidden px-4">
+      <div className="max-w-[800px] mx-auto mb-6 flex justify-between items-center print:hidden px-4">
         <Button variant="outline" onClick={() => router.back()}>
           <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
         </Button>
-        <Button onClick={handlePrint}>
+        <Button onClick={handlePrint} className="bg-primary hover:bg-primary/90">
           <Printer className="mr-2 h-4 w-4" /> Print A4 OMR Sheet
         </Button>
       </div>
 
-      {/* Official OMR Sheet */}
+      {/* Official OMR Sheet Container */}
       <div className="sheet mx-auto print:m-0">
         <style jsx>{`
           .sheet {
@@ -85,6 +85,7 @@ function OMRContent() {
               margin: 0;
               width: 210mm;
               height: 297mm;
+              padding: 15mm;
             }
             @page {
               size: A4 portrait;
@@ -107,7 +108,7 @@ function OMRContent() {
           h2 {
             margin: 8px 0 0 0;
             font-size: 18px;
-            color: #b91c1c;
+            color: #1e3a8a;
             text-decoration: underline;
           }
 
@@ -183,6 +184,7 @@ function OMRContent() {
             height: 20px;
             border-radius: 50%;
             border: 2px solid #ff66b2;
+            background: transparent;
           }
 
           .choice-label {
@@ -222,7 +224,7 @@ function OMRContent() {
             </div>
             <h1>Holy Writ High School & Junior College, Badlapur (W)</h1>
           </div>
-          <h2>Annual Exam (2025-26)</h2>
+          <h2 style={{ color: '#000', textDecoration: 'none', fontWeight: 'bold' }}>Annual Exam (2025-26)</h2>
         </header>
 
         <div className="top-info">
