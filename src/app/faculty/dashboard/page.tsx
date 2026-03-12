@@ -1,14 +1,16 @@
+
 'use client';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { BookCopy, Users, ExternalLink, Award, FileSignature, RotateCcw } from "lucide-react";
+import { BookCopy, Users, ExternalLink, Award, FileSignature, RotateCcw, FileSpreadsheet, Printer } from "lucide-react";
 import Link from "next/link";
 import { getStoredUsers, type User } from "@/lib/user-store";
 import { getStoredResults, type ExamResult, clearAttempt, getExamForStudent } from "@/lib/exam-store";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 type GroupedStudents = {
   [className: string]: {
@@ -136,7 +138,42 @@ export default function FacultyDashboard() {
 
         <main className="flex-1 p-4 sm:p-6 md:p-8">
             <div className="container mx-auto">
-                <h1 className="font-headline text-4xl font-bold mb-8">Faculty Dashboard</h1>
+                <div className="flex items-center justify-between mb-8">
+                  <h1 className="font-headline text-4xl font-bold">Faculty Dashboard</h1>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="lg">
+                        <FileSpreadsheet className="mr-2 h-5 w-5" />
+                        Generate OMR Sheets
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56">
+                      <DropdownMenuLabel>Select Exam Set</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link href="/faculty/omr?set=1&subject=Computer&class=IX&marks=30">
+                          <Printer className="mr-2 h-4 w-4" /> Set 1 (Computer)
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/faculty/omr?set=2&subject=Computer&class=IX&marks=30">
+                          <Printer className="mr-2 h-4 w-4" /> Set 2 (Computer)
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link href="/faculty/omr?set=1&subject=Robotics&class=VI&marks=80">
+                          <Printer className="mr-2 h-4 w-4" /> Set 1 (Robotics)
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/faculty/omr?set=2&subject=Robotics&class=VI&marks=80">
+                          <Printer className="mr-2 h-4 w-4" /> Set 2 (Robotics)
+                        </Link>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
 
                 <Card className="mb-8">
                     <CardHeader>
