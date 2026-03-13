@@ -4,7 +4,6 @@ import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Printer } from "lucide-react";
-import Logo from "@/components/Logo";
 
 function OMRContent() {
   const searchParams = useSearchParams();
@@ -27,38 +26,13 @@ function OMRContent() {
     window.print();
   };
 
-  const renderQuestions = () => {
-    const questions = [];
-    // The image shows 2 columns. Column 1 (Left) has odd/even? 
-    // Usually, it's 1-20 left, 21-40 right or Q1 left, Q2 right.
-    // Based on the image Q.1 is left, Q.2 is right.
-    for (let i = 1; i <= 40; i++) {
-      questions.push(
-        <div key={i} className="question-block">
-          <div className="qrow">
-            <div className="qno">Q.{i}</div>
-            <div className="choices">
-              {['A', 'B', 'C', 'D'].map((ch) => (
-                <div key={ch} className="choice-item">
-                  <div className="omr-circle" />
-                  <span className="choice-label">{ch}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      );
-    }
-    return questions;
-  };
-
   if (!isClient) return null;
 
   return (
-    <div className="min-h-screen bg-gray-100 print:bg-white p-0 sm:p-8">
+    <div className="min-h-screen bg-gray-100 print:bg-white p-0 sm:p-8 overflow-x-hidden">
       {/* Controls - Hidden during print */}
       <div className="max-w-[800px] mx-auto mb-6 flex justify-between items-center print:hidden px-4">
-        <Button variant="outline" onClick={() => router.back()}>
+        <Button variant="outline" onClick={() => router.push('/faculty/dashboard')}>
           <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
         </Button>
         <Button onClick={handlePrint} className="bg-[#ff66b2] hover:bg-[#e0559e] text-white">
@@ -66,224 +40,203 @@ function OMRContent() {
         </Button>
       </div>
 
-      {/* Professional OMR Sheet Container */}
-      <div className="sheet mx-auto print:m-0 printable-content">
+      {/* The Official Sheet */}
+      <div className="sheet mx-auto printable-content">
         <style jsx>{`
           .sheet {
+            --accent: #ff66b2;
+            --accent-dark: #e0559e;
+            --paper: #ffffff;
+            font-family: Arial, sans-serif;
             width: 210mm;
             min-height: 297mm;
-            padding: 10mm 15mm;
             margin: auto;
-            background: #ffffff;
+            padding: 15mm 15mm;
+            background: #fff;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-            color: #ff66b2;
+            color: var(--accent-dark);
           }
 
           @media print {
             .sheet {
               box-shadow: none;
-              margin: 0;
-              width: 210mm;
-              height: 297mm;
-              padding: 8mm 12mm;
+              margin: 0 !important;
+              width: 210mm !important;
+              height: 297mm !important;
+              padding: 10mm 12mm !important;
+              position: fixed !important;
+              top: 0 !important;
+              left: 0 !important;
+              visibility: visible !important;
+              z-index: 9999 !important;
             }
             @page {
               size: A4 portrait;
-              margin: 0;
+              margin: 0 !important;
             }
           }
 
           header {
             text-align: center;
-            margin-bottom: 5px;
-          }
-
-          .header-top {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
+            margin-bottom: 10px;
           }
 
           h1 {
             margin: 0;
-            font-size: 22px;
-            font-weight: bold;
-            color: #ff66b2;
-            text-transform: none;
+            font-size: 20px;
+            white-space: nowrap;
           }
 
           h2 {
-            margin: 10px 0;
+            margin: 8px 0 0 0;
             font-size: 18px;
-            color: #ff66b2;
-            font-weight: bold;
+            text-align: center;
           }
 
-          .meta-info {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
-            font-size: 12px;
-            font-weight: bold;
-          }
-
-          .meta-item {
+          .top-info, .meta {
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            font-size: 14px;
           }
 
-          .student-fields {
-            margin-bottom: 15px;
-            font-size: 13px;
-            font-weight: bold;
+          .top-info div, .meta div {
+            margin: 4px 0;
           }
 
-          .field-row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 8px;
+          .student-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+            font-size: 14px;
           }
 
-          .field-line {
-            border-bottom: 1px solid #ff66b2;
-            flex-grow: 1;
-            height: 18px;
+          .student-info div {
+            border-bottom: 1px solid var(--accent);
+            padding: 5px 0;
           }
 
           .instructions-box {
-            border: 1.5px solid #ff66b2;
-            border-radius: 10px;
-            padding: 10px 15px;
-            margin-bottom: 20px;
-            font-size: 11px;
-            line-height: 1.4;
-            color: #ff66b2;
-          }
-
-          .instructions-box strong {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 12px;
+            margin-top: 18px;
+            border: 1px solid var(--accent);
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #333;
           }
 
           .omr-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px 30px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-top: 20px;
           }
 
           .question-block {
-            border-bottom: 1px dashed #ff66b2;
-            padding: 6px 0;
+            padding: 10px;
+            border: 1px dashed var(--accent);
+            border-radius: 6px;
           }
 
           .qrow {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
           }
 
           .qno {
             font-weight: bold;
             font-size: 14px;
-            min-width: 40px;
           }
 
           .choices {
             display: flex;
-            gap: 15px;
-          }
-
-          .choice-item {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-          }
-
-          .omr-circle {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            border: 1.5px solid #ff66b2;
-            background: transparent;
+            gap: 12px;
           }
 
           .choice-label {
-            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            font-size: 13px;
             font-weight: bold;
           }
 
-          .footer-section {
-            margin-top: auto;
-            border-top: 1px solid #ff66b2;
-            padding-top: 15px;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            font-size: 11px;
-            font-weight: bold;
+          .omr-radio {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            cursor: pointer;
+            position: relative;
+            background: transparent;
           }
 
-          .footer-marks {
-            margin-top: 15px;
+          .omr-radio:checked {
+            background: var(--accent);
+          }
+
+          .bottom-section {
+            margin-top: 25px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            font-weight: bold;
-            font-size: 13px;
+            flex-wrap: wrap;
+            font-size: 14px;
           }
 
-          .marks-box {
-            border: 1.5px solid #ff66b2;
-            padding: 5px 15px;
+          .signature-box {
+            margin-top: 15px;
+          }
+
+          .box {
+            border: 1px solid var(--accent);
+            padding: 8px 12px;
             border-radius: 5px;
-            min-width: 80px;
+            min-width: 120px;
             text-align: center;
-            height: 25px;
             display: inline-block;
           }
         `}</style>
 
         <header>
-          <div className="header-top">
-            <div className="w-12 h-12">
-              <Logo />
-            </div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
+            <img 
+              src="https://mychildmate.in/AdmissionForm/img/holywritlogo_512_512.png" 
+              alt="School Logo" 
+              style={{ width: '65px', height: '65px', objectFit: 'contain' }} 
+            />
             <h1>Holy Writ High School & Junior College, Badlapur (W)</h1>
           </div>
           <h2>Annual Exam (2025-26)</h2>
         </header>
 
-        <div className="meta-info">
-          <div className="meta-item"><span>Date:</span> <span>{date}</span></div>
-          <div className="meta-item"><span>Subject:</span> <span>{subject}</span></div>
-          <div className="meta-item"><span>Marks:</span> <span>{marks}</span></div>
-          <div className="meta-item"><span>Class:</span> <span>{className}</span></div>
-          <div className="meta-item"><span>Time:</span> <span>{time}</span></div>
-          <div className="meta-item"><span>SET:</span> <span>{set}</span></div>
+        <div className="top-info">
+          <div><strong>Date:</strong> {date}</div>
+          <div><strong>Subject:</strong> {subject}</div>
+          <div><strong>Marks:</strong> {marks}</div>
         </div>
 
-        <div className="student-fields">
-          <div className="field-row">
-            <span>Name:</span>
-            <div className="field-line"></div>
-            <span>Roll Number:</span>
-            <div className="field-line" style={{ flexGrow: 0, width: '150px' }}></div>
-          </div>
-          <div className="field-row">
-            <span>Section:</span>
-            <div className="field-line"></div>
-          </div>
+        <div className="meta">
+          <div><strong>Class:</strong> {className}</div>
+          <div><strong>Time:</strong> {time}</div>
+          <div><strong>SET:</strong> {set}</div>
+        </div>
+
+        <div className="student-info">
+          <div><strong>Name:</strong> ________________________</div>
+          <div><strong>Roll Number:</strong> ________________________</div>
+          <div><strong>Section:</strong> ________________________</div>
         </div>
 
         <div className="instructions-box">
           <strong>Instructions for Candidates:</strong>
-          <ol className="list-decimal list-inside space-y-0.5">
+          <ol style={{ marginTop: '8px', paddingLeft: '18px', listStyleType: 'decimal' }}>
             <li>Use <strong>only Black Ball Point Pen</strong> to darken the circles.</li>
             <li>Fill only <strong>one circle</strong> for question 1-20.</li>
             <li>Fill more than one <strong>circle</strong> for question 21-40.</li>
@@ -296,22 +249,32 @@ function OMRContent() {
         </div>
 
         <div className="omr-grid">
-          {renderQuestions()}
+          {Array.from({ length: 40 }, (_, i) => i + 1).map((n) => (
+            <div key={n} className="question-block">
+              <div className="qrow">
+                <div className="qno">Q.{n}</div>
+                <div className="choices">
+                  {['A', 'B', 'C', 'D'].map((ch) => (
+                    <label key={ch} className="choice-label">
+                      <input type="radio" name={`q${n}`} className="omr-radio" />
+                      {ch}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
-        <div className="footer-section">
-          <div>Invigilator Sign: ____________________</div>
-          <div>Examiner Name: ____________________</div>
-          <div>Examiner Sign: ____________________</div>
+        <div className="bottom-section">
+          <div className="signature-box">Invigilator Sign: ________________________</div>
+          <div className="signature-box">Examiner Name: ________________________</div>
+          <div className="signature-box">Examiner Sign: ________________________</div>
         </div>
 
-        <div className="footer-marks">
-          <div className="flex items-center gap-2">
-            Total Marks Obtained: <span className="marks-box"></span>
-          </div>
-          <div className="flex items-center gap-2">
-            Out Of: <span className="marks-box">{marks}</span>
-          </div>
+        <div className="bottom-section" style={{ alignItems: 'center' }}>
+          <div>Total Marks Obtained: <span className="box"></span></div>
+          <div>Out Of: <span className="box">{marks}</span></div>
         </div>
       </div>
     </div>
