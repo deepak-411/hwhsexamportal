@@ -51,13 +51,15 @@ function OMRContent() {
             width: 210mm;
             height: 297mm;
             margin: auto;
-            padding: 8mm 12mm; /* Tightened for single page fit */
+            padding: 10mm 12mm;
             background: #fff;
             box-sizing: border-box;
             color: var(--accent-dark);
             position: relative;
             overflow: hidden;
             border: 1px solid #eee;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
           }
 
           @media print {
@@ -65,7 +67,7 @@ function OMRContent() {
               border: none;
               box-shadow: none;
               margin: 0 !important;
-              padding: 6mm 10mm !important; /* Adjusted for maximum printable area */
+              padding: 8mm 10mm !important;
               width: 210mm !important;
               height: 297mm !important;
               position: absolute !important;
@@ -79,62 +81,69 @@ function OMRContent() {
 
           header {
             text-align: center;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 8px;
           }
 
           h1 {
             margin: 0;
-            font-size: 19px;
-            white-space: nowrap;
+            font-size: 24px; /* Increased for better visibility */
+            font-weight: 900;
+            color: #1e3a8a; /* Professional blue for school name */
           }
 
           h2 {
-            margin: 4px 0 0 0;
-            font-size: 17px;
+            margin: 6px 0 0 0;
+            font-size: 20px;
             text-align: center;
+            color: var(--accent-dark);
           }
 
           .top-info, .meta {
             display: flex;
             justify-content: space-between;
-            margin-top: 6px;
-            font-size: 13px;
+            margin-top: 10px;
+            font-size: 16px; /* Larger text */
+            font-weight: bold;
           }
 
           .student-info {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 8px;
-            font-size: 13px;
+            gap: 20px;
+            margin-top: 15px;
+            font-size: 16px;
+            font-weight: bold;
           }
 
           .student-info div {
-            border-bottom: 1px solid var(--accent);
-            padding: 3px 0;
+            border-bottom: 2px solid var(--accent);
+            padding: 5px 0;
           }
 
           .instructions-box {
-            margin-top: 10px;
-            border: 1.5px solid var(--accent);
-            padding: 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            line-height: 1.3;
+            margin-top: 15px;
+            border: 2px solid var(--accent);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.4;
             color: #333;
+            background: #fff5fa;
           }
 
           .omr-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 12px;
+            gap: 12px;
+            margin-top: 20px;
           }
 
           .question-block {
-            padding: 5px 8px;
+            padding: 8px 12px;
             border: 1px dashed var(--accent);
-            border-radius: 4px;
+            border-radius: 6px;
           }
 
           .qrow {
@@ -144,29 +153,29 @@ function OMRContent() {
           }
 
           .qno {
-            font-weight: bold;
-            font-size: 11px;
+            font-weight: 900;
+            font-size: 14px;
           }
 
           .choices {
             display: flex;
-            gap: 10px;
+            gap: 15px;
           }
 
           .choice-label {
             display: flex;
             align-items: center;
-            gap: 3px;
-            font-size: 11px;
-            font-weight: bold;
+            gap: 5px;
+            font-size: 14px;
+            font-weight: 900;
           }
 
           .omr-radio {
             appearance: none;
-            width: 15px;
-            height: 15px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
-            border: 2px solid var(--accent);
+            border: 2.5px solid var(--accent);
             cursor: pointer;
             position: relative;
             background: transparent;
@@ -178,68 +187,71 @@ function OMRContent() {
           }
 
           .bottom-section {
-            margin-top: 12px;
+            margin-top: 20px;
             display: flex;
             justify-content: space-between;
-            font-size: 12px;
+            font-size: 14px;
+            font-weight: bold;
           }
 
           .signature-box {
-            margin-top: 8px;
+            margin-top: 10px;
           }
 
           .box {
-            border: 1.5px solid var(--accent);
-            padding: 4px 10px;
-            border-radius: 4px;
-            min-width: 100px;
+            border: 2px solid var(--accent);
+            padding: 6px 15px;
+            border-radius: 6px;
+            min-width: 120px;
             text-align: center;
             display: inline-block;
-            font-weight: bold;
+            font-weight: 900;
+            font-size: 16px;
           }
         `}</style>
 
         <header>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px' }}>
             <img 
               src="https://mychildmate.in/AdmissionForm/img/holywritlogo_512_512.png" 
               alt="School Logo" 
-              style={{ width: '55px', height: '55px', objectFit: 'contain' }} 
+              style={{ width: '75px', height: '75px', objectFit: 'contain' }} 
             />
-            <h1>Holy Writ High School & Junior College, Badlapur (W)</h1>
+            <div style={{ textAlign: 'center' }}>
+                <h1>Holy Writ High School & Junior College</h1>
+                <p style={{ margin: 0, fontSize: '14px', fontWeight: 'bold', color: '#666' }}>Badlapur (W), Dist. Thane</p>
+            </div>
           </div>
-          <h2>Annual Exam (2025-26)</h2>
+          <h2>Annual Examination (2025-26)</h2>
         </header>
 
         <div className="top-info">
-          <div><strong>Date:</strong> {date}</div>
-          <div><strong>Subject:</strong> {subject}</div>
-          <div><strong>Marks:</strong> {marks}</div>
+          <div>DATE: {date}</div>
+          <div>SUBJECT: {subject}</div>
+          <div>TOTAL MARKS: {marks}</div>
         </div>
 
         <div className="meta">
-          <div><strong>Class:</strong> {className}</div>
-          <div><strong>Time:</strong> {time}</div>
-          <div><strong>SET:</strong> {set}</div>
+          <div>CLASS: {className}</div>
+          <div>TIME: {time}</div>
+          <div>SET: {set}</div>
         </div>
 
         <div className="student-info">
-          <div><strong>Name:</strong> ________________________</div>
-          <div><strong>Roll Number:</strong> ________________________</div>
-          <div><strong>Section:</strong> ________________________</div>
+          <div>CANDIDATE NAME: ________________________</div>
+          <div>ROLL NUMBER: ________________________</div>
+          <div>SECTION: ________________________</div>
         </div>
 
         <div className="instructions-box">
-          <strong>Instructions for Candidates:</strong>
-          <ol style={{ marginTop: '4px', paddingLeft: '15px', listStyleType: 'decimal' }}>
-            <li>Use <strong>only Black Ball Point Pen</strong> to darken the circles.</li>
-            <li>Fill only <strong>one circle</strong> for question 1-20.</li>
-            <li>Fill more than one <strong>circle</strong> for question 21-40.</li>
-            <li>Completely darken the circle. Do not tick (✓) or cross (✗).</li>
-            <li>Do not use pencil, gel pen, or ink pen.</li>
-            <li>Avoid stray marks on the OMR sheet.</li>
-            <li>Do not fold, tear, or damage the OMR sheet.</li>
-            <li>Write your Name, Roll Number, and Section correctly.</li>
+          <strong>Important Instructions for Candidates:</strong>
+          <ol style={{ marginTop: '6px', paddingLeft: '20px', listStyleType: 'decimal' }}>
+            <li>Use <strong>only Black Ball Point Pen</strong> to darken the circles. Do not use pencil or ink pen.</li>
+            <li>Fill only <strong>one circle</strong> for question numbers 1 to 20.</li>
+            <li>Fill <strong>more than one circle</strong> for question numbers 21 to 40 (if applicable).</li>
+            <li>Completely darken the circle. Do not tick (✓) or cross (✗) inside the circles.</li>
+            <li>Ensure your Name, Roll Number, and Section are written clearly in the fields provided above.</li>
+            <li>Do not fold, tear, or damage the OMR sheet. Avoid any stray marks on the grid.</li>
           </ol>
         </div>
 
@@ -262,14 +274,13 @@ function OMRContent() {
         </div>
 
         <div className="bottom-section">
-          <div className="signature-box">Invigilator Sign: ________________________</div>
-          <div className="signature-box">Examiner Name: ________________________</div>
-          <div className="signature-box">Examiner Sign: ________________________</div>
+          <div className="signature-box">Invigilator Signature: __________________</div>
+          <div className="signature-box">Examiner Signature: ___________________</div>
         </div>
 
-        <div className="bottom-section" style={{ alignItems: 'center', marginTop: '10px' }}>
-          <div>Total Marks Obtained: <span className="box">________</span></div>
-          <div>Out Of: <span className="box">{marks}</span></div>
+        <div className="bottom-section" style={{ alignItems: 'center', marginTop: '15px' }}>
+          <div style={{ fontSize: '18px' }}>Marks Obtained: <span className="box">__________</span></div>
+          <div style={{ fontSize: '18px' }}>Grand Total: <span className="box">{marks}</span></div>
         </div>
       </div>
     </div>
@@ -278,7 +289,7 @@ function OMRContent() {
 
 export default function OMRPage() {
   return (
-    <Suspense fallback={<div className="flex h-screen items-center justify-center text-[#ff66b2]">Loading OMR...</div>}>
+    <Suspense fallback={<div className="flex h-screen items-center justify-center text-[#ff66b2] font-bold">Initializing Official OMR...</div>}>
       <OMRContent />
     </Suspense>
   );
