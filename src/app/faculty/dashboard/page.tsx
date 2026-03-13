@@ -1,4 +1,3 @@
-
 'use client';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -147,28 +146,28 @@ export default function FacultyDashboard() {
                         Generate OMR Sheets
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-56">
-                      <DropdownMenuLabel>Select Exam Set</DropdownMenuLabel>
+                    <DropdownMenuContent align="end" className="w-64">
+                      <DropdownMenuLabel>Official OMR (A4)</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link href="/faculty/omr?set=1&subject=Computer&class=VI&marks=30">
+                          <Printer className="mr-2 h-4 w-4" /> Class VI - SET 1
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/faculty/omr?set=2&subject=Computer&class=VI&marks=30">
+                          <Printer className="mr-2 h-4 w-4" /> Class VI - SET 2
+                        </Link>
+                      </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem asChild>
                         <Link href="/faculty/omr?set=1&subject=Computer&class=IX&marks=30">
-                          <Printer className="mr-2 h-4 w-4" /> Set 1 (Computer)
+                          <Printer className="mr-2 h-4 w-4" /> Class IX - SET 1
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
                         <Link href="/faculty/omr?set=2&subject=Computer&class=IX&marks=30">
-                          <Printer className="mr-2 h-4 w-4" /> Set 2 (Computer)
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem asChild>
-                        <Link href="/faculty/omr?set=1&subject=Robotics&class=VI&marks=80">
-                          <Printer className="mr-2 h-4 w-4" /> Set 1 (Robotics)
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link href="/faculty/omr?set=2&subject=Robotics&class=VI&marks=80">
-                          <Printer className="mr-2 h-4 w-4" /> Set 2 (Robotics)
+                          <Printer className="mr-2 h-4 w-4" /> Class IX - SET 2
                         </Link>
                       </DropdownMenuItem>
                     </DropdownMenuContent>

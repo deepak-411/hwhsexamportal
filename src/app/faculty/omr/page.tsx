@@ -51,26 +51,29 @@ function OMRContent() {
             width: 210mm;
             height: 297mm;
             margin: auto;
-            padding: 10mm 12mm;
+            padding: 8mm 12mm; /* Tightened for single page fit */
             background: #fff;
             box-sizing: border-box;
             color: var(--accent-dark);
             position: relative;
             overflow: hidden;
+            border: 1px solid #eee;
           }
 
           @media print {
             .sheet {
+              border: none;
               box-shadow: none;
               margin: 0 !important;
-              padding: 8mm 10mm !important;
+              padding: 6mm 10mm !important; /* Adjusted for maximum printable area */
               width: 210mm !important;
               height: 297mm !important;
-              position: fixed !important;
+              position: absolute !important;
               top: 0 !important;
               left: 0 !important;
               visibility: visible !important;
               z-index: 9999 !important;
+              overflow: hidden !important;
             }
           }
 
@@ -81,29 +84,29 @@ function OMRContent() {
 
           h1 {
             margin: 0;
-            font-size: 18px;
+            font-size: 19px;
             white-space: nowrap;
           }
 
           h2 {
             margin: 4px 0 0 0;
-            font-size: 16px;
+            font-size: 17px;
             text-align: center;
           }
 
           .top-info, .meta {
             display: flex;
             justify-content: space-between;
-            margin-top: 8px;
-            font-size: 12px;
+            margin-top: 6px;
+            font-size: 13px;
           }
 
           .student-info {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin-top: 10px;
-            font-size: 12px;
+            margin-top: 8px;
+            font-size: 13px;
           }
 
           .student-info div {
@@ -112,24 +115,24 @@ function OMRContent() {
           }
 
           .instructions-box {
-            margin-top: 12px;
+            margin-top: 10px;
             border: 1.5px solid var(--accent);
-            padding: 10px;
+            padding: 8px;
             border-radius: 6px;
             font-size: 11px;
-            line-height: 1.4;
+            line-height: 1.3;
             color: #333;
           }
 
           .omr-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 8px;
+            margin-top: 12px;
           }
 
           .question-block {
-            padding: 6px 8px;
+            padding: 5px 8px;
             border: 1px dashed var(--accent);
             border-radius: 4px;
           }
@@ -142,12 +145,12 @@ function OMRContent() {
 
           .qno {
             font-weight: bold;
-            font-size: 12px;
+            font-size: 11px;
           }
 
           .choices {
             display: flex;
-            gap: 8px;
+            gap: 10px;
           }
 
           .choice-label {
@@ -160,8 +163,8 @@ function OMRContent() {
 
           .omr-radio {
             appearance: none;
-            width: 16px;
-            height: 16px;
+            width: 15px;
+            height: 15px;
             border-radius: 50%;
             border: 2px solid var(--accent);
             cursor: pointer;
@@ -175,14 +178,14 @@ function OMRContent() {
           }
 
           .bottom-section {
-            margin-top: 15px;
+            margin-top: 12px;
             display: flex;
             justify-content: space-between;
             font-size: 12px;
           }
 
           .signature-box {
-            margin-top: 10px;
+            margin-top: 8px;
           }
 
           .box {
@@ -197,11 +200,11 @@ function OMRContent() {
         `}</style>
 
         <header>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
             <img 
               src="https://mychildmate.in/AdmissionForm/img/holywritlogo_512_512.png" 
               alt="School Logo" 
-              style={{ width: '50px', height: '50px', objectFit: 'contain' }} 
+              style={{ width: '55px', height: '55px', objectFit: 'contain' }} 
             />
             <h1>Holy Writ High School & Junior College, Badlapur (W)</h1>
           </div>
@@ -236,6 +239,7 @@ function OMRContent() {
             <li>Do not use pencil, gel pen, or ink pen.</li>
             <li>Avoid stray marks on the OMR sheet.</li>
             <li>Do not fold, tear, or damage the OMR sheet.</li>
+            <li>Write your Name, Roll Number, and Section correctly.</li>
           </ol>
         </div>
 
@@ -259,6 +263,7 @@ function OMRContent() {
 
         <div className="bottom-section">
           <div className="signature-box">Invigilator Sign: ________________________</div>
+          <div className="signature-box">Examiner Name: ________________________</div>
           <div className="signature-box">Examiner Sign: ________________________</div>
         </div>
 
