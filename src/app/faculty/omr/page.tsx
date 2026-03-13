@@ -38,7 +38,7 @@ function OMRContent() {
           <div className="qno">Q.{n}</div>
           {isSpecialQ15 ? (
             <div className="ans-box-container">
-              <div className="ans-label">Write Answer:</div>
+              <div className="ans-label">Write Ans:</div>
               <div className="ans-box-rect"></div>
             </div>
           ) : (
@@ -80,7 +80,7 @@ function OMRContent() {
             width: 210mm;
             height: 297mm;
             margin: auto;
-            padding: 10mm 12mm;
+            padding: 8mm 10mm;
             background: #fff;
             box-sizing: border-box;
             color: var(--accent-dark);
@@ -97,7 +97,7 @@ function OMRContent() {
             .official-sheet {
               box-shadow: none;
               margin: 0 !important;
-              padding: 10mm 12mm !important;
+              padding: 8mm 10mm !important;
               width: 210mm !important;
               height: 297mm !important;
               position: absolute !important;
@@ -109,72 +109,69 @@ function OMRContent() {
 
           header {
             text-align: center;
-            margin-bottom: 8px;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 8px;
+            margin-bottom: 5px;
           }
 
           .header-main {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
           }
 
           .school-logo {
-            width: 75px;
-            height: 75px;
+            width: 60px;
+            height: 60px;
             object-fit: contain;
           }
 
           h1 {
             margin: 0;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 900;
             color: var(--blue-main);
             text-transform: uppercase;
-            letter-spacing: -0.5px;
           }
 
           h2 {
             margin: 5px 0 0 0;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             color: var(--accent-dark);
+            text-align: center;
           }
 
-          .info-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 10px;
-            font-size: 14px;
+          .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 13px;
             font-weight: bold;
           }
 
           .student-fields {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 12px;
-            font-size: 15px;
+            gap: 15px;
+            margin-top: 10px;
+            font-size: 14px;
             font-weight: bold;
           }
 
           .field-line {
             border-bottom: 1.5px solid var(--accent);
-            padding: 4px 0;
+            padding: 3px 0;
             display: flex;
             gap: 10px;
           }
 
           .instructions-box {
-            margin-top: 12px;
+            margin-top: 10px;
             border: 1.5px solid var(--accent);
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 12px;
-            line-height: 1.5;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            line-height: 1.4;
             color: #333;
             background: #fff5fa;
           }
@@ -183,27 +180,27 @@ function OMRContent() {
             flex: 1;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-top: 15px;
+            gap: 20px;
+            margin-top: 12px;
           }
 
           .column-title {
             background: var(--accent);
             color: white;
-            padding: 3px 10px;
+            padding: 2px 10px;
             font-weight: 900;
-            font-size: 14px;
+            font-size: 13px;
             text-align: center;
             border-radius: 4px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-transform: uppercase;
           }
 
           .question-block {
-            padding: 5px 10px;
+            padding: 4px 8px;
             border: 1px dashed var(--accent);
-            border-radius: 5px;
-            margin-bottom: 5px;
+            border-radius: 4px;
+            margin-bottom: 4px;
           }
 
           .qrow {
@@ -214,13 +211,13 @@ function OMRContent() {
 
           .qno {
             font-weight: 900;
-            font-size: 14px;
-            width: 35px;
+            font-size: 13px;
+            width: 30px;
           }
 
           .choices {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             flex: 1;
             justify-content: space-around;
           }
@@ -228,14 +225,14 @@ function OMRContent() {
           .choice-item {
             display: flex;
             align-items: center;
-            gap: 5px;
-            font-size: 14px;
+            gap: 4px;
+            font-size: 13px;
             font-weight: 900;
           }
 
           .omr-bubble {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
             border: 2px solid var(--accent);
             background: transparent;
@@ -245,12 +242,12 @@ function OMRContent() {
             flex: 1;
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-left: 10px;
+            gap: 8px;
+            margin-left: 5px;
           }
 
           .ans-label {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
             color: #666;
           }
@@ -258,42 +255,42 @@ function OMRContent() {
           .ans-box-rect {
             flex: 1;
             border: 2px solid var(--accent);
-            height: 24px;
-            border-radius: 4px;
+            height: 22px;
+            border-radius: 3px;
             background: #fff;
           }
 
           .footer-section {
-            margin-top: 15px;
+            margin-top: 10px;
             border-top: 2px solid var(--accent);
-            padding-top: 10px;
+            padding-top: 8px;
           }
 
           .signature-row {
             display: flex;
             justify-content: space-between;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
           }
 
           .marks-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 900;
           }
 
           .marks-box {
-            border: 2.5px solid var(--accent);
-            padding: 6px 15px;
-            border-radius: 6px;
-            min-width: 100px;
+            border: 2px solid var(--accent);
+            padding: 4px 12px;
+            border-radius: 4px;
+            min-width: 80px;
             text-align: center;
             display: inline-block;
-            margin-left: 10px;
-            font-size: 18px;
+            margin-left: 8px;
+            font-size: 16px;
           }
         `}</style>
 
@@ -306,20 +303,21 @@ function OMRContent() {
             />
             <div style={{ textAlign: 'center' }}>
                 <h1>Holy Writ High School & Junior College</h1>
-                <p style={{ margin: 0, fontSize: '14px', fontWeight: 'bold', color: '#666' }}>Badlapur (W), Dist. Thane</p>
+                <p style={{ margin: 0, fontSize: '12px', fontWeight: 'bold', color: '#666' }}>Badlapur (W), Dist. Thane</p>
             </div>
           </div>
           <h2>Annual Examination (2025-26)</h2>
         </header>
 
-        <div className="info-grid">
+        <div className="info-row">
           <div>DATE: {date}</div>
-          <div style={{ textAlign: 'center' }}>SUBJECT: {subject}</div>
-          <div style={{ textAlign: 'right' }}>TOTAL MARKS: {marks}</div>
-          
+          <div>SUBJECT: {subject}</div>
+          <div>TOTAL MARKS: {marks}</div>
+        </div>
+        <div className="info-row" style={{ marginTop: '2px' }}>
           <div>CLASS: {className}</div>
-          <div style={{ textAlign: 'center' }}>TIME: {time}</div>
-          <div style={{ textAlign: 'right' }}>SET: {set}</div>
+          <div>TIME: {time}</div>
+          <div>SET: {set}</div>
         </div>
 
         <div className="student-fields">
@@ -330,14 +328,15 @@ function OMRContent() {
         </div>
 
         <div className="instructions-box">
-          <strong>Important Instructions for Candidates:</strong>
-          <ol style={{ marginTop: '5px', paddingLeft: '20px', listStyleType: 'decimal' }}>
+          <strong>Instructions for Candidates:</strong>
+          <ol style={{ marginTop: '4px', paddingLeft: '15px', listStyleType: 'decimal' }}>
             <li>Use <strong>only Black Ball Point Pen</strong> to darken the circles.</li>
-            <li>Fill <strong>only one circle</strong> for questions 1-20. Completely darken the circle.</li>
+            <li>Fill <strong>only one circle</strong> for questions 1-20.</li>
             <li>Fill <strong>more than one circle</strong> for questions 21-40 where required.</li>
-            <li>Do not use pencil, gel pen, or ink pen. No stray marks allowed on the sheet.</li>
+            <li>Completely darken the circle. Do not tick (✓) or cross (✗).</li>
+            <li>Do not use pencil, gel pen, or ink pen. No stray marks allowed.</li>
             <li>Do not fold, tear, or damage this OMR sheet.</li>
-            <li>Ensure Name, Roll Number, and Section are written correctly in the boxes above.</li>
+            <li>Ensure Name, Roll Number, and Section are written correctly.</li>
           </ol>
         </div>
 
@@ -357,9 +356,9 @@ function OMRContent() {
 
         <div className="footer-section">
           <div className="signature-row">
-            <div>Invigilator Signature: __________________</div>
-            <div>Examiner Name: ___________________</div>
-            <div>Examiner Signature: ___________________</div>
+            <div>Invigilator Sign: ________________</div>
+            <div>Examiner Name: ________________</div>
+            <div>Examiner Sign: ________________</div>
           </div>
 
           <div className="marks-row">
