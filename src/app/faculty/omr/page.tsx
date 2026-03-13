@@ -67,7 +67,7 @@ function OMRContent() {
               border: none;
               box-shadow: none;
               margin: 0 !important;
-              padding: 8mm 10mm !important;
+              padding: 5mm 8mm !important; /* Slightly reduced for full bleed */
               width: 210mm !important;
               height: 297mm !important;
               position: absolute !important;
@@ -88,9 +88,10 @@ function OMRContent() {
 
           h1 {
             margin: 0;
-            font-size: 24px; /* Increased for better visibility */
+            font-size: 24px;
             font-weight: 900;
             color: #1e3a8a; /* Professional blue for school name */
+            text-transform: uppercase;
           }
 
           h2 {
@@ -98,13 +99,14 @@ function OMRContent() {
             font-size: 20px;
             text-align: center;
             color: var(--accent-dark);
+            font-weight: bold;
           }
 
           .top-info, .meta {
             display: flex;
             justify-content: space-between;
             margin-top: 10px;
-            font-size: 16px; /* Larger text */
+            font-size: 16px;
             font-weight: bold;
           }
 
@@ -127,8 +129,8 @@ function OMRContent() {
             border: 2px solid var(--accent);
             padding: 12px;
             border-radius: 8px;
-            font-size: 13px;
-            line-height: 1.4;
+            font-size: 14px; /* Increased for readability */
+            line-height: 1.5;
             color: #333;
             background: #fff5fa;
           }
@@ -144,6 +146,7 @@ function OMRContent() {
             padding: 8px 12px;
             border: 1px dashed var(--accent);
             border-radius: 6px;
+            background: #fff;
           }
 
           .qrow {
@@ -154,7 +157,7 @@ function OMRContent() {
 
           .qno {
             font-weight: 900;
-            font-size: 14px;
+            font-size: 15px;
           }
 
           .choices {
@@ -166,7 +169,7 @@ function OMRContent() {
             display: flex;
             align-items: center;
             gap: 5px;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 900;
           }
 
@@ -186,11 +189,20 @@ function OMRContent() {
             background: var(--accent);
           }
 
+          .ans-box {
+            flex: 1;
+            margin-left: 20px;
+            border: 2px solid var(--accent);
+            height: 26px;
+            border-radius: 4px;
+            background: #fff;
+          }
+
           .bottom-section {
             margin-top: 20px;
             display: flex;
             justify-content: space-between;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: bold;
           }
 
@@ -206,20 +218,20 @@ function OMRContent() {
             text-align: center;
             display: inline-block;
             font-weight: 900;
-            font-size: 16px;
+            font-size: 18px;
           }
         `}</style>
 
         <header>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '25px' }}>
             <img 
               src="https://mychildmate.in/AdmissionForm/img/holywritlogo_512_512.png" 
               alt="School Logo" 
-              style={{ width: '75px', height: '75px', objectFit: 'contain' }} 
+              style={{ width: '85px', height: '85px', objectFit: 'contain' }} 
             />
             <div style={{ textAlign: 'center' }}>
                 <h1>Holy Writ High School & Junior College</h1>
-                <p style={{ margin: 0, fontSize: '14px', fontWeight: 'bold', color: '#666' }}>Badlapur (W), Dist. Thane</p>
+                <p style={{ margin: 0, fontSize: '16px', fontWeight: 'bold', color: '#666' }}>Badlapur (W), Dist. Thane</p>
             </div>
           </div>
           <h2>Annual Examination (2025-26)</h2>
@@ -245,10 +257,10 @@ function OMRContent() {
 
         <div className="instructions-box">
           <strong>Important Instructions for Candidates:</strong>
-          <ol style={{ marginTop: '6px', paddingLeft: '20px', listStyleType: 'decimal' }}>
+          <ol style={{ marginTop: '8px', paddingLeft: '22px', listStyleType: 'decimal' }}>
             <li>Use <strong>only Black Ball Point Pen</strong> to darken the circles. Do not use pencil or ink pen.</li>
-            <li>Fill only <strong>one circle</strong> for question numbers 1 to 20.</li>
-            <li>Fill <strong>more than one circle</strong> for question numbers 21 to 40 (if applicable).</li>
+            <li>Fill only <strong>one circle</strong> for question numbers 1 to 20 (Except special format questions).</li>
+            <li>Fill <strong>more than one circle</strong> for question numbers 21 to 40 (where applicable).</li>
             <li>Completely darken the circle. Do not tick (✓) or cross (✗) inside the circles.</li>
             <li>Ensure your Name, Roll Number, and Section are written clearly in the fields provided above.</li>
             <li>Do not fold, tear, or damage the OMR sheet. Avoid any stray marks on the grid.</li>
@@ -260,14 +272,20 @@ function OMRContent() {
             <div key={n} className="question-block">
               <div className="qrow">
                 <div className="qno">Q.{n}</div>
-                <div className="choices">
-                  {['A', 'B', 'C', 'D'].map((ch) => (
-                    <label key={ch} className="choice-label">
-                      <input type="radio" name={`q${n}`} className="omr-radio" />
-                      {ch}
-                    </label>
-                  ))}
-                </div>
+                
+                {/* SET 2 Special Case for Q15: Rectangular Box */}
+                {n === 15 && set === '2' ? (
+                  <div className="ans-box"></div>
+                ) : (
+                  <div className="choices">
+                    {['A', 'B', 'C', 'D'].map((ch) => (
+                      <label key={ch} className="choice-label">
+                        <input type="radio" name={`q${n}`} className="omr-radio" />
+                        {ch}
+                      </label>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           ))}
@@ -278,9 +296,9 @@ function OMRContent() {
           <div className="signature-box">Examiner Signature: ___________________</div>
         </div>
 
-        <div className="bottom-section" style={{ alignItems: 'center', marginTop: '15px' }}>
-          <div style={{ fontSize: '18px' }}>Marks Obtained: <span className="box">__________</span></div>
-          <div style={{ fontSize: '18px' }}>Grand Total: <span className="box">{marks}</span></div>
+        <div className="bottom-section" style={{ alignItems: 'center', marginTop: '20px' }}>
+          <div style={{ fontSize: '20px' }}>Marks Obtained: <span className="box">__________</span></div>
+          <div style={{ fontSize: '20px' }}>Grand Total: <span className="box">{marks}</span></div>
         </div>
       </div>
     </div>
