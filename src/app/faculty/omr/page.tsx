@@ -11,7 +11,7 @@ function OMRContent() {
   
   const className = searchParams.get('class') || 'VI';
   const subject = searchParams.get('subject') || 'Computer';
-  const set = searchParams.get('set') || '2';
+  const set = searchParams.get('set') || '1';
   const marks = searchParams.get('marks') || '30';
   const time = searchParams.get('time') || '1.30 hours';
   const date = searchParams.get('date') || '14/03/2026';
@@ -29,7 +29,7 @@ function OMRContent() {
   if (!isClient) return null;
 
   return (
-    <div className="min-h-screen bg-gray-100 print:bg-white p-0 sm:p-8 overflow-x-hidden">
+    <div className="min-h-screen bg-gray-100 print:bg-white p-0 sm:p-8 overflow-hidden">
       {/* Controls - Hidden during print */}
       <div className="max-w-[800px] mx-auto mb-6 flex justify-between items-center print:hidden px-4">
         <Button variant="outline" onClick={() => router.push('/faculty/dashboard')}>
@@ -49,97 +49,89 @@ function OMRContent() {
             --paper: #ffffff;
             font-family: Arial, sans-serif;
             width: 210mm;
-            min-height: 297mm;
+            height: 297mm;
             margin: auto;
-            padding: 15mm 15mm;
+            padding: 10mm 12mm;
             background: #fff;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             box-sizing: border-box;
             color: var(--accent-dark);
+            position: relative;
+            overflow: hidden;
           }
 
           @media print {
             .sheet {
               box-shadow: none;
               margin: 0 !important;
+              padding: 8mm 10mm !important;
               width: 210mm !important;
               height: 297mm !important;
-              padding: 10mm 12mm !important;
               position: fixed !important;
               top: 0 !important;
               left: 0 !important;
               visibility: visible !important;
               z-index: 9999 !important;
             }
-            @page {
-              size: A4 portrait;
-              margin: 0 !important;
-            }
           }
 
           header {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
           }
 
           h1 {
             margin: 0;
-            font-size: 20px;
+            font-size: 18px;
             white-space: nowrap;
           }
 
           h2 {
-            margin: 8px 0 0 0;
-            font-size: 18px;
+            margin: 4px 0 0 0;
+            font-size: 16px;
             text-align: center;
           }
 
           .top-info, .meta {
             display: flex;
             justify-content: space-between;
-            flex-wrap: wrap;
-            margin-top: 10px;
-            font-size: 14px;
-          }
-
-          .top-info div, .meta div {
-            margin: 4px 0;
+            margin-top: 8px;
+            font-size: 12px;
           }
 
           .student-info {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin-top: 15px;
-            font-size: 14px;
+            margin-top: 10px;
+            font-size: 12px;
           }
 
           .student-info div {
             border-bottom: 1px solid var(--accent);
-            padding: 5px 0;
+            padding: 3px 0;
           }
 
           .instructions-box {
-            margin-top: 18px;
-            border: 1px solid var(--accent);
-            padding: 12px;
+            margin-top: 12px;
+            border: 1.5px solid var(--accent);
+            padding: 10px;
             border-radius: 6px;
-            font-size: 13px;
-            line-height: 1.6;
+            font-size: 11px;
+            line-height: 1.4;
             color: #333;
           }
 
           .omr-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 20px;
+            gap: 10px;
+            margin-top: 15px;
           }
 
           .question-block {
-            padding: 10px;
+            padding: 6px 8px;
             border: 1px dashed var(--accent);
-            border-radius: 6px;
+            border-radius: 4px;
           }
 
           .qrow {
@@ -150,32 +142,32 @@ function OMRContent() {
 
           .qno {
             font-weight: bold;
-            font-size: 14px;
+            font-size: 12px;
           }
 
           .choices {
             display: flex;
-            gap: 12px;
+            gap: 8px;
           }
 
           .choice-label {
             display: flex;
             align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            font-size: 13px;
+            gap: 3px;
+            font-size: 11px;
             font-weight: bold;
           }
 
           .omr-radio {
             appearance: none;
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
             border: 2px solid var(--accent);
             cursor: pointer;
             position: relative;
             background: transparent;
+            margin: 0;
           }
 
           .omr-radio:checked {
@@ -183,33 +175,33 @@ function OMRContent() {
           }
 
           .bottom-section {
-            margin-top: 25px;
+            margin-top: 15px;
             display: flex;
             justify-content: space-between;
-            flex-wrap: wrap;
-            font-size: 14px;
+            font-size: 12px;
           }
 
           .signature-box {
-            margin-top: 15px;
+            margin-top: 10px;
           }
 
           .box {
-            border: 1px solid var(--accent);
-            padding: 8px 12px;
-            border-radius: 5px;
-            min-width: 120px;
+            border: 1.5px solid var(--accent);
+            padding: 4px 10px;
+            border-radius: 4px;
+            min-width: 100px;
             text-align: center;
             display: inline-block;
+            font-weight: bold;
           }
         `}</style>
 
         <header>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
             <img 
               src="https://mychildmate.in/AdmissionForm/img/holywritlogo_512_512.png" 
               alt="School Logo" 
-              style={{ width: '65px', height: '65px', objectFit: 'contain' }} 
+              style={{ width: '50px', height: '50px', objectFit: 'contain' }} 
             />
             <h1>Holy Writ High School & Junior College, Badlapur (W)</h1>
           </div>
@@ -236,7 +228,7 @@ function OMRContent() {
 
         <div className="instructions-box">
           <strong>Instructions for Candidates:</strong>
-          <ol style={{ marginTop: '8px', paddingLeft: '18px', listStyleType: 'decimal' }}>
+          <ol style={{ marginTop: '4px', paddingLeft: '15px', listStyleType: 'decimal' }}>
             <li>Use <strong>only Black Ball Point Pen</strong> to darken the circles.</li>
             <li>Fill only <strong>one circle</strong> for question 1-20.</li>
             <li>Fill more than one <strong>circle</strong> for question 21-40.</li>
@@ -244,7 +236,6 @@ function OMRContent() {
             <li>Do not use pencil, gel pen, or ink pen.</li>
             <li>Avoid stray marks on the OMR sheet.</li>
             <li>Do not fold, tear, or damage the OMR sheet.</li>
-            <li>Write your Name, Roll Number, and Section correctly.</li>
           </ol>
         </div>
 
@@ -268,12 +259,11 @@ function OMRContent() {
 
         <div className="bottom-section">
           <div className="signature-box">Invigilator Sign: ________________________</div>
-          <div className="signature-box">Examiner Name: ________________________</div>
           <div className="signature-box">Examiner Sign: ________________________</div>
         </div>
 
-        <div className="bottom-section" style={{ alignItems: 'center' }}>
-          <div>Total Marks Obtained: <span className="box"></span></div>
+        <div className="bottom-section" style={{ alignItems: 'center', marginTop: '10px' }}>
+          <div>Total Marks Obtained: <span className="box">________</span></div>
           <div>Out Of: <span className="box">{marks}</span></div>
         </div>
       </div>
@@ -283,7 +273,7 @@ function OMRContent() {
 
 export default function OMRPage() {
   return (
-    <Suspense fallback={<div className="flex h-screen items-center justify-center text-primary">Loading OMR...</div>}>
+    <Suspense fallback={<div className="flex h-screen items-center justify-center text-[#ff66b2]">Loading OMR...</div>}>
       <OMRContent />
     </Suspense>
   );
