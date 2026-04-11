@@ -48,16 +48,30 @@ const aiTeacherFlow = ai.defineFlow(
         - You provide supportive guidance on mental health and stress management.
         - Keep explanations clear, structured, and encouraging.`;
 
-      // Filter and clean history to ensure alternating roles (user -> model -> user)
-      const validHistory = (input.history || []).filter(h => h.role === 'user' || h.role === 'model');
+      // CRITICAL: Gemini requires strictly alternating roles (user -> model -> user)
+      // and it must start with a 'user' message.
+      const rawHistory = input.history || [];
+      const cleanHistory: any[] = [];
+      let expectedRole = 'user';
+
+      for (const msg of rawHistory) {
+        if (msg.role === expectedRole) {
+          cleanHistory.push(msg);
+          expectedRole = expectedRole === 'user' ? 'model' : 'user';
+        }
+      }
+
+      // If history was empty or ended with a model message, we are good to add the new user message.
+      // If history ended with a user message (which shouldn't happen with our logic), we ignore it to keep alternation.
+      const messages: any[] = [
+        ...cleanHistory,
+        { role: 'user', content: [{ text: input.message }] }
+      ];
 
       const { text } = await ai.generate({
         model: 'googleai/gemini-1.5-flash',
         system: systemPrompt,
-        messages: [
-          ...validHistory,
-          { role: 'user', content: [{ text: input.message }] }
-        ],
+        messages: messages,
         config: {
           safetySettings: [
             { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
