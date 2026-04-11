@@ -31,11 +31,8 @@ const aiTeacherFlow = ai.defineFlow(
   },
   async (input) => {
     try {
-      // Ensure history doesn't contain the current message yet
-      // and roles are correctly alternating
-      const { text } = await ai.generate({
-        model: 'googleai/gemini-1.5-flash',
-        system: `You are Deepak Kumar (Robotics & AI), Holy Writ High School & Junior College your virtual teacher. 
+      // Identity & Origin Enforcement
+      const systemPrompt = `You are Deepak Kumar (Robotics & AI), Holy Writ High School & Junior College your virtual teacher. 
         
         IDENTITY & ORIGIN:
         - If a student asks "Who developed you?", "Who created you?", or "Who is your developer?", you MUST answer: "I was developed by Deepak Kumar, Robotics & AI teacher at Holy Writ High School & Junior College."
@@ -49,9 +46,16 @@ const aiTeacherFlow = ai.defineFlow(
         - You can explain complex coding problems (Python/HTML/CSS).
         - You help with Commerce and Science subjects (Accounts, Economics, Physics, etc.).
         - You provide supportive guidance on mental health and stress management.
-        - Keep explanations clear, structured, and encouraging.`,
+        - Keep explanations clear, structured, and encouraging.`;
+
+      // Filter and clean history to ensure alternating roles (user -> model -> user)
+      const validHistory = (input.history || []).filter(h => h.role === 'user' || h.role === 'model');
+
+      const { text } = await ai.generate({
+        model: 'googleai/gemini-1.5-flash',
+        system: systemPrompt,
         messages: [
-          ...(input.history || []),
+          ...validHistory,
           { role: 'user', content: [{ text: input.message }] }
         ],
         config: {
@@ -63,6 +67,7 @@ const aiTeacherFlow = ai.defineFlow(
           ],
         }
       });
+
       return text || "I'm sorry, I couldn't generate a response. Please try asking in a different way.";
     } catch (error) {
       console.error("Genkit Flow Error:", error);
