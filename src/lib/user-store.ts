@@ -12,7 +12,7 @@ const USERS_STORAGE_KEY = 'hwhs_users_v2';
 const CURRENT_USER_STORAGE_KEY = 'hwhs_currentUser';
 
 const DEFAULT_USERS: User[] = [
-  // Class 12 Commerce - Official List
+  // Class 12 Commerce - Official List (Name-based login)
   { name: 'VEDANT SHANKAR LIMBANI', rollNumber: '1', class: '12', section: 'Daffodils', faculty: 'Commerce' },
   { name: 'AYUSH ARUP CHATTARAJ', rollNumber: '2', class: '12', section: 'Daffodils', faculty: 'Commerce' },
   { name: 'RAYYAN IMRAN NAI', rollNumber: '3', class: '12', section: 'Daffodils', faculty: 'Commerce' },
@@ -22,16 +22,13 @@ const DEFAULT_USERS: User[] = [
   { name: 'YUKTA TEJAS PATIL', rollNumber: '7', class: '12', section: 'Daffodils', faculty: 'Commerce' },
   { name: 'SOHAIL SAMIM SHAIKH', rollNumber: '8', class: '12', section: 'Daffodils', faculty: 'Commerce' },
 
-  // Class 12 Science (Placeholder)
-  { name: 'Aman Deep', rollNumber: '101', class: '12', section: 'Daisies', faculty: 'Science' },
-  { name: 'Neha Sharma', rollNumber: '102', class: '12', section: 'Daisies', faculty: 'Science' },
+  // Class 11 Science (Placeholder)
+  { name: 'Aditya Science', rollNumber: '101', class: '11', section: 'Daffodils', faculty: 'Science' },
+  { name: 'Meera Science', rollNumber: '102', class: '11', section: 'Daffodils', faculty: 'Science' },
 
-  // Class 6-9 (Existing)
+  // Class 6-9
   { name: 'Aarav jadhav', rollNumber: '1', class: '6', section: 'Daffodils', faculty: 'Robotics' },
-  { name: 'Aarush PATIL', rollNumber: '2', class: '6', section: 'Daffodils', faculty: 'Robotics' },
-  { name: 'Mishti Malviya', rollNumber: '19', class: '6', section: 'Daffodils', faculty: 'Robotics' },
   { name: 'Aarav ashok patel', rollNumber: '1', class: '9', section: 'Daffodils', faculty: 'Computer' },
-  { name: 'Aayush patel', rollNumber: '2', class: '9', section: 'Daffodils', faculty: 'Computer' },
 ];
 
 export function getStoredUsers(): User[] {

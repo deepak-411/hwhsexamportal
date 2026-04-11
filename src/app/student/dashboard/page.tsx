@@ -1,10 +1,10 @@
 'use client';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen, Trophy, Code2, GraduationCap, ArrowRight } from "lucide-react";
+import { BookOpen, Trophy, Code2, GraduationCap, ArrowRight, FileCheck, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getExamForStudent, type ScheduledExam, hasAttemptedExam } from "@/lib/exam-store";
+import { getExamForStudent, type ScheduledExam, hasAttemptedExam, getCodingSubmissions, type CodingSubmission } from "@/lib/exam-store";
 import { getCurrentUser, clearCurrentUser, type User } from "@/lib/user-store";
 import { useRouter } from "next/navigation";
 import { codingProblems } from "@/lib/coding-problems";
@@ -13,6 +13,7 @@ export default function StudentDashboard() {
   const [activeExam, setActiveExam] = useState<ScheduledExam | null>(null);
   const [student, setStudent] = useState<User | null>(null);
   const [isResultAvailable, setIsResultAvailable] = useState(false);
+  const [codingHistory, setCodingHistory] = useState<CodingSubmission[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -22,12 +23,14 @@ export default function StudentDashboard() {
         const examForStudent = getExamForStudent(user.class, user.section);
         setActiveExam(examForStudent);
 
-        if (examForStudent) {
-            const studentId = `${user.rollNumber.padStart(2, '0')}-${user.class}-${user.section}`;
-            if (hasAttemptedExam(studentId, examForStudent.selectedSet)) {
-                setIsResultAvailable(true);
-            }
+        const studentId = `${user.rollNumber.padStart(2, '0')}-${user.class}-${user.section}`;
+        if (examForStudent && hasAttemptedExam(studentId, examForStudent.selectedSet)) {
+            setIsResultAvailable(true);
         }
+
+        // Load coding history
+        const submissions = getCodingSubmissions(studentId);
+        setCodingHistory(submissions);
     } else {
         router.push('/auth/student/login');
     }
@@ -70,92 +73,124 @@ export default function StudentDashboard() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <Card className="lg:col-span-1 border-primary/20">
+                <Card className="lg:col-span-1 border-primary/20 h-fit">
                     <CardHeader>
                         <CardTitle>My Profile</CardTitle>
-                        <CardDescription>Your academic credentials.</CardDescription>
+                        <CardDescription>Academic credentials.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div><p className="font-semibold text-muted-foreground">Name</p><p className="text-lg font-bold">{student.name}</p></div>
                         <div><p className="font-semibold text-muted-foreground">Roll Number</p><p className="text-lg font-bold">{student.rollNumber}</p></div>
-                        <div><p className="font-semibold text-muted-foreground">Class & Faculty</p><p className="text-lg font-bold">Class {student.class} - {student.faculty}</p></div>
+                        <div><p className="font-semibold text-muted-foreground">Class & Stream</p><p className="text-lg font-bold">Class {student.class} - {student.faculty}</p></div>
                     </CardContent>
                 </Card>
 
                 <div className="lg:col-span-2 grid grid-cols-1 gap-8">
                     {isSenior ? (
-                      <Card className="border-accent/50 shadow-lg">
-                        <CardHeader className="bg-accent/5">
-                          <CardTitle className="flex items-center gap-2">
-                            <Code2 className="text-accent" /> Coding Studio Assignments
-                          </CardTitle>
-                          <CardDescription>Solve 20 unique challenges in Python and Web Design.</CardDescription>
-                        </CardHeader>
-                        <CardContent className="pt-6">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {codingProblems.map((p) => (
-                              <div key={p.id} className="p-4 border rounded-lg hover:border-primary transition-colors flex justify-between items-center group bg-card">
-                                <div>
-                                  <p className="font-bold">{p.title}</p>
-                                  <p className="text-xs text-muted-foreground uppercase">{p.language}</p>
-                                </div>
-                                <Button size="sm" variant="ghost" asChild>
-                                  <Link href={`/student/coding/${p.id}`}>
-                                    Open Studio <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                  </Link>
-                                </Button>
-                              </div>
-                            ))}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ) : (
-                      <Card className="flex flex-col justify-between border-primary/20">
-                        <CardHeader>
+                      <div className="space-y-8">
+                        <Card className="border-accent/50 shadow-lg">
+                          <CardHeader className="bg-accent/5">
                             <CardTitle className="flex items-center gap-2">
-                                <BookOpen className="text-primary"/> Exam Schedule
+                              <Code2 className="text-accent" /> Coding Studio (20 Problems)
                             </CardTitle>
-                            <CardDescription>{activeExam ? 'Exam active for your class.' : 'No exams currently scheduled.'}</CardDescription>
-                        </CardHeader>
-                        {activeExam && (
-                            <>
-                                <CardContent className="space-y-4">
-                                    <div className="p-4 bg-muted rounded-lg border-l-4 border-primary">
-                                        <h3 className="font-bold text-lg">{activeExam.subject === 'Computer' ? 'Annual Computer Exam 2025-26' : `Robotics and AI Examination (Set ${activeExam.selectedSet})`}</h3>
-                                        <div className="grid grid-cols-2 gap-2 mt-2 text-sm">
-                                            <p><strong>Class:</strong> {activeExam.selectedClass}</p>
-                                            <p><strong>Duration:</strong> 60 Minutes</p>
-                                        </div>
+                            <CardDescription>Solve challenges in Python and Web Design. Live execution enabled.</CardDescription>
+                          </CardHeader>
+                          <CardContent className="pt-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[500px] overflow-auto pr-2">
+                              {codingProblems.map((p) => {
+                                const isDone = codingHistory.some(sub => sub.problemId === p.id);
+                                return (
+                                  <div key={p.id} className="p-4 border rounded-lg hover:border-primary transition-colors flex justify-between items-center group bg-card relative">
+                                    <div className="flex items-center gap-3">
+                                      {isDone && <CheckCircle2 className="h-5 w-5 text-green-500 shrink-0" />}
+                                      <div>
+                                        <p className="font-bold text-sm">{p.title}</p>
+                                        <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">{p.language}</p>
+                                      </div>
                                     </div>
-                                </CardContent>
-                                <CardFooter>
-                                    <Button asChild className="w-full shadow-lg shadow-primary/20"><Link href={examLink}>Start Exam</Link></Button>
-                                </CardFooter>
-                            </>
-                        )}
-                      </Card>
-                    )}
+                                    <Button size="sm" variant="ghost" asChild>
+                                      <Link href={`/student/coding/${p.id}`}>
+                                        Open Studio <ArrowRight className="ml-2 h-4 w-4" />
+                                      </Link>
+                                    </Button>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </CardContent>
+                        </Card>
 
-                    <Card className="flex flex-col justify-between border-accent/20">
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <Trophy className="text-accent"/> Performance Statement
+                        <Card className="border-green-500/20 bg-green-500/5">
+                          <CardHeader>
+                            <CardTitle className="flex items-center gap-2 text-green-600">
+                              <FileCheck className="h-5 w-5" /> Submission Statement
                             </CardTitle>
-                            <CardDescription>Track your submission results.</CardDescription>
-                        </CardHeader>
-                         <CardContent>
-                           <p className="text-muted-foreground">
-                            {isResultAvailable 
-                                ? "Results are ready. Click below to view your official statement." 
-                                : "Submissions are pending faculty evaluation."}
-                           </p>
-                        </CardContent>
-                        <CardFooter>
-                            <Button asChild className="w-full" variant="secondary" disabled={!isResultAvailable}>
-                                <Link href={`/results/${student.rollNumber}?class=${student.class}&section=${student.section}`}>View Marksheet</Link>
-                            </Button>
-                        </CardFooter>
-                    </Card>
+                            <CardDescription>History of your code submissions sent to faculty.</CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            {codingHistory.length > 0 ? (
+                              <div className="space-y-3">
+                                {codingHistory.slice().reverse().map((sub, idx) => (
+                                  <div key={idx} className="flex justify-between items-center p-3 bg-white border rounded shadow-sm">
+                                    <div>
+                                      <p className="font-bold text-sm">{sub.problemTitle}</p>
+                                      <p className="text-xs text-muted-foreground">{new Date(sub.timestamp).toLocaleString()}</p>
+                                    </div>
+                                    <div className="text-xs font-bold text-green-600 px-2 py-1 bg-green-100 rounded">SENT</div>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-center py-6 text-muted-foreground">No submissions recorded yet.</p>
+                            )}
+                          </CardContent>
+                        </Card>
+                      </div>
+                    ) : (
+                      <>
+                        <Card className="border-primary/20">
+                          <CardHeader>
+                              <CardTitle className="flex items-center gap-2"><BookOpen className="text-primary"/> Exam Schedule</CardTitle>
+                              <CardDescription>{activeExam ? 'Exam active for your class.' : 'No exams currently scheduled.'}</CardDescription>
+                          </CardHeader>
+                          {activeExam && (
+                              <>
+                                  <CardContent className="space-y-4">
+                                      <div className="p-4 bg-muted rounded-lg border-l-4 border-primary">
+                                          <h3 className="font-bold text-lg">{activeExam.subject === 'Computer' ? 'Annual Computer Exam 2025-26' : `Robotics and AI Examination (Set ${activeExam.selectedSet})`}</h3>
+                                          <div className="grid grid-cols-2 gap-2 mt-2 text-sm">
+                                              <p><strong>Class:</strong> {activeExam.selectedClass}</p>
+                                              <p><strong>Duration:</strong> 60 Minutes</p>
+                                          </div>
+                                      </div>
+                                  </CardContent>
+                                  <CardFooter>
+                                      <Button asChild className="w-full shadow-lg shadow-primary/20"><Link href={examLink}>Start Exam</Link></Button>
+                                  </CardFooter>
+                              </>
+                          )}
+                        </Card>
+
+                        <Card className="border-accent/20">
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2"><Trophy className="text-accent"/> Performance Statement</CardTitle>
+                                <CardDescription>Track your submission results.</CardDescription>
+                            </CardHeader>
+                             <CardContent>
+                               <p className="text-muted-foreground">
+                                {isResultAvailable 
+                                    ? "Results are ready. Click below to view your official statement." 
+                                    : "Submissions are pending faculty evaluation."}
+                               </p>
+                            </CardContent>
+                            <CardFooter>
+                                <Button asChild className="w-full" variant="secondary" disabled={!isResultAvailable}>
+                                    <Link href={`/results/${student.rollNumber}?class=${student.class}&section=${student.section}`}>View Marksheet</Link>
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                      </>
+                    )}
                 </div>
             </div>
         </div>
