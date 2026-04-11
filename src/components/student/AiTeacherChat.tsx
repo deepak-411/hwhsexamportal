@@ -32,30 +32,36 @@ export default function AiTeacherChat() {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, isLoading]);
+  }, [messages, isLoading, isOpen]);
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
     const userMessage = input.trim();
+    const currentHistory = [...messages]; // Capture history before adding current message
+    
     setInput('');
     setMessages((prev) => [...prev, { role: 'user', text: userMessage }]);
     setIsLoading(true);
 
     try {
-      const history = messages.map(m => ({
+      const historyPayload = currentHistory.map(m => ({
         role: m.role,
         content: [{ text: m.text }]
       }));
 
       const response = await askAiTeacher({
         message: userMessage,
-        history: history
+        history: historyPayload
       });
 
       setMessages((prev) => [...prev, { role: 'model', text: response }]);
     } catch (error) {
-      setMessages((prev) => [...prev, { role: 'model', text: "I'm sorry, I encountered an error. Please try again later." }]);
+      console.error("Chat Error:", error);
+      setMessages((prev) => [...prev, { 
+        role: 'model', 
+        text: "I'm sorry, I encountered an error connecting to the HWHS Knowledge Grid. Please try again in a moment." 
+      }]);
     } finally {
       setIsLoading(false);
     }
@@ -66,7 +72,6 @@ export default function AiTeacherChat() {
       {/* Floating Toggle Button */}
       <Button
         onClick={() => setIsOpen(!isOpen)}
-        data-chat-toggle
         className={cn(
           "fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-2xl z-50 transition-all duration-300",
           isOpen ? "bg-destructive hover:bg-destructive/90 rotate-90" : "bg-primary hover:bg-primary/90"
@@ -85,7 +90,7 @@ export default function AiTeacherChat() {
               </div>
               Virtual AI Teacher
             </CardTitle>
-            <p className="text-[10px] text-white/70 font-bold">Deepak Kumar (Robotics & AI)</p>
+            <p className="text-[10px] text-white/70 font-bold uppercase tracking-tighter">Deepak Kumar (Robotics & AI)</p>
           </CardHeader>
 
           <CardContent className="flex-1 overflow-hidden p-0 bg-slate-900/50">
@@ -99,7 +104,7 @@ export default function AiTeacherChat() {
                     <div className="space-y-2">
                       <p className="font-bold text-slate-300">HWHS Academic Support</p>
                       <p className="text-xs text-slate-500 max-w-[200px] mx-auto">
-                        Ask me anything in English or Hindi about your subjects or mental health.
+                        Ask me anything in English or Hindi about your subjects, coding, or mental health.
                       </p>
                     </div>
                   </div>
@@ -113,15 +118,15 @@ export default function AiTeacherChat() {
                     )}
                   >
                     <div className={cn(
-                      "h-8 w-8 rounded-full flex items-center justify-center shrink-0 border",
+                      "h-8 w-8 rounded-full flex items-center justify-center shrink-0 border shadow-sm",
                       msg.role === 'user' ? "bg-slate-800 border-slate-700" : "bg-primary/20 border-primary/30"
                     )}>
                       {msg.role === 'user' ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4 text-primary" />}
                     </div>
                     <div className={cn(
-                      "p-3 rounded-2xl text-sm leading-relaxed",
+                      "p-3 rounded-2xl text-sm leading-relaxed shadow-sm",
                       msg.role === 'user' 
-                        ? "bg-slate-800 text-slate-100 rounded-tr-none" 
+                        ? "bg-primary text-white rounded-tr-none" 
                         : "bg-slate-950 border border-slate-800 text-slate-300 rounded-tl-none"
                     )}>
                       {msg.text}
@@ -155,7 +160,7 @@ export default function AiTeacherChat() {
               className="flex w-full gap-2"
             >
               <Input
-                placeholder="Ask your teacher..."
+                placeholder="Ask your teacher in English or Hindi..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 disabled={isLoading}
