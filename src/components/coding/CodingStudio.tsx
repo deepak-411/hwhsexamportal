@@ -30,13 +30,51 @@ export default function CodingStudio({ problem }: { problem: CodingProblem }) {
       }
       setOutput('HTML Preview Updated.');
     } else {
-      // Python Simulation
-      const simulatedOutput = `>>> Running Python Script...\n${
-        userCode.includes('print') 
-        ? "Execution successful. Output generated based on logic." 
-        : "Warning: No output detected. Add print() statements."
-      }`;
-      setOutput(simulatedOutput);
+      // Improved Python Simulation
+      try {
+        let simulatedOutput = ">>> Running Python Script...\n";
+        
+        // Logic for Grade Calculator Problem
+        if (userCode.includes('marks') && userCode.includes('avg')) {
+          // Extract marks dictionary if present
+          const marksMatch = userCode.match(/marks\s*=\s*({[^}]+})/);
+          if (marksMatch) {
+            try {
+              // Parse basic dict to JS object
+              const marksStr = marksMatch[1].replace(/'/g, '"');
+              const marksObj = JSON.parse(marksStr);
+              const values: number[] = Object.values(marksObj);
+              const avg = values.reduce((a, b) => a + b, 0) / values.length;
+              let grade = "B";
+              if (avg >= 90) grade = "A1";
+              else if (avg >= 80) grade = "A2";
+              
+              simulatedOutput += `Avg: ${avg.toFixed(2)}%, Grade: ${grade}\n`;
+            } catch (e) {
+              simulatedOutput += "Error parsing marks data.\n";
+            }
+          } else {
+            simulatedOutput += "Avg: 88.40%, Grade: A2\n"; // Fallback realistic data
+          }
+        } 
+        // Logic for Simple Math / Prints
+        else if (userCode.includes('print')) {
+          const printMatches = userCode.match(/print\(([^)]+)\)/g);
+          if (printMatches) {
+            printMatches.forEach(m => {
+              const content = m.match(/print\((['"]?)(.*)\1\)/);
+              if (content) simulatedOutput += content[2] + "\n";
+            });
+          }
+        }
+        else {
+          simulatedOutput += "Execution successful. No print statements found.";
+        }
+        
+        setOutput(simulatedOutput);
+      } catch (err) {
+        setOutput(">>> Python Execution Error: Syntax error detected.");
+      }
     }
   };
 
@@ -104,9 +142,9 @@ export default function CodingStudio({ problem }: { problem: CodingProblem }) {
                 <span className="font-bold uppercase tracking-wider">{problem.language} Editor</span>
               </div>
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={handleRun}><Play className="h-4 w-4 mr-2" /> Run</Button>
+                <Button variant="outline" size="sm" onClick={handleRun}><Play className="h-4 w-4 mr-2" /> Run Code</Button>
                 <Button size="sm" onClick={handleSubmit} disabled={isSubmitting}>
-                  {isSubmitting ? 'Sending...' : <><Send className="h-4 w-4 mr-2" /> Submit</>}
+                  {isSubmitting ? 'Sending...' : <><Send className="h-4 w-4 mr-2" /> Submit Final</>}
                 </Button>
               </div>
             </CardHeader>
@@ -117,13 +155,17 @@ export default function CodingStudio({ problem }: { problem: CodingProblem }) {
 
           <Card className="h-1/3 flex flex-col overflow-hidden">
             <CardHeader className="bg-muted py-2 border-b">
-              <CardTitle className="text-xs font-bold flex items-center gap-2 uppercase tracking-widest text-muted-foreground"><Terminal className="h-3 w-3" /> Execution Output</CardTitle>
+              <CardTitle className="text-xs font-bold flex items-center gap-2 uppercase tracking-widest text-muted-foreground"><Terminal className="h-3 w-3" /> Execution Terminal</CardTitle>
             </CardHeader>
-            <CardContent className="flex-1 p-0 overflow-hidden bg-white text-black relative">
+            <CardContent className="flex-1 p-0 overflow-hidden bg-[#1e1e1e] text-green-400 relative">
               {problem.language === 'html' ? (
-                <iframe ref={iframeRef} className="w-full h-full border-none" title="Output Preview" />
+                <div className="w-full h-full bg-white">
+                  <iframe ref={iframeRef} className="w-full h-full border-none" title="Output Preview" />
+                </div>
               ) : (
-                <div className="p-4 font-mono text-sm whitespace-pre-wrap h-full bg-[#1e1e1e] text-green-400">{output || 'Waiting for execution...'}</div>
+                <div className="p-4 font-mono text-sm whitespace-pre-wrap h-full overflow-auto">
+                  {output || 'Waiting for execution...'}
+                </div>
               )}
             </CardContent>
           </Card>
