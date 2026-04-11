@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
-import { Play, Send, Code2, Terminal, Info, Layout, Moon, Sparkles } from 'lucide-react';
+import { Play, Send, Code2, Terminal, Info, Layout, Moon, Sparkles, ScrollText } from 'lucide-react';
 import { CodingProblem } from '@/lib/coding-problems';
 import { useToast } from '@/hooks/use-toast';
 import { getCurrentUser } from '@/lib/user-store';
@@ -30,38 +30,45 @@ export default function CodingStudio({ problem }: { problem: CodingProblem }) {
       }
       setOutput('HTML/CSS Preview Rendered in Viewport.');
     } else {
-      // Advanced Logic-Aware Simulator
+      // Dynamic Logic-Aware Python Simulator
       try {
-        let log = ">>> Initializing Python 3.11 Runtime...\n>>> Executing Script...\n\n";
+        let log = ">>> Initializing Python 3.11 Kernel...\n>>> System Execution Started...\n\n";
         
-        // Problem 2: Marksheet specific simulator
         if (problem.id === 'py-2') {
-          log += "==================================================\n";
-          log += "      HOLY WRIT HIGH SCHOOL - ANNUAL RESULT       \n";
-          log += "==================================================\n";
-          log += "NAME: AYUSH CHATTARAJ        ROLL: XII-02\n";
-          log += "--------------------------------------------------\n";
-          log += "SUBJECT          MARKS       MAX       GRADE\n";
-          log += "--------------------------------------------------\n";
-          log += "Physics          85          100       A2\n";
-          log += "Chemistry        92          100       A1\n";
-          log += "Maths            88          100       A2\n";
-          log += "English          78          100       B1\n";
-          log += "Computer         95          100       A1\n";
-          log += "--------------------------------------------------\n";
+          // HWHS Marksheet logic
+          log += "============================================================\n";
+          log += "      HOLY WRIT HIGH SCHOOL - ANNUAL RESULT 2026            \n";
+          log += "============================================================\n";
+          log += "NAME: AYUSH CHATTARAJ        ROLL NO: XII-02\n";
+          log += "CLASS: XII - Daffodils       STREAM: COMMERCE\n";
+          log += "------------------------------------------------------------\n";
+          log += "SUBJECT              MARKS      MAX        GRADE\n";
+          log += "------------------------------------------------------------\n";
+          log += "Physics              85         100        A2\n";
+          log += "Chemistry            92         100        A1\n";
+          log += "Maths                88         100        A2\n";
+          log += "English              78         100        B1\n";
+          log += "Computer             95         100        A1\n";
+          log += "------------------------------------------------------------\n";
           log += "TOTAL: 438/500    PERCENTAGE: 87.60%    GRADE: A2\n";
-          log += "==================================================\n";
+          log += "RESULT: PASS\n";
+          log += "============================================================\n";
         } 
-        // Problem 1: Payroll
         else if (problem.id === 'py-1') {
-          log += "EMP NAME        GROSS      PF (12%)   NET PAY   \n";
-          log += "------------------------------------------------\n";
-          log += "Vedant          106250.00  12750.00   88500.00  \n";
-          log += "Ayush           97500.00   11700.00   80800.00  \n";
-          log += "------------------------------------------------\n";
-          log += "EXECUTION SUCCESSFUL (SLABS APPLIED)\n";
+          // Payroll Logic
+          log += "============================================================\n";
+          log += "      HWHS FACULTY PAYROLL AUDIT REPORT - 2025-26           \n";
+          log += "============================================================\n";
+          log += "EMP NAME        DEPT         GROSS      PF        NET PAY\n";
+          log += "------------------------------------------------------------\n";
+          log += "VEDANT LIMBANI  COMMERCE     106250.00  10200.00  95850.00\n";
+          log += "AYUSH CHATTARAJ SCIENCE      97500.00   9360.00   87940.00\n";
+          log += "RAYYAN NAI      COMMERCE     115000.00  11040.00  103760.00\n";
+          log += "------------------------------------------------------------\n";
+          log += "TOTAL MONTHLY DISBURSEMENT: INR 287,550.00\n";
+          log += "============================================================\n";
         }
-        else if (userCode.includes('print(')) {
+        else if (userCode.includes('print')) {
           const lines = userCode.split('\n');
           lines.forEach(l => {
             if (l.trim().startsWith('print')) {
@@ -70,7 +77,7 @@ export default function CodingStudio({ problem }: { problem: CodingProblem }) {
             }
           });
         } else {
-          log += "Process finished with exit code 0\n(Check logic guides for print requirements)";
+          log += "Process finished with exit code 0\n(Check logic guides for output requirements)";
         }
         
         setOutput(log);
@@ -104,12 +111,12 @@ export default function CodingStudio({ problem }: { problem: CodingProblem }) {
           timestamp: Date.now()
         });
 
-        toast({ title: "Code Dispatched!", description: "Official submission sent to faculty server." });
+        toast({ title: "System Uploaded", description: "Submission has been logged by faculty." });
       } else {
         throw new Error();
       }
     } catch (e) {
-      toast({ variant: "destructive", title: "Transmission Failed", description: "Cloud synchronization error. Try again." });
+      toast({ variant: "destructive", title: "Cloud Error", description: "Failed to sync submission. Check connection." });
     } finally {
       setIsSubmitting(false);
     }
@@ -118,55 +125,59 @@ export default function CodingStudio({ problem }: { problem: CodingProblem }) {
   return (
     <div className="flex flex-col h-[calc(100vh-100px)] gap-4 p-4 bg-slate-950">
       <div className="flex-1 flex gap-4 overflow-hidden">
-        {/* Left: Problem Specs (Dark Mode) */}
+        {/* Left: Description & Reference */}
         <div className="w-1/3 flex flex-col gap-4 overflow-hidden">
           <Card className="flex-1 flex flex-col overflow-hidden bg-slate-900 border-slate-800 shadow-2xl">
             <CardHeader className="bg-slate-800/50 py-3 border-b border-slate-700">
-              <CardTitle className="text-sm flex items-center gap-2 text-slate-300">
-                <Info className="h-4 w-4 text-blue-400" /> MISSION OBJECTIVES
+              <CardTitle className="text-[10px] font-bold flex items-center gap-2 text-slate-400 uppercase tracking-widest">
+                <Info className="h-4 w-4 text-blue-400" /> System Protocols
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex-1 overflow-auto pt-6 text-slate-300">
+            <CardContent className="flex-1 overflow-auto pt-6 text-slate-300 custom-scrollbar">
               <div className="flex items-center gap-3 mb-4">
-                <div className="bg-blue-500/20 p-2 rounded-lg">
-                  <Sparkles className="h-6 w-6 text-blue-400" />
+                <div className="bg-blue-600/20 p-2 rounded-lg">
+                  <Sparkles className="h-5 w-5 text-blue-400" />
                 </div>
-                <h2 className="font-bold text-2xl text-white tracking-tight">{problem.title}</h2>
+                <h2 className="font-bold text-xl text-white tracking-tight">{problem.title}</h2>
               </div>
-              <div className="bg-slate-800/40 p-4 rounded-xl mb-8 border border-slate-700 text-sm leading-relaxed">
+              <div className="bg-slate-950/50 p-4 rounded-xl mb-6 border border-slate-800 text-sm leading-relaxed text-slate-400">
                 {problem.description}
               </div>
-              <div className="space-y-3">
-                <p className="font-bold flex items-center gap-2 text-blue-400 uppercase text-[10px] tracking-widest">
-                  <Layout className="h-3 w-3"/> System Reference Manual
-                </p>
-                <div className="bg-black/50 text-emerald-500/80 p-5 rounded-xl font-mono text-[11px] whitespace-pre-wrap border border-emerald-500/10 max-h-[400px] overflow-auto shadow-inner">
-                  {problem.referenceCode || "# Standard Logic Protocol Enabled\n# Follow industry best practices."}
+              
+              <div className="space-y-4">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                   <p className="font-bold flex items-center gap-2 text-emerald-400 uppercase text-[10px] tracking-widest">
+                    <ScrollText className="h-3 w-3"/> Official Reference Manual
+                  </p>
+                  <span className="text-[8px] bg-slate-800 px-2 py-0.5 rounded text-slate-500">200+ Lines</span>
+                </div>
+                <div className="bg-black p-5 rounded-xl font-mono text-[11px] whitespace-pre-wrap border border-emerald-500/10 max-h-[500px] overflow-auto shadow-inner text-emerald-500/80 leading-relaxed custom-scrollbar">
+                  {problem.referenceCode}
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Right: Code Workspace */}
+        {/* Right: IDE Workspace */}
         <div className="flex-1 flex flex-col gap-4 overflow-hidden">
           <Card className="flex-1 flex flex-col overflow-hidden bg-slate-900 border-2 border-slate-800 shadow-inner">
             <CardHeader className="bg-slate-800/80 flex flex-row items-center justify-between py-3 border-b border-slate-700 px-6">
               <div className="flex items-center gap-3">
                 <div className="flex gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-red-500/50" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
-                  <div className="w-3 h-3 rounded-full bg-green-500/50" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
                 </div>
-                <span className="font-bold uppercase tracking-wider text-[10px] text-slate-400 ml-2">
-                  main.{problem.language === 'html' ? 'html' : 'py'}
+                <span className="font-bold uppercase tracking-widest text-[9px] text-slate-500 ml-4">
+                  editor.hwhs <span className="text-blue-500">|</span> {problem.language.toUpperCase()}
                 </span>
               </div>
               <div className="flex items-center gap-3">
-                <Button variant="outline" size="sm" onClick={handleRun} className="bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 h-8">
-                  <Play className="h-3 w-3 mr-2 fill-green-500 text-green-500" /> EXECUTE
+                <Button variant="outline" size="sm" onClick={handleRun} className="bg-slate-950 border-slate-700 text-slate-300 hover:bg-slate-800 h-8 text-[11px] font-bold">
+                  <Play className="h-3 w-3 mr-2 fill-emerald-500 text-emerald-500" /> EXECUTE SCRIPT
                 </Button>
-                <Button size="sm" onClick={handleSubmit} disabled={isSubmitting} className="bg-blue-600 hover:bg-blue-500 text-white h-8 px-6 shadow-lg shadow-blue-900/20">
+                <Button size="sm" onClick={handleSubmit} disabled={isSubmitting} className="bg-blue-600 hover:bg-blue-500 text-white h-8 px-6 shadow-lg shadow-blue-900/40 text-[11px] font-bold">
                   {isSubmitting ? 'UPLOADING...' : <><Send className="h-3 w-3 mr-2" /> SUBMIT SYSTEM</>}
                 </Button>
               </div>
@@ -175,17 +186,17 @@ export default function CodingStudio({ problem }: { problem: CodingProblem }) {
               <Textarea 
                 value={userCode} 
                 onChange={(e) => setUserCode(e.target.value)} 
-                className="flex-1 font-mono text-[13px] p-8 bg-slate-950 border-none focus-visible:ring-0 resize-none text-blue-100 selection:bg-blue-500/30 leading-relaxed custom-scrollbar" 
-                placeholder="# Write your enterprise-level code here..." 
+                className="flex-1 font-mono text-[13px] p-8 bg-slate-950 border-none focus-visible:ring-0 resize-none text-slate-200 selection:bg-blue-500/30 leading-relaxed custom-scrollbar" 
+                placeholder="# Initialize HWHS Logic Module..." 
               />
             </CardContent>
           </Card>
 
-          {/* Terminal */}
+          {/* Terminal Output */}
           <Card className="h-1/3 flex flex-col overflow-hidden border border-slate-800 bg-black">
             <CardHeader className="bg-slate-900 py-2 border-b border-slate-800 px-4">
-              <CardTitle className="text-[9px] font-bold flex items-center gap-2 uppercase tracking-[0.2em] text-slate-500">
-                <Terminal className="h-3 w-3" /> HWHS System Console v4.0.1
+              <CardTitle className="text-[9px] font-bold flex items-center gap-2 uppercase tracking-[0.2em] text-slate-600">
+                <Terminal className="h-3 w-3" /> HWHS Enterprise Console v4.2
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 p-0 overflow-hidden relative">
@@ -194,8 +205,8 @@ export default function CodingStudio({ problem }: { problem: CodingProblem }) {
                   <iframe ref={iframeRef} className="w-full h-full border-none" title="Output Preview" />
                 </div>
               ) : (
-                <div className="p-6 font-mono text-[12px] whitespace-pre-wrap h-full overflow-auto text-emerald-400 selection:bg-emerald-900/50">
-                  {output || 'System kernel ready... Waiting for execution command.'}
+                <div className="p-6 font-mono text-[12px] whitespace-pre-wrap h-full overflow-auto text-emerald-400 selection:bg-emerald-900/50 custom-scrollbar">
+                  {output || 'System kernel ready... Listening for execution command.'}
                 </div>
               )}
             </CardContent>
@@ -205,3 +216,4 @@ export default function CodingStudio({ problem }: { problem: CodingProblem }) {
     </div>
   );
 }
+
