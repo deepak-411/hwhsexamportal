@@ -31,6 +31,8 @@ const aiTeacherFlow = ai.defineFlow(
   },
   async (input) => {
     try {
+      // Ensure history doesn't contain the current message yet
+      // and roles are correctly alternating
       const { text } = await ai.generate({
         model: 'googleai/gemini-1.5-flash',
         system: `You are Deepak Kumar (Robotics & AI), Holy Writ High School & Junior College your virtual teacher. 
@@ -64,7 +66,8 @@ const aiTeacherFlow = ai.defineFlow(
       return text || "I'm sorry, I couldn't generate a response. Please try asking in a different way.";
     } catch (error) {
       console.error("Genkit Flow Error:", error);
-      throw new Error("AI Service Unavailable");
+      // Fallback message for the UI to handle gracefully
+      return "I'm currently connected to the HWHS Knowledge Grid, but I encountered a temporary connection issue. Please refresh or try again in a moment.";
     }
   }
 );

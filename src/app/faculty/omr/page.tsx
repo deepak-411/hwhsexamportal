@@ -37,7 +37,7 @@ function OMRContent() {
           <div className="qno">Q.{n}</div>
           {isSpecialQ15 ? (
             <div className="ans-box-container">
-              <div className="ans-label">Write Ans:</div>
+              <div className="ans-label">Ans:</div>
               <div className="ans-box-rect"></div>
             </div>
           ) : (
@@ -67,7 +67,7 @@ function OMRContent() {
         </Button>
       </div>
 
-      {/* Official OMR Sheet - Locked to A4 Portrait */}
+      {/* Official OMR Sheet - Precision Locked to A4 */}
       <div className="official-sheet printable-content">
         <style jsx>{`
           .official-sheet {
@@ -77,7 +77,7 @@ function OMRContent() {
             
             width: 210mm;
             height: 297mm;
-            padding: 5mm 12mm;
+            padding: 4mm 8mm;
             background: #fff;
             box-sizing: border-box;
             color: var(--blue-main);
@@ -100,41 +100,75 @@ function OMRContent() {
             }
           }
 
-          .header-container { text-align: center; margin-bottom: 8px; border-bottom: 4px solid var(--blue-main); padding-bottom: 10px; }
-          .header-main { display: flex; align-items: center; justify-content: center; gap: 25px; }
-          .school-logo { width: 110px; height: 110px; object-fit: contain; }
-          h1 { margin: 0; font-size: 32px; font-weight: 900; color: var(--blue-main); text-transform: uppercase; line-height: 1.1; letter-spacing: -0.5px; }
-          h2 { margin: 8px 0 0 0; font-size: 24px; font-weight: bold; color: var(--accent-dark); text-align: center; text-decoration: underline; text-transform: uppercase; letter-spacing: 1px; }
+          .header-container { 
+            text-align: center; 
+            margin-bottom: 4px; 
+            border-bottom: 3px solid var(--blue-main); 
+            padding-bottom: 6px; 
+          }
+          .header-main { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 20px; 
+          }
+          .school-logo { 
+            width: 100px; 
+            height: 100px; 
+            object-fit: contain; 
+          }
+          h1 { 
+            margin: 0; 
+            font-size: 28px; 
+            font-weight: 900; 
+            color: var(--blue-main); 
+            text-transform: uppercase; 
+            line-height: 1.1; 
+          }
+          h2 { 
+            margin: 4px 0 0 0; 
+            font-size: 20px; 
+            font-weight: bold; 
+            color: var(--accent-dark); 
+            text-align: center; 
+            text-decoration: underline; 
+            text-transform: uppercase; 
+          }
 
           .meta-info-grid {
             display: grid;
             grid-template-columns: 1.2fr 1fr 1fr;
-            gap: 12px;
-            margin-top: 12px;
-            font-size: 17px;
+            gap: 10px;
+            margin-top: 8px;
+            font-size: 15px;
             font-weight: 900;
-            border-bottom: 2.5px solid var(--accent);
-            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 6px;
           }
 
           .student-fields {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-top: 15px;
-            font-size: 17px;
+            gap: 20px;
+            margin-top: 10px;
+            font-size: 15px;
             font-weight: 900;
           }
 
-          .field-line { border-bottom: 2px solid var(--accent); padding: 5px 0; display: flex; gap: 12px; }
+          .field-line { 
+            border-bottom: 1.5px solid var(--accent); 
+            padding: 3px 0; 
+            display: flex; 
+            gap: 8px; 
+          }
 
           .instructions-box {
-            margin-top: 15px;
-            border: 2.5px solid var(--accent);
-            padding: 12px 20px;
-            border-radius: 10px;
-            font-size: 14px;
-            line-height: 1.5;
+            margin-top: 10px;
+            border: 2px solid var(--accent);
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 12px;
+            line-height: 1.4;
             color: #000;
             background: #fff5fa;
           }
@@ -143,44 +177,43 @@ function OMRContent() {
             flex: 1;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-top: 20px;
+            gap: 30px;
+            margin-top: 12px;
           }
 
           .column-title {
             background: var(--accent);
             color: white;
-            padding: 6px;
+            padding: 4px;
             font-weight: 900;
-            font-size: 15px;
+            font-size: 13px;
             text-align: center;
-            border-radius: 5px;
-            margin-bottom: 12px;
+            border-radius: 4px;
+            margin-bottom: 8px;
             text-transform: uppercase;
-            letter-spacing: 1px;
           }
 
           .question-block {
-            padding: 6px 12px;
+            padding: 4px 10px;
             border: 1px dashed var(--accent);
-            border-radius: 5px;
-            margin-bottom: 8px;
+            border-radius: 4px;
+            margin-bottom: 5px;
           }
 
           .qrow { display: flex; justify-content: space-between; align-items: center; }
-          .qno { font-weight: 900; font-size: 16px; width: 45px; color: var(--blue-main); }
-          .choices { display: flex; gap: 18px; flex: 1; justify-content: space-around; }
-          .choice-item { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 900; }
-          .omr-bubble { width: 22px; height: 22px; border-radius: 50%; border: 2.5px solid var(--accent); background: transparent; }
+          .qno { font-weight: 900; font-size: 14px; width: 40px; color: var(--blue-main); }
+          .choices { display: flex; gap: 12px; flex: 1; justify-content: space-around; }
+          .choice-item { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 900; }
+          .omr-bubble { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--accent); background: transparent; }
 
-          .ans-box-container { flex: 1; display: flex; align-items: center; gap: 12px; }
-          .ans-label { font-size: 13px; font-weight: bold; color: var(--accent-dark); }
-          .ans-box-rect { flex: 1; border: 2.5px solid var(--accent); height: 30px; border-radius: 5px; background: #fff; }
+          .ans-box-container { flex: 1; display: flex; align-items: center; gap: 8px; }
+          .ans-label { font-size: 11px; font-weight: bold; color: var(--accent-dark); }
+          .ans-box-rect { flex: 1; border: 2px solid var(--accent); height: 24px; border-radius: 4px; background: #fff; }
 
-          .footer-section { margin-top: 20px; border-top: 4px double var(--blue-main); padding-top: 15px; }
-          .signature-row { display: flex; justify-content: space-between; font-size: 15px; font-weight: 900; margin-bottom: 20px; }
-          .marks-summary { display: flex; justify-content: space-between; align-items: center; font-size: 20px; font-weight: 900; }
-          .marks-box { border: 2.5px solid var(--accent); padding: 6px 20px; border-radius: 5px; min-width: 120px; text-align: center; background: #fff; }
+          .footer-section { margin-top: auto; border-top: 3px double var(--blue-main); padding-top: 10px; }
+          .signature-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 900; margin-bottom: 15px; }
+          .marks-summary { display: flex; justify-content: space-between; align-items: center; font-size: 18px; font-weight: 900; }
+          .marks-box { border: 2px solid var(--accent); padding: 4px 15px; border-radius: 4px; min-width: 100px; text-align: center; background: #fff; }
         `}</style>
 
         <div className="header-container">
@@ -188,11 +221,11 @@ function OMRContent() {
             <img src="https://mychildmate.in/AdmissionForm/img/holywritlogo_512_512.png" alt="Logo" className="school-logo" />
             <div style={{ textAlign: 'center' }}>
                 <h1>Holy Writ High School & Junior College</h1>
-                <p style={{ margin: '2px 0 0 0', fontSize: '16px', fontWeight: 'bold', color: '#444' }}>Badlapur (W), Dist. Thane - Academic Session 2025-2026</p>
-                <p style={{ margin: 0, fontSize: '13px', color: '#666', fontStyle: 'italic' }}>Affiliated to CBSE, New Delhi | An ISO 9001:2015 Certified Institution</p>
+                <p style={{ margin: '2px 0 0 0', fontSize: '14px', fontWeight: 'bold', color: '#444' }}>Badlapur (W), Thane - Session 2025-2026</p>
+                <p style={{ margin: 0, fontSize: '11px', color: '#666', fontStyle: 'italic' }}>Affiliated to CBSE, New Delhi | ISO 9001:2015 Certified</p>
             </div>
           </div>
-          <h2>Official Examination OMR Answer Sheet</h2>
+          <h2>Official OMR Answer Sheet</h2>
         </div>
 
         <div className="meta-info-grid">
@@ -212,12 +245,11 @@ function OMRContent() {
         </div>
 
         <div className="instructions-box">
-          <strong>Important Instructions for Candidates:</strong>
-          <ol style={{ marginTop: '5px', paddingLeft: '22px', listStyleType: 'decimal', fontWeight: 'bold' }}>
-            <li>Use <strong>Only Black or Blue Ball Point Pen</strong> to darken the circles. Use of pencil is strictly prohibited.</li>
-            <li>Darken only one circle for each question. Once darkened, it cannot be changed.</li>
-            <li>Ensure that the bubble is filled completely. Partial or cross marks will not be evaluated.</li>
-            <li>Do not make any stray marks on the sheet. Do not fold or tear the OMR sheet.</li>
+          <strong>Instructions:</strong>
+          <ol style={{ marginTop: '3px', paddingLeft: '18px', listStyleType: 'decimal', fontWeight: 'bold' }}>
+            <li>Use <strong>Black or Blue Ball Point Pen</strong>. Pencil is prohibited.</li>
+            <li>Darken only one circle. Once filled, it cannot be changed.</li>
+            <li>Ensure the bubble is filled completely. Partial marks will not be evaluated.</li>
           </ol>
         </div>
 
