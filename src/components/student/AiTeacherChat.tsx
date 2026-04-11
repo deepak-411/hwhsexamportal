@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Sparkles, Send, User, Bot, Loader2, X, MessageCircle } from 'lucide-react';
+import { Sparkles, Send, User, Bot, Loader2, X, MessageCircle, ShieldCheck } from 'lucide-react';
 import { askAiTeacher } from '@/ai/flows/ai-teacher-flow';
 import { cn } from '@/lib/utils';
 
@@ -21,7 +21,6 @@ export default function AiTeacherChat() {
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Robust activation from external dashboard button
   useEffect(() => {
     const handleOpenChat = () => setIsOpen(true);
     window.addEventListener('hwhs-open-ai-chat', handleOpenChat);
@@ -38,7 +37,7 @@ export default function AiTeacherChat() {
     if (!input.trim() || isLoading) return;
 
     const userMessage = input.trim();
-    const currentHistory = [...messages]; // Capture history before adding current message
+    const currentHistory = [...messages];
     
     setInput('');
     setMessages((prev) => [...prev, { role: 'user', text: userMessage }]);
@@ -60,7 +59,7 @@ export default function AiTeacherChat() {
       console.error("Chat Error:", error);
       setMessages((prev) => [...prev, { 
         role: 'model', 
-        text: "I'm sorry, I encountered an error connecting to the HWHS Knowledge Grid. Please try again in a moment." 
+        text: "System overload detected. I'm still here to help! Please wait a few seconds and try your question again." 
       }]);
     } finally {
       setIsLoading(false);
@@ -69,7 +68,6 @@ export default function AiTeacherChat() {
 
   return (
     <>
-      {/* Floating Toggle Button */}
       <Button
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
@@ -80,15 +78,17 @@ export default function AiTeacherChat() {
         {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
       </Button>
 
-      {/* Chat Window */}
       {isOpen && (
-        <Card className="fixed bottom-24 right-6 w-[400px] h-[600px] z-50 flex flex-col shadow-2xl border-primary/20 animate-in slide-in-from-bottom-4 duration-300 bg-slate-950 text-slate-200 overflow-hidden">
-          <CardHeader className="bg-primary py-4 px-6 shrink-0">
+        <Card className="fixed bottom-24 right-6 w-[420px] h-[650px] z-50 flex flex-col shadow-2xl border-primary/20 animate-in slide-in-from-bottom-4 duration-300 bg-slate-950 text-slate-200 overflow-hidden">
+          <CardHeader className="bg-primary py-4 px-6 shrink-0 relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-2 opacity-10">
+                <ShieldCheck className="h-20 w-20" />
+            </div>
             <CardTitle className="text-white flex items-center gap-3 text-sm font-headline tracking-widest uppercase">
               <div className="bg-white/20 p-1.5 rounded-lg">
                 <Sparkles className="h-4 w-4" />
               </div>
-              Virtual AI Teacher
+              Virtual AI Teacher v2.0
             </CardTitle>
             <p className="text-[10px] text-white/70 font-bold uppercase tracking-tighter">Deepak Kumar (Robotics & AI)</p>
           </CardHeader>
@@ -102,9 +102,9 @@ export default function AiTeacherChat() {
                       <Bot className="h-8 w-8 text-primary" />
                     </div>
                     <div className="space-y-2">
-                      <p className="font-bold text-slate-300">HWHS Academic Support</p>
-                      <p className="text-xs text-slate-500 max-w-[200px] mx-auto">
-                        Ask me anything in English or Hindi about your subjects, coding, or mental health.
+                      <p className="font-bold text-slate-300">HWHS Advanced Support</p>
+                      <p className="text-xs text-slate-500 max-w-[250px] mx-auto leading-relaxed">
+                        I can help with Class 12 Commerce Accounts, Python coding, Science, or mental health support in any language.
                       </p>
                     </div>
                   </div>
@@ -160,7 +160,7 @@ export default function AiTeacherChat() {
               className="flex w-full gap-2"
             >
               <Input
-                placeholder="Ask your teacher in English or Hindi..."
+                placeholder="Ask in Hindi, English, or mixed..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 disabled={isLoading}

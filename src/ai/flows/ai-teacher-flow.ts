@@ -1,9 +1,8 @@
 'use server';
 /**
- * @fileOverview AI Teacher Flow for HWHS Students.
+ * @fileOverview High-Level AI Teacher Flow for HWHS.
  * 
- * Provides a virtual teacher persona (Deepak Kumar) to help students with
- * coding, mental health, and academic subjects.
+ * Uses Gemini 1.5 Pro for advanced pedagogical support and mental health guidance.
  */
 
 import { ai } from '@/ai/genkit';
@@ -31,47 +30,52 @@ const aiTeacherFlow = ai.defineFlow(
   },
   async (input) => {
     try {
-      // Identity & Origin Enforcement
-      const systemPrompt = `You are Deepak Kumar (Robotics & AI), Holy Writ High School & Junior College your virtual teacher. 
+      const systemPrompt = `You are Mr. Deepak Kumar (Robotics & AI), the Virtual Teacher at Holy Writ High School & Junior College.
         
-        IDENTITY & ORIGIN:
-        - If a student asks "Who developed you?", "Who created you?", or "Who is your developer?", you MUST answer: "I was developed by Deepak Kumar, Robotics & AI teacher at Holy Writ High School & Junior College."
-        - Always start your very first response in a session with: "Hello! This is Deepak Kumar (Robotics & AI), Holy Writ High School & Junior College your virtual teacher. How can I assist you today?"
+        IDENTITY:
+        - If asked about your developer/creator: "I was developed by Deepak Kumar, Robotics & AI teacher at Holy Writ High School & Junior College."
+        - Always maintain a highly professional, supportive, and pedagogical persona.
         
-        TONE & STYLE:
-        - Your tone must be supportive, professional, and pedagogical, like a real teacher.
-        - You are MULTILINGUAL. You can communicate fluently in English, Hindi, or any language the student uses. Respond in the same language the student uses to make them feel comfortable.
+        CAPABILITIES & SUBJECTS:
+        - Academic Support: Commerce (Accounts, Economics), Science (Physics, Chemistry), and Computer/Robotics (Python, HTML, AI logic).
+        - Mental Health: Provide supportive, stress-management guidance for students.
+        - Language: Multilingual. Auto-detect if the student uses Hindi, English, or mixed (Hinglish) and respond in the same language.
         
-        KNOWLEDGE DOMAIN:
-        - You can explain complex coding problems (Python/HTML/CSS).
-        - You help with Commerce and Science subjects (Accounts, Economics, Physics, etc.).
-        - You provide supportive guidance on mental health and stress management.
-        - Keep explanations clear, structured, and encouraging.`;
+        RESPONSE STYLE:
+        - Use clear, structured explanations. 
+        - For coding, provide logic snippets and explain "why" things work.
+        - If a student is stressed, be empathetic and encouraging.`;
 
-      // CRITICAL: Gemini requires strictly alternating roles (user -> model -> user)
-      // and it must start with a 'user' message.
+      // CRITICAL FIX: Ensure strictly alternating user/model roles starting with 'user'
       const rawHistory = input.history || [];
-      const cleanHistory: any[] = [];
-      let expectedRole = 'user';
-
+      const sanitizedMessages: any[] = [];
+      
+      // Filter out any invalid messages or repeated roles
+      let lastRole: string | null = null;
       for (const msg of rawHistory) {
-        if (msg.role === expectedRole) {
-          cleanHistory.push(msg);
-          expectedRole = expectedRole === 'user' ? 'model' : 'user';
+        if (msg.role !== lastRole) {
+          sanitizedMessages.push(msg);
+          lastRole = msg.role;
         }
       }
 
-      // If history was empty or ended with a model message, we are good to add the new user message.
-      // If history ended with a user message (which shouldn't happen with our logic), we ignore it to keep alternation.
-      const messages: any[] = [
-        ...cleanHistory,
-        { role: 'user', content: [{ text: input.message }] }
-      ];
+      // Final verification of sequence for high-level model integrity
+      const finalMessages: any[] = [];
+      let expected = 'user';
+      for (const msg of sanitizedMessages) {
+        if (msg.role === expected) {
+          finalMessages.push(msg);
+          expected = expected === 'user' ? 'model' : 'user';
+        }
+      }
+
+      // Add the new user message
+      finalMessages.push({ role: 'user', content: [{ text: input.message }] });
 
       const { text } = await ai.generate({
-        model: 'googleai/gemini-1.5-flash',
+        model: 'googleai/gemini-1.5-pro', // High-level reasoning model
         system: systemPrompt,
-        messages: messages,
+        messages: finalMessages,
         config: {
           safetySettings: [
             { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
@@ -82,11 +86,10 @@ const aiTeacherFlow = ai.defineFlow(
         }
       });
 
-      return text || "I'm sorry, I couldn't generate a response. Please try asking in a different way.";
+      return text || "I'm currently reviewing the school logic grid. Could you please rephrase your query?";
     } catch (error) {
       console.error("Genkit Flow Error:", error);
-      // Fallback message for the UI to handle gracefully
-      return "I'm currently connected to the HWHS Knowledge Grid, but I encountered a temporary connection issue. Please refresh or try again in a moment.";
+      return "Hello! This is Deepak Kumar. I'm connected to the HWHS Knowledge Grid, but I'm currently experiencing a high load of queries. Please try again in a few moments or refresh your dashboard.";
     }
   }
 );
