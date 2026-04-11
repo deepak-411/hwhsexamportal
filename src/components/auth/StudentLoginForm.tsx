@@ -22,10 +22,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { findUser, setCurrentUser } from "@/lib/user-store";
+import { findUser, findUserByName, setCurrentUser, getUsersByClassAndFaculty } from "@/lib/user-store";
+import { useEffect, useState } from "react";
 
 const FormSchema = z.object({
-  rollNumber: z.string().min(1, "Roll number is required."),
+  rollNumber: z.string().optional(),
+  name: z.string().optional(),
   class: z.string().min(1, "Class is required."),
   faculty: z.string().min(1, "Faculty/Stream is required."),
 });
@@ -33,18 +35,47 @@ const FormSchema = z.object({
 export default function StudentLoginForm() {
   const router = useRouter();
   const { toast } = useToast();
+  const [availableNames, setAvailableNames] = useState<string[]>([]);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       rollNumber: "",
+      name: "",
       class: "",
       faculty: "",
     },
   });
 
+  const watchedClass = form.watch("class");
+  const watchedFaculty = form.watch("faculty");
+
+  const isClass12Commerce = watchedClass === "12" && watchedFaculty === "Commerce";
+
+  useEffect(() => {
+    if (isClass12Commerce) {
+      const users = getUsersByClassAndFaculty("12", "Commerce");
+      setAvailableNames(users.map(u => u.name));
+    } else {
+      setAvailableNames([]);
+    }
+  }, [watchedClass, watchedFaculty, isClass12Commerce]);
+
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    const user = findUser(data.rollNumber, data.class, data.faculty);
+    let user;
+    if (isClass12Commerce) {
+      if (!data.name) {
+        toast({ variant: "destructive", title: "Missing Name", description: "Please select your name." });
+        return;
+      }
+      user = findUserByName(data.name, data.class, data.faculty);
+    } else {
+      if (!data.rollNumber) {
+        toast({ variant: "destructive", title: "Missing Roll No", description: "Please enter your roll number." });
+        return;
+      }
+      user = findUser(data.rollNumber, data.class, data.faculty);
+    }
 
     if (user) {
       setCurrentUser(user);
@@ -57,7 +88,7 @@ export default function StudentLoginForm() {
       toast({
         variant: "destructive",
         title: "Login Failed",
-        description: "No student found with these details. Check Faculty/Stream selection.",
+        description: "No student found with these details. Please check your selection.",
       });
     }
   }
@@ -65,19 +96,6 @@ export default function StudentLoginForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="rollNumber"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Roll Number</FormLabel>
-              <FormControl>
-                <Input placeholder="e.g., 1" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <FormField
           control={form.control}
           name="class"
@@ -122,6 +140,46 @@ export default function StudentLoginForm() {
             </FormItem>
           )}
         />
+
+        {isClass12Commerce ? (
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Select Your Name</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Search your name" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {availableNames.sort().map((name) => (
+                      <SelectItem key={name} value={name}>{name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ) : (
+          <FormField
+            control={form.control}
+            name="rollNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Roll Number</FormLabel>
+                <FormControl>
+                  <Input placeholder="e.g., 1" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
         <Button type="submit" className="w-full">Login to Student Portal</Button>
       </form>
     </Form>

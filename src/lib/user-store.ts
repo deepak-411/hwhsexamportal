@@ -8,11 +8,11 @@ export type User = {
   faculty: 'Science' | 'Commerce' | 'Robotics' | 'Computer';
 };
 
-const USERS_STORAGE_KEY = 'hwhs_users_v2'; // Bumped version for faculty field
+const USERS_STORAGE_KEY = 'hwhs_users_v2';
 const CURRENT_USER_STORAGE_KEY = 'hwhs_currentUser';
 
 const DEFAULT_USERS: User[] = [
-  // Class 12 Commerce (New)
+  // Class 12 Commerce - Official List
   { name: 'VEDANT SHANKAR LIMBANI', rollNumber: '1', class: '12', section: 'Daffodils', faculty: 'Commerce' },
   { name: 'AYUSH ARUP CHATTARAJ', rollNumber: '2', class: '12', section: 'Daffodils', faculty: 'Commerce' },
   { name: 'RAYYAN IMRAN NAI', rollNumber: '3', class: '12', section: 'Daffodils', faculty: 'Commerce' },
@@ -65,6 +65,20 @@ export function findUser(rollNumber: string, className: string, faculty: string)
       u.class.trim() === className.trim() && 
       u.faculty.toLowerCase() === faculty.toLowerCase()
     );
+}
+
+export function findUserByName(name: string, className: string, faculty: string): User | undefined {
+    const users = getStoredUsers();
+    return users.find(u => 
+      u.name.trim().toLowerCase() === name.trim().toLowerCase() && 
+      u.class.trim() === className.trim() && 
+      u.faculty.toLowerCase() === faculty.toLowerCase()
+    );
+}
+
+export function getUsersByClassAndFaculty(className: string, faculty: string): User[] {
+    const users = getStoredUsers();
+    return users.filter(u => u.class === className && u.faculty.toLowerCase() === faculty.toLowerCase());
 }
 
 export function setCurrentUser(user: User) {
