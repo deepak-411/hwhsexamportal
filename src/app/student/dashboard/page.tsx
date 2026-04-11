@@ -1,13 +1,14 @@
 'use client';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen, Trophy, Code2, GraduationCap, ArrowRight, FileCheck, CheckCircle2 } from "lucide-react";
+import { BookOpen, Trophy, Code2, GraduationCap, ArrowRight, FileCheck, CheckCircle2, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getExamForStudent, type ScheduledExam, hasAttemptedExam, getCodingSubmissions, type CodingSubmission } from "@/lib/exam-store";
 import { getCurrentUser, clearCurrentUser, type User } from "@/lib/user-store";
 import { useRouter } from "next/navigation";
 import { codingProblems } from "@/lib/coding-problems";
+import AiTeacherChat from "@/components/student/AiTeacherChat";
 
 export default function StudentDashboard() {
   const [activeExam, setActiveExam] = useState<ScheduledExam | null>(null);
@@ -44,6 +45,7 @@ export default function StudentDashboard() {
   if (!student) return <div className="flex h-screen items-center justify-center"><p>Loading...</p></div>;
 
   const isSenior = ['11', '12'].includes(student.class);
+  const isClass12Commerce = student.class === '12' && student.faculty === 'Commerce';
   const examLink = activeExam?.subject === 'Computer' ? '/exam/computer' : `/exam/${activeExam?.selectedSet}`;
 
   return (
@@ -73,17 +75,45 @@ export default function StudentDashboard() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <Card className="lg:col-span-1 border-primary/20 h-fit">
-                    <CardHeader>
-                        <CardTitle>My Profile</CardTitle>
-                        <CardDescription>Academic credentials.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div><p className="font-semibold text-muted-foreground">Name</p><p className="text-lg font-bold">{student.name}</p></div>
-                        <div><p className="font-semibold text-muted-foreground">Roll Number</p><p className="text-lg font-bold">{student.rollNumber}</p></div>
-                        <div><p className="font-semibold text-muted-foreground">Class & Stream</p><p className="text-lg font-bold">Class {student.class} - {student.faculty}</p></div>
-                    </CardContent>
-                </Card>
+                <div className="lg:col-span-1 space-y-8">
+                  <Card className="border-primary/20 h-fit">
+                      <CardHeader>
+                          <CardTitle>My Profile</CardTitle>
+                          <CardDescription>Academic credentials.</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                          <div><p className="font-semibold text-muted-foreground">Name</p><p className="text-lg font-bold">{student.name}</p></div>
+                          <div><p className="font-semibold text-muted-foreground">Roll Number</p><p className="text-lg font-bold">{student.rollNumber}</p></div>
+                          <div><p className="font-semibold text-muted-foreground">Class & Stream</p><p className="text-lg font-bold">Class {student.class} - {student.faculty}</p></div>
+                      </CardContent>
+                  </Card>
+
+                  {isClass12Commerce && (
+                    <Card className="border-primary/50 bg-primary/5 shadow-lg overflow-hidden">
+                      <CardHeader className="bg-primary/10">
+                        <CardTitle className="flex items-center gap-2 text-primary">
+                          <Sparkles className="h-5 w-5" /> Virtual AI Teacher
+                        </CardTitle>
+                        <CardDescription className="text-primary/70 font-bold">Deepak Kumar (Robotics & AI)</CardDescription>
+                      </CardHeader>
+                      <CardContent className="pt-6">
+                        <p className="text-sm text-muted-foreground mb-4">
+                          Need help with Class 12 Commerce accounts, Python coding, or just feeling stressed? Ask your virtual teacher for guidance.
+                        </p>
+                        <Button 
+                          className="w-full bg-primary hover:bg-primary/90 text-white font-bold"
+                          onClick={() => {
+                            // The chat component will handle being opened
+                            const chatBtn = document.querySelector('[data-chat-toggle]') as HTMLButtonElement;
+                            if (chatBtn) chatBtn.click();
+                          }}
+                        >
+                          Chat with Mr. Deepak Kumar
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
 
                 <div className="lg:col-span-2 grid grid-cols-1 gap-8">
                     {isSenior ? (
@@ -195,6 +225,8 @@ export default function StudentDashboard() {
             </div>
         </div>
       </main>
+      {/* Show AI Teacher Chat for Class 12 Commerce */}
+      {isClass12Commerce && <AiTeacherChat />}
     </div>
   );
 }
