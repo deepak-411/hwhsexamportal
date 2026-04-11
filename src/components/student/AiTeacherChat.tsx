@@ -21,6 +21,13 @@ export default function AiTeacherChat() {
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  // Robust activation from external dashboard button
+  useEffect(() => {
+    const handleOpenChat = () => setIsOpen(true);
+    window.addEventListener('hwhs-open-ai-chat', handleOpenChat);
+    return () => window.removeEventListener('hwhs-open-ai-chat', handleOpenChat);
+  }, []);
+
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -59,6 +66,7 @@ export default function AiTeacherChat() {
       {/* Floating Toggle Button */}
       <Button
         onClick={() => setIsOpen(!isOpen)}
+        data-chat-toggle
         className={cn(
           "fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-2xl z-50 transition-all duration-300",
           isOpen ? "bg-destructive hover:bg-destructive/90 rotate-90" : "bg-primary hover:bg-primary/90"
@@ -91,7 +99,7 @@ export default function AiTeacherChat() {
                     <div className="space-y-2">
                       <p className="font-bold text-slate-300">HWHS Academic Support</p>
                       <p className="text-xs text-slate-500 max-w-[200px] mx-auto">
-                        Ask me about Coding, mental health, or any school subjects.
+                        Ask me anything in English or Hindi about your subjects or mental health.
                       </p>
                     </div>
                   </div>

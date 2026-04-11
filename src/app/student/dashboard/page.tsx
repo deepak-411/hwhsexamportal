@@ -98,14 +98,13 @@ export default function StudentDashboard() {
                       </CardHeader>
                       <CardContent className="pt-6">
                         <p className="text-sm text-muted-foreground mb-4">
-                          Need help with Class 12 Commerce accounts, Python coding, or just feeling stressed? Ask your virtual teacher for guidance.
+                          Need help with Class 12 Commerce accounts, Python coding, or just feeling stressed? Ask your virtual teacher for guidance in any language (English/Hindi).
                         </p>
                         <Button 
                           className="w-full bg-primary hover:bg-primary/90 text-white font-bold"
                           onClick={() => {
-                            // The chat component will handle being opened
-                            const chatBtn = document.querySelector('[data-chat-toggle]') as HTMLButtonElement;
-                            if (chatBtn) chatBtn.click();
+                            // Using a CustomEvent for robust cross-component interaction
+                            window.dispatchEvent(new Event('hwhs-open-ai-chat'));
                           }}
                         >
                           Chat with Mr. Deepak Kumar
