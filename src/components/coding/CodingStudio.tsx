@@ -4,24 +4,37 @@ import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
-import { Play, Send, Code2, Terminal, Info, Layout, Moon, Sparkles, ScrollText } from 'lucide-react';
+import { 
+  Play, Send, Code2, Terminal, Info, Layout, 
+  Moon, Sparkles, ScrollText, Maximize2, X 
+} from 'lucide-react';
 import { CodingProblem } from '@/lib/coding-problems';
 import { useToast } from '@/hooks/use-toast';
 import { getCurrentUser } from '@/lib/user-store';
 import { sendCodingSubmission } from '@/ai/flows/send-coding-submission-email';
 import { storeCodingSubmission } from '@/lib/exam-store';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function CodingStudio({ problem }: { problem: CodingProblem }) {
   const [userCode, setUserCode] = useState(problem.initialCode);
   const [output, setOutput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isZoomed, setIsZoomed] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const zoomIframeRef = useRef<HTMLIFrameElement>(null);
   const { toast } = useToast();
 
-  const handleRun = () => {
+  const handleRun = (targetIframe?: HTMLIFrameElement | null) => {
     if (problem.language === 'html') {
-      if (iframeRef.current) {
-        const doc = iframeRef.current.contentDocument || iframeRef.current.contentWindow?.document;
+      const activeIframe = targetIframe || iframeRef.current;
+      if (activeIframe) {
+        const doc = activeIframe.contentDocument || activeIframe.contentWindow?.document;
         if (doc) {
           doc.open();
           doc.write(userCode);
@@ -174,7 +187,7 @@ export default function CodingStudio({ problem }: { problem: CodingProblem }) {
                 </span>
               </div>
               <div className="flex items-center gap-3">
-                <Button variant="outline" size="sm" onClick={handleRun} className="bg-slate-950 border-slate-700 text-slate-300 hover:bg-slate-800 h-8 text-[11px] font-bold">
+                <Button variant="outline" size="sm" onClick={() => handleRun()} className="bg-slate-950 border-slate-700 text-slate-300 hover:bg-slate-800 h-8 text-[11px] font-bold">
                   <Play className="h-3 w-3 mr-2 fill-emerald-500 text-emerald-500" /> EXECUTE SCRIPT
                 </Button>
                 <Button size="sm" onClick={handleSubmit} disabled={isSubmitting} className="bg-blue-600 hover:bg-blue-500 text-white h-8 px-6 shadow-lg shadow-blue-900/40 text-[11px] font-bold">
@@ -194,10 +207,39 @@ export default function CodingStudio({ problem }: { problem: CodingProblem }) {
 
           {/* Terminal Output */}
           <Card className="h-1/3 flex flex-col overflow-hidden border border-slate-800 bg-black">
-            <CardHeader className="bg-slate-900 py-2 border-b border-slate-800 px-4">
+            <CardHeader className="bg-slate-900 py-2 border-b border-slate-800 px-4 flex flex-row items-center justify-between">
               <CardTitle className="text-[9px] font-bold flex items-center gap-2 uppercase tracking-[0.2em] text-slate-600">
                 <Terminal className="h-3 w-3" /> HWHS Enterprise Console v4.2
               </CardTitle>
+              <Dialog open={isZoomed} onOpenChange={(open) => {
+                setIsZoomed(open);
+                if (open) setTimeout(() => handleRun(zoomIframeRef.current), 100);
+              }}>
+                <DialogTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-6 w-6 text-slate-600 hover:text-white">
+                    <Maximize2 className="h-3 w-3" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-[95vw] w-[95vw] h-[90vh] bg-black border-slate-800 p-0 overflow-hidden flex flex-col">
+                  <DialogHeader className="p-4 border-b border-slate-800 bg-slate-900 shrink-0">
+                    <DialogTitle className="text-slate-400 text-xs font-bold uppercase tracking-widest flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Terminal className="h-4 w-4 text-emerald-500" />
+                        System Output Zoom - {problem.title}
+                      </div>
+                    </DialogTitle>
+                  </DialogHeader>
+                  <div className="flex-1 bg-black overflow-hidden relative">
+                    {problem.language === 'html' ? (
+                      <iframe ref={zoomIframeRef} className="w-full h-full bg-white border-none" title="Zoom Output Preview" />
+                    ) : (
+                      <div className="p-10 font-mono text-lg whitespace-pre-wrap h-full overflow-auto text-emerald-400 custom-scrollbar">
+                        {output || 'System kernel ready... Listening for execution command.'}
+                      </div>
+                    )}
+                  </div>
+                </DialogContent>
+              </Dialog>
             </CardHeader>
             <CardContent className="flex-1 p-0 overflow-hidden relative">
               {problem.language === 'html' ? (
@@ -216,4 +258,3 @@ export default function CodingStudio({ problem }: { problem: CodingProblem }) {
     </div>
   );
 }
-
