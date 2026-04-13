@@ -28,8 +28,6 @@ export default function StudentDashboard() {
         if (examForStudent && hasAttemptedExam(studentId, examForStudent.selectedSet)) {
             setIsResultAvailable(true);
         }
-
-        // Load coding history
         const submissions = getCodingSubmissions(studentId);
         setCodingHistory(submissions);
     } else {
@@ -42,9 +40,8 @@ export default function StudentDashboard() {
     router.push('/auth');
   }
 
-  if (!student) return <div className="flex h-screen items-center justify-center"><p>Loading...</p></div>;
+  if (!student) return <div className="flex h-screen items-center justify-center"><p>Loading Profile...</p></div>;
 
-  const isSenior = ['11', '12'].includes(student.class);
   const isClass12Commerce = student.class === '12' && student.faculty === 'Commerce';
   const examLink = activeExam?.subject === 'Computer' ? '/exam/computer' : `/exam/${activeExam?.selectedSet}`;
 
@@ -52,12 +49,10 @@ export default function StudentDashboard() {
     <div className="min-h-screen flex flex-col">
        <header className="sticky top-0 z-50 w-full border-b bg-card/80 shadow-sm backdrop-blur">
             <div className="container mx-auto flex h-16 items-center justify-between px-4">
+                <Link href="/">
+                    <h1 className="font-headline text-xl font-bold text-foreground">HWHS Portal</h1>
+                </Link>
                 <div className="flex items-center gap-4">
-                    <Link href="/">
-                       <h1 className="font-headline text-xl font-bold text-foreground">HWHS Portal</h1>
-                    </Link>
-                </div>
-                 <div className="flex items-center gap-4">
                     <span className="text-sm text-muted-foreground hidden sm:inline">Welcome, {student.name}</span>
                     <Button variant="outline" size="sm" onClick={handleLogout}>Logout</Button>
                 </div>
@@ -76,155 +71,94 @@ export default function StudentDashboard() {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-1 space-y-8">
-                  <Card className="border-primary/20 h-fit">
+                  <Card className="border-primary/20">
                       <CardHeader>
                           <CardTitle>My Profile</CardTitle>
                           <CardDescription>Academic credentials.</CardDescription>
                       </CardHeader>
                       <CardContent className="space-y-4">
                           <div><p className="font-semibold text-muted-foreground">Name</p><p className="text-lg font-bold">{student.name}</p></div>
-                          <div><p className="font-semibold text-muted-foreground">Roll Number</p><p className="text-lg font-bold">{student.rollNumber}</p></div>
-                          <div><p className="font-semibold text-muted-foreground">Class & Stream</p><p className="text-lg font-bold">Class {student.class} - {student.faculty}</p></div>
+                          <div><p className="font-semibold text-muted-foreground">Roll No</p><p className="text-lg font-bold">{student.rollNumber}</p></div>
+                          <div><p className="font-semibold text-muted-foreground">Stream</p><p className="text-lg font-bold">{student.faculty}</p></div>
                       </CardContent>
                   </Card>
 
                   {isClass12Commerce && (
-                    <Card className="border-primary/50 bg-primary/5 shadow-lg overflow-hidden">
-                      <CardHeader className="bg-primary/10">
+                    <Card className="border-primary/50 bg-primary/5 shadow-lg">
+                      <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-primary">
-                          <Sparkles className="h-5 w-5" /> Virtual AI Teacher
+                          <Sparkles className="h-5 w-5" /> AI Teacher Chat
                         </CardTitle>
-                        <CardDescription className="text-primary/70 font-bold">Deepak Kumar (Robotics & AI)</CardDescription>
+                        <CardDescription>Guideline support from Mr. Deepak Kumar.</CardDescription>
                       </CardHeader>
-                      <CardContent className="pt-6">
-                        <p className="text-sm text-muted-foreground mb-4">
-                          Need help with Class 12 Commerce accounts, Python coding, or just feeling stressed? Ask your virtual teacher for guidance in any language (English/Hindi).
-                        </p>
+                      <CardContent>
                         <Button 
-                          className="w-full bg-primary hover:bg-primary/90 text-white font-bold"
-                          onClick={() => {
-                            // Using a CustomEvent for robust cross-component interaction
-                            window.dispatchEvent(new Event('hwhs-open-ai-chat'));
-                          }}
+                          className="w-full font-bold"
+                          onClick={() => window.dispatchEvent(new Event('hwhs-open-ai-chat'))}
                         >
-                          Chat with Mr. Deepak Kumar
+                          Chat with Virtual Teacher
                         </Button>
                       </CardContent>
                     </Card>
                   )}
                 </div>
 
-                <div className="lg:col-span-2 grid grid-cols-1 gap-8">
-                    {isSenior ? (
-                      <div className="space-y-8">
-                        <Card className="border-accent/50 shadow-lg">
-                          <CardHeader className="bg-accent/5">
-                            <CardTitle className="flex items-center gap-2">
-                              <Code2 className="text-accent" /> Coding Studio (20 Problems)
-                            </CardTitle>
-                            <CardDescription>Solve challenges in Python and Web Design. Live execution enabled.</CardDescription>
-                          </CardHeader>
-                          <CardContent className="pt-6">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[500px] overflow-auto pr-2">
-                              {codingProblems.map((p) => {
-                                const isDone = codingHistory.some(sub => sub.problemId === p.id);
-                                return (
-                                  <div key={p.id} className="p-4 border rounded-lg hover:border-primary transition-colors flex justify-between items-center group bg-card relative">
-                                    <div className="flex items-center gap-3">
-                                      {isDone && <CheckCircle2 className="h-5 w-5 text-green-500 shrink-0" />}
-                                      <div>
-                                        <p className="font-bold text-sm">{p.title}</p>
-                                        <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">{p.language}</p>
-                                      </div>
-                                    </div>
-                                    <Button size="sm" variant="ghost" asChild>
-                                      <Link href={`/student/coding/${p.id}`}>
-                                        Open Studio <ArrowRight className="ml-2 h-4 w-4" />
-                                      </Link>
-                                    </Button>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          </CardContent>
-                        </Card>
-
-                        <Card className="border-green-500/20 bg-green-500/5">
-                          <CardHeader>
-                            <CardTitle className="flex items-center gap-2 text-green-600">
-                              <FileCheck className="h-5 w-5" /> Submission Statement
-                            </CardTitle>
-                            <CardDescription>History of your code submissions sent to faculty.</CardDescription>
-                          </CardHeader>
-                          <CardContent>
-                            {codingHistory.length > 0 ? (
-                              <div className="space-y-3">
-                                {codingHistory.slice().reverse().map((sub, idx) => (
-                                  <div key={idx} className="flex justify-between items-center p-3 bg-white border rounded shadow-sm">
-                                    <div>
-                                      <p className="font-bold text-sm">{sub.problemTitle}</p>
-                                      <p className="text-xs text-muted-foreground">{new Date(sub.timestamp).toLocaleString()}</p>
-                                    </div>
-                                    <div className="text-xs font-bold text-green-600 px-2 py-1 bg-green-100 rounded">SENT</div>
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <p className="text-center py-6 text-muted-foreground">No submissions recorded yet.</p>
-                            )}
-                          </CardContent>
-                        </Card>
-                      </div>
-                    ) : (
-                      <>
-                        <Card className="border-primary/20">
-                          <CardHeader>
-                              <CardTitle className="flex items-center gap-2"><BookOpen className="text-primary"/> Exam Schedule</CardTitle>
-                              <CardDescription>{activeExam ? 'Exam active for your class.' : 'No exams currently scheduled.'}</CardDescription>
-                          </CardHeader>
-                          {activeExam && (
-                              <>
-                                  <CardContent className="space-y-4">
-                                      <div className="p-4 bg-muted rounded-lg border-l-4 border-primary">
-                                          <h3 className="font-bold text-lg">{activeExam.subject === 'Computer' ? 'Annual Computer Exam 2025-26' : `Robotics and AI Examination (Set ${activeExam.selectedSet})`}</h3>
-                                          <div className="grid grid-cols-2 gap-2 mt-2 text-sm">
-                                              <p><strong>Class:</strong> {activeExam.selectedClass}</p>
-                                              <p><strong>Duration:</strong> 60 Minutes</p>
-                                          </div>
-                                      </div>
-                                  </CardContent>
-                                  <CardFooter>
-                                      <Button asChild className="w-full shadow-lg shadow-primary/20"><Link href={examLink}>Start Exam</Link></Button>
-                                  </CardFooter>
-                              </>
-                          )}
-                        </Card>
-
-                        <Card className="border-accent/20">
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2"><Trophy className="text-accent"/> Performance Statement</CardTitle>
-                                <CardDescription>Track your submission results.</CardDescription>
-                            </CardHeader>
-                             <CardContent>
-                               <p className="text-muted-foreground">
-                                {isResultAvailable 
-                                    ? "Results are ready. Click below to view your official statement." 
-                                    : "Submissions are pending faculty evaluation."}
-                               </p>
-                            </CardContent>
-                            <CardFooter>
-                                <Button asChild className="w-full" variant="secondary" disabled={!isResultAvailable}>
-                                    <Link href={`/results/${student.rollNumber}?class=${student.class}&section=${student.section}`}>View Marksheet</Link>
+                <div className="lg:col-span-2 space-y-8">
+                    <Card className="border-accent/50 shadow-lg">
+                      <CardHeader className="bg-accent/5">
+                        <CardTitle className="flex items-center gap-2">
+                          <Code2 className="text-accent" /> Coding Studio (20 Problems)
+                        </CardTitle>
+                        <CardDescription>Night Mode Enterprise Workspace.</CardDescription>
+                      </CardHeader>
+                      <CardContent className="pt-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[500px] overflow-auto pr-2">
+                          {codingProblems.map((p) => {
+                            const isDone = codingHistory.some(sub => sub.problemId === p.id);
+                            return (
+                              <div key={p.id} className="p-4 border rounded-lg hover:border-primary transition-colors flex justify-between items-center bg-card">
+                                <div>
+                                  <p className="font-bold text-sm">{p.title}</p>
+                                  <p className="text-[10px] text-muted-foreground uppercase font-bold">{p.language}</p>
+                                </div>
+                                <Button size="sm" variant="ghost" asChild>
+                                  <Link href={`/student/coding/${p.id}`}>
+                                    Open <ArrowRight className="ml-2 h-4 w-4" />
+                                  </Link>
                                 </Button>
-                            </CardFooter>
-                        </Card>
-                      </>
-                    )}
+                                {isDone && <CheckCircle2 className="absolute top-2 right-2 h-3 w-3 text-green-500" />}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="border-green-500/20 bg-green-500/5">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-green-600">
+                          <FileCheck className="h-5 w-5" /> Submissions
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        {codingHistory.length > 0 ? (
+                          <div className="space-y-2">
+                            {codingHistory.map((sub, idx) => (
+                              <div key={idx} className="flex justify-between items-center p-2 bg-white border rounded text-xs">
+                                <span className="font-bold">{sub.problemTitle}</span>
+                                <span className="text-muted-foreground">{new Date(sub.timestamp).toLocaleDateString()}</span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-center text-muted-foreground">No work submitted yet.</p>
+                        )}
+                      </CardContent>
+                    </Card>
                 </div>
             </div>
         </div>
       </main>
-      {/* Show AI Teacher Chat for Class 12 Commerce */}
       {isClass12Commerce && <AiTeacherChat />}
     </div>
   );

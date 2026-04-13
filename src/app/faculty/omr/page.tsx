@@ -13,8 +13,6 @@ function OMRContent() {
   const subject = searchParams.get('subject') || 'Computer';
   const set = searchParams.get('set') || '1';
   const marks = searchParams.get('marks') || '30';
-  const time = searchParams.get('time') || '1.30 hours';
-  const date = searchParams.get('date') || '14/03/2026';
 
   const [isClient, setIsClient] = useState(false);
 
@@ -29,7 +27,6 @@ function OMRContent() {
   if (!isClient) return null;
 
   const renderQuestion = (n: number) => {
-    // Special requirement for Set 2, Question 15
     const isSpecialQ15 = n === 15 && set === '2';
     
     return (
@@ -38,7 +35,6 @@ function OMRContent() {
           <div className="qno">Q.{n}</div>
           {isSpecialQ15 ? (
             <div className="ans-box-container">
-              <div className="ans-label">Ans:</div>
               <div className="ans-box-rect"></div>
             </div>
           ) : (
@@ -58,239 +54,114 @@ function OMRContent() {
 
   return (
     <div className="min-h-screen bg-gray-100 print:bg-white p-0 sm:p-8 flex flex-col items-center">
-      {/* Controls - Hidden during print */}
       <div className="w-[210mm] mb-6 flex justify-between items-center print:hidden">
         <Button variant="outline" onClick={() => router.push('/faculty/dashboard')}>
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
+          <ArrowLeft className="mr-2 h-4 w-4" /> Dashboard
         </Button>
-        <Button onClick={handlePrint} className="bg-[#ff66b2] hover:bg-[#e0559e] text-white font-bold h-12 px-8 text-lg shadow-lg transition-transform active:scale-95">
-          <Printer className="mr-2 h-5 w-5" /> PRINT OFFICIAL A4 OMR
+        <Button onClick={handlePrint} size="lg">
+          <Printer className="mr-2 h-5 w-5" /> PRINT OFFICIAL OMR (A4)
         </Button>
       </div>
 
-      {/* Official OMR Sheet - Precision Locked to A4 (210x297mm) */}
       <div className="official-sheet printable-content">
         <style jsx>{`
           .official-sheet {
-            --accent: #ff66b2;
-            --accent-dark: #e0559e;
-            --blue-main: #1e3a8a;
-            
             width: 210mm;
             height: 297mm;
-            padding: 8mm 12mm;
+            padding: 10mm 15mm;
             background: #fff;
-            box-sizing: border-box;
-            color: var(--blue-main);
-            font-family: 'Arial', sans-serif;
+            color: #1e3a8a;
+            font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
             position: relative;
-            box-shadow: 0 0 40px rgba(0,0,0,0.1);
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-            overflow: hidden;
-          }
-
-          @media print {
-            .official-sheet {
-              box-shadow: none !important;
-              position: absolute !important;
-              top: 0 !important;
-              left: 0 !important;
-              margin: 0 !important;
-            }
+            box-sizing: border-box;
           }
 
           .header-container { 
             text-align: center; 
-            margin-bottom: 8px; 
-            border: 4px solid var(--blue-main);
+            margin-bottom: 10px; 
+            border: 3px solid #1e3a8a;
             padding: 15px;
-            background: #fff;
-            border-radius: 8px;
           }
-          .header-main { 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 30px; 
-          }
+          
           .school-logo { 
-            width: 130px; 
-            height: 130px; 
-            object-fit: contain; 
-            background: white;
-            padding: 2px;
-            border-radius: 50%;
-            border: 2px solid var(--blue-main);
+            width: 100px; 
+            height: 100px; 
+            margin-bottom: 5px;
           }
-          h1 { 
-            margin: 0; 
-            font-size: 38px; 
-            font-weight: 900; 
-            color: var(--blue-main); 
-            text-transform: uppercase; 
-            line-height: 1.1; 
-            letter-spacing: -1px;
-          }
-          .subtitle { 
-            margin: 6px 0 0 0; 
-            font-size: 18px; 
-            font-weight: 900; 
-            color: #333; 
-          }
-          h2 { 
-            margin: 12px 0 0 0; 
-            font-size: 26px; 
-            font-weight: 900; 
-            color: var(--accent-dark); 
-            text-align: center; 
-            text-decoration: underline; 
-            text-transform: uppercase; 
-            letter-spacing: 3px;
-          }
+          
+          h1 { margin: 0; font-size: 32px; font-weight: 900; text-transform: uppercase; }
+          h2 { margin: 10px 0; font-size: 24px; color: #ff66b2; text-decoration: underline; font-weight: 900; }
 
-          .meta-info-grid {
+          .meta-grid {
             display: grid;
-            grid-template-columns: 1.2fr 1fr 1fr;
-            gap: 12px;
-            margin-top: 12px;
-            font-size: 16px;
-            font-weight: 900;
-            border-bottom: 3px solid var(--accent);
-            padding-bottom: 8px;
-          }
-
-          .student-fields {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-top: 15px;
-            font-size: 16px;
-            font-weight: 900;
-          }
-
-          .field-line { 
-            border-bottom: 2.5px solid var(--accent); 
-            padding: 5px 0; 
-            display: flex; 
-            gap: 10px; 
-          }
-
-          .instructions-box {
-            margin-top: 12px;
-            border: 2.5px solid var(--accent);
-            padding: 12px 25px;
-            border-radius: 12px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
             font-size: 14px;
-            line-height: 1.4;
-            color: #000;
-            background: #fff5fa;
+            font-weight: bold;
+            border-bottom: 2px solid #ff66b2;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
           }
 
           .omr-main-grid {
-            flex: 1;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-top: 15px;
-          }
-
-          .column-title {
-            background: var(--accent);
-            color: white;
-            padding: 8px;
-            font-weight: 900;
-            font-size: 15px;
-            text-align: center;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
+            gap: 30px;
+            flex: 1;
           }
 
           .question-block {
-            padding: 6px 15px;
-            border: 1.5px dashed var(--accent);
-            border-radius: 8px;
-            margin-bottom: 8px;
+            padding: 4px 10px;
+            border: 1px dashed #ff66b2;
+            margin-bottom: 5px;
+            border-radius: 4px;
           }
 
-          .qrow { display: flex; justify-content: space-between; align-items: center; }
-          .qno { font-weight: 900; font-size: 16px; width: 50px; color: var(--blue-main); }
-          .choices { display: flex; gap: 18px; flex: 1; justify-content: space-around; }
-          .choice-item { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 900; }
-          .omr-bubble { width: 22px; height: 22px; border-radius: 50%; border: 2.5px solid var(--accent); background: transparent; }
-          .choice-label { color: #000; }
+          .qrow { display: flex; align-items: center; justify-content: space-between; }
+          .qno { font-weight: 900; width: 40px; }
+          .choices { display: flex; gap: 15px; flex: 1; justify-content: space-around; }
+          .choice-item { display: flex; align-items: center; gap: 4px; }
+          .omr-bubble { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #ff66b2; }
+          .ans-box-rect { flex: 1; height: 25px; border: 2px solid #ff66b2; border-radius: 4px; }
 
-          .ans-box-container { flex: 1; display: flex; align-items: center; gap: 12px; }
-          .ans-label { font-size: 14px; font-weight: bold; color: var(--accent-dark); }
-          .ans-box-rect { flex: 1; border: 3px solid var(--accent); height: 32px; border-radius: 8px; background: #fff; }
-
-          .footer-section { margin-top: auto; border-top: 5px double var(--blue-main); padding-top: 15px; }
-          .signature-row { display: flex; justify-content: space-between; font-size: 15px; font-weight: 900; margin-bottom: 25px; }
-          .marks-summary { display: flex; justify-content: space-between; align-items: center; font-size: 22px; font-weight: 900; }
-          .marks-box { border: 3px solid var(--accent); padding: 8px 25px; border-radius: 8px; min-width: 140px; text-align: center; background: #fff; }
+          .footer-section { margin-top: auto; border-top: 3px double #1e3a8a; padding-top: 15px; }
+          .sig-row { display: flex; justify-content: space-between; font-weight: 900; font-size: 12px; }
         `}</style>
 
         <div className="header-container">
-          <div className="header-main">
-            <img src="https://mychildmate.in/AdmissionForm/img/holywritlogo_512_512.png" alt="Logo" className="school-logo" />
-            <div style={{ textAlign: 'center' }}>
-                <h1>Holy Writ High School & Junior College</h1>
-                <p className="subtitle">Pimpoli, Barvi Dam Road, Badlapur (W), Thane - Session 2025-2026</p>
-                <p style={{ margin: 0, fontSize: '14px', color: '#444', fontStyle: 'italic', fontWeight: '900' }}>Affiliated to CBSE, New Delhi | ISO 9001:2015 Certified</p>
-            </div>
-          </div>
-          <h2>Official OMR Answer Sheet</h2>
+          <img src="https://mychildmate.in/AdmissionForm/img/holywritlogo_512_512.png" alt="Logo" className="school-logo mx-auto" />
+          <h1>Holy Writ High School & Junior College</h1>
+          <p className="text-sm font-bold">Pimpoli, Barvi Dam Road, Badlapur (W), Thane</p>
+          <h2>OFFICIAL OMR ANSWER SHEET</h2>
         </div>
 
-        <div className="meta-info-grid">
-          <div>DATE: {date}</div>
-          <div>SUBJECT: {subject}</div>
-          <div>MARKS: {marks}</div>
+        <div className="meta-grid">
           <div>CLASS: {className}</div>
-          <div>TIME: {time}</div>
+          <div>SUBJECT: {subject}</div>
           <div>SET: {set}</div>
-        </div>
-
-        <div className="student-fields">
-          <div className="field-line">NAME: <span style={{ flex: 1 }}></span></div>
-          <div className="field-line">ROLL NO: <span style={{ flex: 1 }}></span></div>
-          <div className="field-line">SECTION: <span style={{ flex: 1 }}></span></div>
-          <div className="field-line">CATEGORY: <span style={{ flex: 1 }}></span></div>
-        </div>
-
-        <div className="instructions-box">
-          <strong>Instructions for Candidates:</strong>
-          <ol style={{ marginTop: '6px', paddingLeft: '25px', listStyleType: 'decimal', fontWeight: '900' }}>
-            <li>Use <strong>Black or Blue Ball Point Pen</strong> only. Use of pencil is strictly prohibited.</li>
-            <li>Darken only one circle for each question. Once filled, the answer cannot be changed or erased.</li>
-            <li>Ensure the bubble is darkened completely. Incomplete marks will not be evaluated.</li>
-          </ol>
+          <div>MARKS: {marks}</div>
+          <div>ROLL NO: ________</div>
+          <div>NAME: ________</div>
         </div>
 
         <div className="omr-main-grid">
-          <div className="section-column">
-            <div className="column-title">SECTION A (Q.1 - Q.20)</div>
-            {Array.from({ length: 20 }, (_, i) => i + 1).map((n) => renderQuestion(n))}
+          <div className="col">
+            <div className="bg-[#ff66b2] text-white text-center font-bold text-xs py-1 mb-2">SEC A (1-20)</div>
+            {Array.from({ length: 20 }, (_, i) => i + 1).map(n => renderQuestion(n))}
           </div>
-          <div className="section-column">
-            <div className="column-title">SECTION B (Q.21 - Q.40)</div>
-            {Array.from({ length: 20 }, (_, i) => i + 21).map((n) => renderQuestion(n))}
+          <div className="col">
+            <div className="bg-[#ff66b2] text-white text-center font-bold text-xs py-1 mb-2">SEC B (21-40)</div>
+            {Array.from({ length: 20 }, (_, i) => i + 21).map(n => renderQuestion(n))}
           </div>
         </div>
 
         <div className="footer-section">
-          <div className="signature-row">
-            <div>Invigilator Sign: ________________</div>
-            <div>Examiner Name: ________________</div>
-            <div>Examiner Sign: ________________</div>
-          </div>
-          <div className="marks-summary">
-            <div>Marks Obtained: <span className="marks-box">__________</span></div>
-            <div>Total Marks: <span className="marks-box">{marks}</span></div>
+          <div className="sig-row">
+            <div>Invigilator: ________________</div>
+            <div>Examiner: ________________</div>
+            <div>Marks Obtained: [ ______ / {marks} ]</div>
           </div>
         </div>
       </div>
@@ -300,7 +171,7 @@ function OMRContent() {
 
 export default function OMRPage() {
   return (
-    <Suspense fallback={<div className="flex h-screen items-center justify-center text-[#ff66b2] font-bold text-3xl animate-pulse">Loading Official A4 Template...</div>}>
+    <Suspense fallback={<div>Loading Template...</div>}>
       <OMRContent />
     </Suspense>
   );

@@ -3,6 +3,7 @@
  * @fileOverview High-Level AI Teacher Flow for HWHS.
  * 
  * Uses Gemini 1.5 Pro for advanced pedagogical support and mental health guidance.
+ * Implements strict history sanitization to prevent role sequence errors.
  */
 
 import { ai } from '@/ai/genkit';
@@ -33,7 +34,7 @@ const aiTeacherFlow = ai.defineFlow(
       const systemPrompt = `You are Mr. Deepak Kumar (Robotics & AI), the Virtual Teacher at Holy Writ High School & Junior College.
         
         IDENTITY:
-        - If asked about your developer/creator: "I was developed by Deepak Kumar, Robotics & AI teacher at Holy Writ High School & Junior College."
+        - If asked "Who developed you?": "I was developed by Deepak Kumar, Robotics & AI teacher at Holy Writ High School & Junior College."
         - Always maintain a highly professional, supportive, and pedagogical persona.
         
         CAPABILITIES & SUBJECTS:
@@ -46,36 +47,25 @@ const aiTeacherFlow = ai.defineFlow(
         - For coding, provide logic snippets and explain "why" things work.
         - If a student is stressed, be empathetic and encouraging.`;
 
-      // CRITICAL FIX: Ensure strictly alternating user/model roles starting with 'user'
       const rawHistory = input.history || [];
       const sanitizedMessages: any[] = [];
       
-      // Filter out any invalid messages or repeated roles
-      let lastRole: string | null = null;
+      // CRITICAL FIX: Ensure strictly alternating user/model roles starting with 'user'
+      let expectedRole = 'user';
       for (const msg of rawHistory) {
-        if (msg.role !== lastRole) {
+        if (msg.role === expectedRole) {
           sanitizedMessages.push(msg);
-          lastRole = msg.role;
+          expectedRole = expectedRole === 'user' ? 'model' : 'user';
         }
       }
 
-      // Final verification of sequence for high-level model integrity
-      const finalMessages: any[] = [];
-      let expected = 'user';
-      for (const msg of sanitizedMessages) {
-        if (msg.role === expected) {
-          finalMessages.push(msg);
-          expected = expected === 'user' ? 'model' : 'user';
-        }
-      }
-
-      // Add the new user message
-      finalMessages.push({ role: 'user', content: [{ text: input.message }] });
+      // Add the current user message
+      sanitizedMessages.push({ role: 'user', content: [{ text: input.message }] });
 
       const { text } = await ai.generate({
-        model: 'googleai/gemini-1.5-pro', // High-level reasoning model
+        model: 'googleai/gemini-1.5-pro', // HIGH-LEVEL MODEL
         system: systemPrompt,
-        messages: finalMessages,
+        messages: sanitizedMessages,
         config: {
           safetySettings: [
             { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
